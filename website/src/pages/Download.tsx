@@ -90,13 +90,36 @@ export const DownloadPage: React.FC = () => {
         if (!res.ok) throw new Error("Failed to load downloads.json");
         return res.json();
       })
-      .then((data: DownloadsConfig) => {
-        if (data.windows && data.android) {
-          setConfig(data);
+      .then((data: any) => {
+        if (data && (data.windows || data.android)) {
+          setConfig((prev) => ({
+            windows: {
+              ...prev.windows,
+              ...(data.windows || {}),
+              url: data.windows?.url || data.windows?.downloadUrl || prev.windows.url,
+              filename: data.windows?.filename || prev.windows.filename,
+              name: data.windows?.name || prev.windows.name,
+              size: data.windows?.size || prev.windows.size,
+              platform: data.windows?.platform || prev.windows.platform,
+              requirements: data.windows?.requirements || prev.windows.requirements,
+              description: data.windows?.description || prev.windows.description,
+            },
+            android: {
+              ...prev.android,
+              ...(data.android || {}),
+              url: data.android?.url || data.android?.downloadUrl || prev.android.url,
+              filename: data.android?.filename || prev.android.filename,
+              name: data.android?.name || prev.android.name,
+              size: data.android?.size || prev.android.size,
+              platform: data.android?.platform || prev.android.platform,
+              requirements: data.android?.requirements || prev.android.requirements,
+              description: data.android?.description || prev.android.description,
+            }
+          }));
         }
       })
-      .catch(() => {
-        // Fallback to default bundled configuration
+      .catch((err) => {
+        console.warn("Using fallback download config:", err);
       });
   }, []);
 
@@ -291,6 +314,11 @@ export const DownloadPage: React.FC = () => {
                   <Download className="w-4 h-4" />
                   <span>DOWNLOAD FOR WINDOWS</span>
                 </a>
+                <div className="text-center pt-1">
+                  <span className="text-[11px] text-zinc-500">
+                    Direct file: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
+                  </span>
+                </div>
               </div>
 
               {/* SHA-256 Snippet */}
@@ -318,7 +346,7 @@ export const DownloadPage: React.FC = () => {
             <div className="pt-4 border-t border-white/5 space-y-2 text-xs text-zinc-400">
               <div className="font-semibold text-zinc-300">System Requirements:</div>
               <ul className="list-disc list-inside space-y-1 text-zinc-400">
-                {config.windows.requirements.map((req, idx) => (
+                {(config.windows.requirements || []).map((req, idx) => (
                   <li key={idx}>{req}</li>
                 ))}
               </ul>
@@ -378,6 +406,11 @@ export const DownloadPage: React.FC = () => {
                   <Download className="w-4 h-4" />
                   <span>DOWNLOAD APK</span>
                 </a>
+                <div className="text-center pt-1">
+                  <span className="text-[11px] text-zinc-500">
+                    Direct package: <a href={config.android.url} download={config.android.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.android.filename}</a> ({config.android.size})
+                  </span>
+                </div>
               </div>
 
               {/* SHA-256 Snippet */}
@@ -405,7 +438,7 @@ export const DownloadPage: React.FC = () => {
             <div className="pt-4 border-t border-white/5 space-y-2 text-xs text-zinc-400">
               <div className="font-semibold text-zinc-300">Device Requirements:</div>
               <ul className="list-disc list-inside space-y-1 text-zinc-400">
-                {config.android.requirements.map((req, idx) => (
+                {(config.android.requirements || []).map((req, idx) => (
                   <li key={idx}>{req}</li>
                 ))}
               </ul>

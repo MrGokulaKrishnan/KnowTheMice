@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { 
   MousePointer, Download, ShieldCheck, Zap, Lock, Wifi, Monitor, 
-  Smartphone, ChevronRight, HelpCircle, Layers, PlayCircle, EyeOff, Radio
+  Smartphone, ChevronRight, HelpCircle, Layers, PlayCircle, EyeOff, Radio,
+  CheckCircle2
 } from 'lucide-react';
 import { PhoneMockup } from '../components/PhoneMockup';
 import { GlassCard, GradientButton, GlassButton, GlowText, StatusBadge } from '../components/UIComponents';
@@ -12,6 +13,14 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ setActivePage }) => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [downloadToast, setDownloadToast] = useState<{ filename: string; size: string } | null>(null);
+
+  const handleDownload = (filename: string, size: string) => {
+    setDownloadToast({ filename, size });
+    setTimeout(() => {
+      setDownloadToast(null);
+    }, 5000);
+  };
 
   const faqs = [
     {
@@ -38,10 +47,27 @@ export const Home: React.FC<HomeProps> = ({ setActivePage }) => {
 
   return (
     <div className="space-y-24 pt-28 pb-16">
+      {/* Download Toast Notification */}
+      {downloadToast && (
+        <div className="fixed bottom-6 right-6 z-50 animate-bounce-short">
+          <div className="glass-panel border-orange-500/50 p-4 rounded-2xl shadow-2xl flex items-center space-x-3 bg-black/90 backdrop-blur-xl border">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+              <CheckCircle2 className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white">Download Initiated</p>
+              <p className="text-[11px] font-mono text-zinc-400">
+                {downloadToast.filename} ({downloadToast.size})
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 1. Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
         <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-white/5 border border-orange-500/30 mb-8 backdrop-blur-md">
-          <StatusBadge status="secure" label="v1.0.0 Ready" />
+          <StatusBadge status="secure" label="v1.1.0 Ready" />
           <span className="text-xs text-zinc-300 font-mono">Zero Cloud · Local-First Control</span>
         </div>
 
@@ -54,23 +80,38 @@ export const Home: React.FC<HomeProps> = ({ setActivePage }) => {
           Turn your Android phone into a lightning-fast, secure wireless mouse, trackpad, keyboard, and presentation remote for Windows. Control without cables.
         </p>
 
-        {/* CTA Button Group */}
+        {/* CTA Button Group - DIRECT DOWNLOADS */}
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <GradientButton 
-            onClick={() => setActivePage('download')}
-            className="w-full sm:w-auto text-sm px-8 py-4"
+          <a 
+            href="/downloads/windows/KnowTheMice-Setup-x64.exe"
+            download="KnowTheMice-Setup-x64.exe"
+            onClick={() => handleDownload('KnowTheMice-Setup-x64.exe', '1.18 MB')}
+            className="w-full sm:w-auto text-sm px-8 py-4 gradient-brand-button rounded-xl font-semibold text-white tracking-wide uppercase flex items-center justify-center space-x-2 transition-all shadow-glow-orange cursor-pointer"
           >
             <Download className="w-4 h-4" />
-            <span>Download for Windows (.exe / .msi)</span>
-          </GradientButton>
+            <span>Download for Windows (.exe)</span>
+          </a>
 
-          <GlassButton 
-            onClick={() => setActivePage('download')}
-            className="w-full sm:w-auto text-sm px-8 py-4"
+          <a 
+            href="/downloads/android/KnowTheMice-Android.apk"
+            download="KnowTheMice-Android.apk"
+            onClick={() => handleDownload('KnowTheMice-Android.apk', '2.33 MB')}
+            className="w-full sm:w-auto text-sm px-8 py-4 bg-white/5 hover:bg-white/10 border border-orange-500/25 hover:border-orange-500/50 rounded-xl font-semibold text-zinc-200 hover:text-white tracking-wide uppercase flex items-center justify-center space-x-2 transition-all cursor-pointer"
           >
             <Smartphone className="w-4 h-4 text-brand-orange" />
-            <span>Get Android App (.apk)</span>
-          </GlassButton>
+            <span>Download Android App (.apk)</span>
+          </a>
+        </div>
+
+        {/* Checksum & Options Link */}
+        <div className="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs text-zinc-400">
+          <span>Need SHA-256 hashes, device specs or release notes?</span>
+          <button
+            onClick={() => setActivePage('download')}
+            className="text-orange-400 hover:text-orange-300 underline font-medium cursor-pointer"
+          >
+            Open Download Center & Verification →
+          </button>
         </div>
 
         {/* Sub-tagline pills */}

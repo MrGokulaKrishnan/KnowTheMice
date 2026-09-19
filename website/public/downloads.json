@@ -4,16 +4,42 @@
   "windows": {
     "version": "1.1.0",
     "versionCode": 110,
+    "name": "Know The Mice for Windows",
+    "filename": "KnowTheMice-Setup-x64.exe",
+    "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
+    "size": "1.18 MB",
     "sha256": "B889FDD951757C4A10B6C69CDE7501DDEECB8196ED057B178D2F126A0C54FA44",
+    "releaseDate": "September 19, 2026",
+    "platform": "Windows 10 / 11 (64-bit)",
+    "requirements": [
+      "Windows 10 (Build 19041+) or Windows 11",
+      "x64 Architecture (64-bit)",
+      "Local Wi-Fi network interface",
+      "RAM: < 25MB footprint"
+    ],
+    "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
     "changelog": "- Pure black Liquid Glass installer with desktop & start menu shortcuts\n- High-performance Win32 input injector with stuck-key prevention\n- Comprehensive system tray service with notifications\n- Modern desktop dashboard layout",
     "mandatory": false
   },
   "android": {
     "version": "1.1.0",
     "versionCode": 2,
+    "name": "Know The Mice for Android",
+    "filename": "KnowTheMice-Android.apk",
+    "url": "/downloads/android/KnowTheMice-Android.apk",
     "downloadUrl": "https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk",
+    "size": "2.33 MB",
     "sha256": "35A6150EADC930B0B3E810E7332E816D8949358A84A274D8D58B6F36FAD46EEC",
+    "releaseDate": "September 19, 2026",
+    "platform": "Android 10.0+ (API 29+)",
+    "requirements": [
+      "Android 10 or newer (API 29+)",
+      "Connected to the same local Wi-Fi as your PC",
+      "Gyroscope & Accelerometer (for Air Mouse mode)",
+      "Vibration motor (for tactile haptic feedback)"
+    ],
+    "description": "Touchpad with multi-touch gestures, Gyroscope Air Mouse with complementary filter, full virtual keyboard, universal media deck, and presentation controls.",
     "changelog": "- New safe-zone adaptive icon with zero clipping\n- Full wireless mobile keyboard with QWERTY, F1-F12, and shortcuts\n- AMOLED pure black canvas with tactile haptic controls\n- 1-tap in-app Over-The-Air update installation",
     "mandatory": false
   }
