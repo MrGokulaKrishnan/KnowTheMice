@@ -245,6 +245,20 @@ class ControlClient {
         sendJsonMessage(KeyInputMessage(key = key, code = code, action = action.uppercase(), modifiers = modifiers))
     }
 
+    fun sendKeyDown(code: Int, key: String = "") {
+        sendJsonMessage(mapOf("type" to "KEY_DOWN", "code" to code, "key" to key))
+    }
+
+    fun sendKeyUp(code: Int, key: String = "") {
+        sendJsonMessage(mapOf("type" to "KEY_UP", "code" to code, "key" to key))
+    }
+
+    fun sendTextInput(text: String) {
+        if (text.isNotEmpty()) {
+            sendJsonMessage(mapOf("type" to "TEXT_INPUT", "text" to text))
+        }
+    }
+
     fun sendMedia(action: String) {
         sendJsonMessage(MediaMessage(action = action.uppercase()))
     }

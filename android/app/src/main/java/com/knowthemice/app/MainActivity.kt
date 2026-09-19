@@ -187,35 +187,99 @@ class MainActivity : ComponentActivity() {
 
             "keyboard" -> {
                 KeyboardScreen(
-                    onSendKey = { key, code ->
+                    onSendKey = { key, code, action ->
                         triggerHaptic()
-                        controlClient.sendKey(key = key, code = code)
+                        if (action == "DOWN") {
+                            controlClient.sendKeyDown(code, key)
+                        } else if (action == "UP") {
+                            controlClient.sendKeyUp(code, key)
+                        } else {
+                            controlClient.sendKey(key = key, code = code, action = "PRESS")
+                        }
+                    },
+                    onSendTextInput = { text ->
+                        triggerHaptic()
+                        controlClient.sendTextInput(text)
                     },
                     onSendShortcut = { sc ->
                         triggerHaptic()
                         when (sc) {
-                            "ALT + TAB" -> {
-                                controlClient.sendKey(code = 0x12, action = "DOWN")
+                            "Ctrl + C" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x43, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Ctrl + V" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x56, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Ctrl + X" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x58, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Ctrl + Z" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x5A, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Ctrl + Y" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x59, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Ctrl + A" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKey(code = 0x41, action = "PRESS")
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Alt + Tab" -> {
+                                controlClient.sendKeyDown(0x12)
                                 controlClient.sendKey(code = 0x09, action = "PRESS")
-                                controlClient.sendKey(code = 0x12, action = "UP")
+                                controlClient.sendKeyUp(0x12)
                             }
-                            "WIN + D" -> {
-                                controlClient.sendKey(code = 0x5B, action = "DOWN")
-                                controlClient.sendKey(key = "d", action = "PRESS")
-                                controlClient.sendKey(code = 0x5B, action = "UP")
+                            "Alt + F4" -> {
+                                controlClient.sendKeyDown(0x12)
+                                controlClient.sendKey(code = 0x73, action = "PRESS")
+                                controlClient.sendKeyUp(0x12)
                             }
-                            "CTRL + Z" -> {
-                                controlClient.sendKey(code = 0x11, action = "DOWN")
-                                controlClient.sendKey(key = "z", action = "PRESS")
-                                controlClient.sendKey(code = 0x11, action = "UP")
+                            "Win + D" -> {
+                                controlClient.sendKeyDown(0x5B)
+                                controlClient.sendKey(code = 0x44, action = "PRESS")
+                                controlClient.sendKeyUp(0x5B)
                             }
-                            "WIN + L" -> {
-                                controlClient.sendKey(code = 0x5B, action = "DOWN")
-                                controlClient.sendKey(key = "l", action = "PRESS")
-                                controlClient.sendKey(code = 0x5B, action = "UP")
+                            "Win + E" -> {
+                                controlClient.sendKeyDown(0x5B)
+                                controlClient.sendKey(code = 0x45, action = "PRESS")
+                                controlClient.sendKeyUp(0x5B)
+                            }
+                            "Win + L" -> {
+                                controlClient.sendKeyDown(0x5B)
+                                controlClient.sendKey(code = 0x4C, action = "PRESS")
+                                controlClient.sendKeyUp(0x5B)
+                            }
+                            "Win + R" -> {
+                                controlClient.sendKeyDown(0x5B)
+                                controlClient.sendKey(code = 0x52, action = "PRESS")
+                                controlClient.sendKeyUp(0x5B)
+                            }
+                            "Ctrl+Shift+Esc" -> {
+                                controlClient.sendKeyDown(0x11)
+                                controlClient.sendKeyDown(0x10)
+                                controlClient.sendKey(code = 0x1B, action = "PRESS")
+                                controlClient.sendKeyUp(0x10)
+                                controlClient.sendKeyUp(0x11)
+                            }
+                            "Win + Print" -> {
+                                controlClient.sendKeyDown(0x5B)
+                                controlClient.sendKey(code = 0x2C, action = "PRESS")
+                                controlClient.sendKeyUp(0x5B)
                             }
                         }
                     },
+                    hapticsEnabled = hapticsEnabled,
+                    onToggleHaptics = { hapticsEnabled = !hapticsEnabled },
                     onBack = { currentScreen = "remote" }
                 )
             }

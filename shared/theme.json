@@ -15,7 +15,7 @@
   },
   "palette": {
     "background": {
-      "amoled": "#050505",
+      "amoled": "#000000",
       "surface": "#080808",
       "card": "#0D0D0D",
       "overlay": "rgba(5, 5, 5, 0.85)"

@@ -30,8 +30,8 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "922 KB",
-    sha256: "7589C7A1B1814BA508B9005D24621F6AD6A5DCDEEBE7A5EB18E6F24BFCE36B86",
+    size: "1.18 MB",
+    sha256: "B889FDD951757C4A10B6C69CDE7501DDEECB8196ED057B178D2F126A0C54FA44",
     releaseDate: "September 19, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
@@ -40,15 +40,15 @@ const DEFAULT_CONFIG: DownloadsConfig = {
       "Local Wi-Fi network interface",
       "RAM: < 25MB footprint"
     ],
-    description: "Native Windows Host installer with auto-start, system tray service, firewall rules, and desktop shortcuts."
+    description: "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts."
   },
   android: {
     version: "1.1.0",
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "2.11 MB",
-    sha256: "18E65EAC732CC1A4FD55061400136C8E20E8F98DEB739162B9D404AB7DC4F25F",
+    size: "2.33 MB",
+    sha256: "35A6150EADC930B0B3E810E7332E816D8949358A84A274D8D58B6F36FAD46EEC",
     releaseDate: "September 19, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [

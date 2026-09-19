@@ -37,7 +37,7 @@ def post_process():
             with open(path, "r") as f:
                 data = json.load(f)
             data["android"]["sha256"] = sha256
-            data["windows"]["sha256"] = "7589C7A1B1814BA508B9005D24621F6AD6A5DCDEEBE7A5EB18E6F24BFCE36B86"
+            data["windows"]["sha256"] = "B889FDD951757C4A10B6C69CDE7501DDEECB8196ED057B178D2F126A0C54FA44"
             with open(path, "w") as f:
                 json.dump(data, f, indent=2)
             print(f"Updated {path} with hashes")

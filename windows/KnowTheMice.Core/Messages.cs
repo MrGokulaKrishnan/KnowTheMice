@@ -133,6 +133,14 @@ public class KeyInputMessage : BaseMessage
     public List<string> Modifiers { get; set; } = new();
 }
 
+public class TextInputMessage : BaseMessage
+{
+    public TextInputMessage() { Type = "TEXT_INPUT"; }
+
+    [JsonPropertyName("text")]
+    public string Text { get; set; } = string.Empty;
+}
+
 public class MediaMessage : BaseMessage
 {
     public MediaMessage() { Type = "MEDIA_CMD"; }

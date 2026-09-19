@@ -5,6 +5,7 @@
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
+    <UseWPF>true</UseWPF>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AssemblyName>KnowTheMice-Setup-x64</AssemblyName>
@@ -20,6 +21,7 @@
   <ItemGroup>
     <EmbeddedResource Include="payload.zip" />
     <EmbeddedResource Include="icon.ico" />
+    <Resource Include="logo.png" />
   </ItemGroup>
 
 </Project>

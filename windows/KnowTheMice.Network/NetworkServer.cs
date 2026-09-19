@@ -149,6 +149,7 @@ public class NetworkServer : IDisposable
         catch { }
         finally
         {
+            _inputInjector.ReleaseAllKeys();
             lock (_sessionLock)
             {
                 _activeSessions.Remove(session);
@@ -296,6 +297,39 @@ public class NetworkServer : IDisposable
                                 Enum.TryParse<KeyAction>(keyMsg.Action, true, out var act);
                                 _inputInjector.KeyStroke((ushort)keyMsg.Code, act);
                             }
+                        }
+                    }
+                    break;
+
+                case "KEY_DOWN":
+                    if (session.IsAuthenticated)
+                    {
+                        var keyMsg = JsonSerializer.Deserialize<KeyInputMessage>(json);
+                        if (keyMsg != null && keyMsg.Code > 0)
+                        {
+                            _inputInjector.KeyDown((ushort)keyMsg.Code);
+                        }
+                    }
+                    break;
+
+                case "KEY_UP":
+                    if (session.IsAuthenticated)
+                    {
+                        var keyMsg = JsonSerializer.Deserialize<KeyInputMessage>(json);
+                        if (keyMsg != null && keyMsg.Code > 0)
+                        {
+                            _inputInjector.KeyUp((ushort)keyMsg.Code);
+                        }
+                    }
+                    break;
+
+                case "TEXT_INPUT":
+                    if (session.IsAuthenticated)
+                    {
+                        var textMsg = JsonSerializer.Deserialize<TextInputMessage>(json);
+                        if (textMsg != null && !string.IsNullOrEmpty(textMsg.Text))
+                        {
+                            _inputInjector.TypeText(textMsg.Text);
                         }
                     }
                     break;

@@ -1,43 +1,8 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="132"
-    android:viewportHeight="152">
-    <!-- KTM Monogram Logo Paths with Orange Stroke -->
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M5,2 L5,150" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M5,74 L60,4" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M36,34 L66,72" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M65.5,72 L65.5,150" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M65,69 L112,69" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M65,111 L126,111" />
-    <path
-        android:strokeColor="#FF8A00"
-        android:strokeWidth="10"
-        android:strokeLineCap="round"
-        android:pathData="M126.5,2 L126.5,150" />
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:width="64dp"
+        android:height="64dp"
+        android:gravity="center"
+        android:drawable="@drawable/logo_monogram" />
+</layer-list>

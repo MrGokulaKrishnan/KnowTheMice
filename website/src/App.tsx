@@ -61,7 +61,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background-amoled text-white subtle-grid relative selection:bg-brand-orange selection:text-white">
+    <div className="min-h-screen flex flex-col bg-background-amoled text-white relative selection:bg-brand-orange selection:text-white">
       {/* Ambient background glow accents */}
       <div className="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-brand-orange/10 blur-[140px] pointer-events-none -z-10 rounded-full" />
       <div className="fixed bottom-0 right-0 w-[500px] h-[300px] bg-brand-deep/10 blur-[120px] pointer-events-none -z-10 rounded-full" />

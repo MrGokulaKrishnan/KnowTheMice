@@ -1,0 +1,20 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(48, 48) scale(0.81)">
+    <!-- Cursor Arrow on top of M -->
+    <path d="M336 24 C342 20, 350 22, 356 28 L430 84 C438 90, 436 102, 426 104 L378 108 L398 152 C400 156, 396 160, 392 160 L368 160 C364 160, 360 156, 358 152 L340 110 L330 144 C326 154, 314 152, 314 142 L314 40 C314 32, 324 24, 336 24 Z" fill="#FFFFFF"/>
+
+    <!-- 'K' Left Stem with Lightning Zag -->
+    <path d="M80 120 L136 120 L112 216 L148 216 L80 340 L108 276 L72 276 Z" fill="#FFFFFF"/>
+    <!-- 'K' Upper Branch -->
+    <path d="M124 210 L196 120 L256 120 L176 220 Z" fill="#FFFFFF"/>
+    <!-- 'K' Lower Branch -->
+    <path d="M152 204 L244 320 L184 320 L112 228 Z" fill="#FFFFFF"/>
+
+    <!-- 'M' Left Leg with Lightning Zag -->
+    <path d="M260 120 L308 120 L288 220 L320 220 L248 340 L280 276 L250 276 Z" fill="#FFFFFF"/>
+    <!-- 'M' Center Peak & Diagonal -->
+    <path d="M304 120 L356 250 L408 120 L452 120 L452 320 L404 320 L404 200 L370 286 L342 286 L308 200 L308 320 L268 320 Z" fill="#FFFFFF"/>
+
+    <text x="256" y="440" font-family="'Orbitron', 'Inter', 'Segoe UI', sans-serif" font-weight="900" font-size="34" letter-spacing="4" fill="#FFFFFF" text-anchor="middle">KNOW THE MICE</text>
+  </g>
+</svg>

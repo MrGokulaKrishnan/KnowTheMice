@@ -8,7 +8,7 @@
   }
   
   body {
-    background-color: #050505;
+    background-color: #000000;
     color: #FFFFFF;
     font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
@@ -84,14 +84,12 @@
 
 /* Grid & Glow Animations */
 .hero-glow {
-  background: radial-gradient(circle at 50% 30%, rgba(255, 90, 0, 0.15) 0%, rgba(5, 5, 5, 0) 70%);
+  background: radial-gradient(circle at 50% 30%, rgba(255, 90, 0, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
 }
 
 .subtle-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  /* Removed grid lines to maintain pure AMOLED black canvas */
+  background-image: none;
 }
 
 /* Custom Scrollbars */
@@ -99,7 +97,7 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #080808;
+  background: #000000;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 165, 80, 0.3);

@@ -3,7 +3,7 @@ package com.knowthemice.app.ui.theme
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
-val BgAmoled = Color(0xFF050505)
+val BgAmoled = Color(0xFF000000)
 val BgSurface = Color(0xFF0A0A0A)
 val BgCard = Color(0xFF0D0D0D)
 

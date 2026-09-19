@@ -7,7 +7,7 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
   return (
-    <footer className="border-t border-orange-500/20 bg-background-surface/80 backdrop-blur-xl mt-24">
+    <footer className="bg-background-surface/80 backdrop-blur-xl mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Col 1: Brand Info */}
@@ -78,7 +78,7 @@ export const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-400 gap-4">
+        <div className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-zinc-400 gap-4">
           <p>© 2026 Know The Mice Ecosystem. All rights reserved. Open-standard local control.</p>
           <div className="flex items-center space-x-4">
             <a

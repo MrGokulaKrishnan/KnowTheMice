@@ -7,6 +7,8 @@ public class InputInjector
 {
     private float _sensitivity = 1.0f;
     private bool _naturalScrolling = true;
+    private readonly HashSet<ushort> _pressedKeys = new();
+    private readonly object _keyLock = new();
 
     public float Sensitivity
     {
@@ -144,20 +146,70 @@ public class InputInjector
         }
     }
 
+    public void KeyDown(ushort virtualKey)
+    {
+        if (virtualKey == 0) return;
+        lock (_keyLock)
+        {
+            if (_pressedKeys.Add(virtualKey))
+            {
+                SendKey(virtualKey, 0);
+            }
+        }
+    }
+
+    public void KeyUp(ushort virtualKey)
+    {
+        if (virtualKey == 0) return;
+        lock (_keyLock)
+        {
+            _pressedKeys.Remove(virtualKey);
+            SendKey(virtualKey, NativeMethods.KEYEVENTF_KEYUP);
+        }
+    }
+
+    public void KeyPress(ushort virtualKey)
+    {
+        if (virtualKey == 0) return;
+        KeyDown(virtualKey);
+        Thread.Sleep(15);
+        KeyUp(virtualKey);
+    }
+
+    public void ReleaseAllKeys()
+    {
+        lock (_keyLock)
+        {
+            foreach (var vk in _pressedKeys)
+            {
+                SendKey(vk, NativeMethods.KEYEVENTF_KEYUP);
+            }
+            _pressedKeys.Clear();
+        }
+    }
+
     public void KeyStroke(ushort virtualKey, KeyAction action)
     {
         if (action == KeyAction.DOWN)
         {
-            SendKey(virtualKey, 0);
+            KeyDown(virtualKey);
         }
         else if (action == KeyAction.UP)
         {
-            SendKey(virtualKey, NativeMethods.KEYEVENTF_KEYUP);
+            KeyUp(virtualKey);
         }
         else // PRESS
         {
-            SendKey(virtualKey, 0);
-            SendKey(virtualKey, NativeMethods.KEYEVENTF_KEYUP);
+            KeyPress(virtualKey);
+        }
+    }
+
+    public void TypeText(string text)
+    {
+        if (string.IsNullOrEmpty(text)) return;
+        foreach (char c in text)
+        {
+            TypeUnicodeChar(c);
         }
     }
 

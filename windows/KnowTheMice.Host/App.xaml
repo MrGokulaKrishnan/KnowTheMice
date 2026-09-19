@@ -4,7 +4,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <!-- Liquid Glass System Theme Brushes -->
-        <SolidColorBrush x:Key="AmoledBackground" Color="#050505"/>
+        <SolidColorBrush x:Key="AmoledBackground" Color="#000000"/>
         <SolidColorBrush x:Key="SurfaceBackground" Color="#0A0A0A"/>
         <SolidColorBrush x:Key="BrandOrange" Color="#FF5A00"/>
         <SolidColorBrush x:Key="BrandHighlight" Color="#FF8A00"/>

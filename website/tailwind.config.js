@@ -9,10 +9,10 @@ export default {
     extend: {
       colors: {
         background: {
-          amoled: "#050505",
-          surface: "#080808",
-          card: "#0D0D0D",
-          cardHover: "#121212"
+          amoled: "#000000",
+          surface: "#050505",
+          card: "#080808",
+          cardHover: "#0E0E0E"
         },
         brand: {
           orange: "#FF5A00",

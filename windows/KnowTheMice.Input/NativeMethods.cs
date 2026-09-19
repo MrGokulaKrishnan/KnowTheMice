@@ -32,6 +32,7 @@ public static class NativeMethods
     public const ushort VK_SHIFT = 0x10;
     public const ushort VK_CONTROL = 0x11;
     public const ushort VK_MENU = 0x12; // Alt
+    public const ushort VK_CAPITAL = 0x14; // Caps Lock
     public const ushort VK_ESCAPE = 0x1B;
     public const ushort VK_SPACE = 0x20;
     public const ushort VK_PRIOR = 0x21; // Page Up
@@ -42,8 +43,11 @@ public static class NativeMethods
     public const ushort VK_UP = 0x26;
     public const ushort VK_RIGHT = 0x27;
     public const ushort VK_DOWN = 0x28;
+    public const ushort VK_SNAPSHOT = 0x2C; // Print Screen
+    public const ushort VK_INSERT = 0x2D;
     public const ushort VK_DELETE = 0x2E;
     public const ushort VK_LWIN = 0x5B;
+    public const ushort VK_RWIN = 0x5C;
 
     // Media Keys
     public const ushort VK_VOLUME_MUTE = 0xAD;
@@ -54,9 +58,19 @@ public static class NativeMethods
     public const ushort VK_MEDIA_STOP = 0xB2;
     public const ushort VK_MEDIA_PLAY_PAUSE = 0xB3;
 
-    // Function keys
+    // Function keys (F1 - F12)
     public const ushort VK_F1 = 0x70;
+    public const ushort VK_F2 = 0x71;
+    public const ushort VK_F3 = 0x72;
+    public const ushort VK_F4 = 0x73;
     public const ushort VK_F5 = 0x74;
+    public const ushort VK_F6 = 0x75;
+    public const ushort VK_F7 = 0x76;
+    public const ushort VK_F8 = 0x77;
+    public const ushort VK_F9 = 0x78;
+    public const ushort VK_F10 = 0x79;
+    public const ushort VK_F11 = 0x7A;
+    public const ushort VK_F12 = 0x7B;
 
     [StructLayout(LayoutKind.Sequential)]
     public struct MOUSEINPUT
