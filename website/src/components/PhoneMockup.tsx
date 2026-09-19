@@ -82,16 +82,8 @@ export const PhoneMockup: React.FC = () => {
             }`}
           >
             {/* Ambient Watermark Logo */}
-            <div className="w-16 h-16 opacity-10 pointer-events-none">
-              <svg viewBox="0 0 132 152" fill="none">
-                <line x1="5" y1="2" x2="5" y2="150" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="5" y1="74" x2="60" y2="4" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="36" y1="34" x2="66" y2="72" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="65" y1="69" x2="112" y2="69" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="65" y1="111" x2="126" y2="111" stroke="#FF8A00" strokeWidth="12"/>
-                <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="#FF8A00" strokeWidth="12"/>
-              </svg>
+            <div className="w-16 h-16 opacity-10 pointer-events-none flex items-center justify-center">
+              <img src="/logo_monogram.png" alt="" className="w-full h-full object-contain" />
             </div>
             <div className="absolute text-[11px] font-mono tracking-wider text-zinc-500 uppercase pointer-events-none">
               {isDragging ? 'Transmitting X/Y' : 'Swipe to Move Cursor'}
@@ -208,8 +200,8 @@ export const PhoneMockup: React.FC = () => {
               <div className="bg-blue-400 rounded-sm" />
               <div className="bg-blue-400 rounded-sm" />
             </div>
-            <div className="w-4 h-4 rounded bg-orange-500/20 border border-orange-500/50 flex items-center justify-center text-[8px] text-orange-400 font-bold">
-              K
+            <div className="w-5 h-5 rounded bg-black border border-orange-500/40 flex items-center justify-center p-0.5 shadow-sm">
+              <img src="/favicon-16x16.png" alt="" className="w-full h-full object-contain" />
             </div>
           </div>
           <div className="text-[11px] font-mono text-zinc-400">

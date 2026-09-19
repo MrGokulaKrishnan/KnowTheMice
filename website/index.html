@@ -2,29 +2,39 @@
 <html lang="en" class="dark scroll-smooth">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Know The Mice — Turn Your Android Phone Into a Wireless Mouse for PC</title>
+    
+    <!-- Official Canonical Brand Favicons & App Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="msapplication-TileColor" content="#000000" />
     
     <!-- Meta Descriptions & SEO -->
     <meta name="description" content="Know The Mice transforms your Android phone into a fast, secure, local-network wireless mouse, keyboard, trackpad, and remote control for your Windows PC — no cloud account, zero latency lag, private by design." />
     <meta name="keywords" content="wireless mouse, phone as mouse for PC, Android remote mouse, wireless touchpad, presentation remote, air mouse, local network remote control, Windows remote control" />
     <meta name="author" content="Know The Mice Team" />
-    <link rel="canonical" href="https://knowthemice.app/" />
+    <link rel="canonical" href="https://knowthemice.web.app/" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://knowthemice.app/" />
+    <meta property="og:url" content="https://knowthemice.web.app/" />
     <meta property="og:title" content="Know The Mice — Your Phone. Your Computer. One Powerful Remote." />
     <meta property="og:description" content="Turn your phone into a low-latency wireless mouse, keyboard, and presentation remote over local Wi-Fi with military-grade X25519 encryption." />
-    <meta property="og:image" content="https://knowthemice.app/og-image.png" />
+    <meta property="og:image" content="https://knowthemice.web.app/og-image.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://knowthemice.app/" />
+    <meta property="twitter:url" content="https://knowthemice.web.app/" />
     <meta property="twitter:title" content="Know The Mice — Your Phone. Your Computer. One Powerful Remote." />
     <meta property="twitter:description" content="Turn your phone into a low-latency wireless mouse, keyboard, and presentation remote over local Wi-Fi with military-grade X25519 encryption." />
-    <meta property="twitter:image" content="https://knowthemice.app/og-image.png" />
+    <meta property="twitter:image" content="https://knowthemice.web.app/og-image.png" />
 
     <!-- Fonts: Professional Plus Jakarta Sans + Inter + JetBrains Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -56,8 +66,26 @@
     }
     </script>
   </head>
-  <body class="bg-background-amoled text-white font-sans antialiased selection:bg-brand-orange selection:text-white min-h-screen">
-    <div id="root"></div>
+  <body class="bg-black text-white font-sans antialiased selection:bg-brand-orange selection:text-white min-h-screen">
+    <div id="root">
+      <div id="app-preloader" style="position:fixed;inset:0;background:#000000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:'Plus Jakarta Sans',Inter,sans-serif;">
+        <div style="position:relative;width:100px;height:100px;display:flex;align-items:center;justify-content:center;">
+          <div style="position:absolute;width:140px;height:140px;background:radial-gradient(circle, rgba(255,94,0,0.35) 0%, transparent 70%);border-radius:50%;animation:km-pulse 2s infinite ease-in-out;"></div>
+          <img src="/logo.png" alt="Know The Mice" style="width:84px;height:84px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 16px rgba(255,94,0,0.4));" />
+        </div>
+        <div style="margin-top:24px;display:flex;flex-direction:column;align-items:center;gap:6px;">
+          <span style="font-size:13px;letter-spacing:0.22em;color:#ff8a00;font-weight:800;text-transform:uppercase;">KNOW THE MICE</span>
+          <span style="font-size:10px;letter-spacing:0.12em;color:#71717a;font-family:monospace;text-transform:uppercase;">Zero-Cloud · Low-Latency Remote</span>
+        </div>
+        <div style="margin-top:16px;width:110px;height:2px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;">
+          <div style="width:45%;height:100%;background:linear-gradient(90deg, #ff8a00, #ff5a00);border-radius:2px;animation:km-shimmer 1.4s infinite linear;"></div>
+        </div>
+        <style>
+          @keyframes km-pulse { 0%, 100% { transform: scale(0.92); opacity: 0.35; } 50% { transform: scale(1.18); opacity: 0.75; } }
+          @keyframes km-shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(250%); } }
+        </style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

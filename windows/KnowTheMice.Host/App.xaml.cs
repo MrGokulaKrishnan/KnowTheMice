@@ -36,8 +36,13 @@ public partial class App : System.Windows.Application
         _trayIcon = new Forms.NotifyIcon();
         try
         {
+            string trayPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "tray.ico");
             string iconPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "icon.ico");
-            if (System.IO.File.Exists(iconPath))
+            if (System.IO.File.Exists(trayPath))
+            {
+                _trayIcon.Icon = new Drawing.Icon(trayPath);
+            }
+            else if (System.IO.File.Exists(iconPath))
             {
                 _trayIcon.Icon = new Drawing.Icon(iconPath);
             }
