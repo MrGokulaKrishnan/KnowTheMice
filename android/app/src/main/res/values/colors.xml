@@ -1,0 +1,10 @@
+<resources>
+    <color name="bg_amoled">#050505</color>
+    <color name="bg_surface">#0A0A0A</color>
+    <color name="brand_orange">#FF5A00</color>
+    <color name="brand_highlight">#FF8A00</color>
+    <color name="brand_deep">#D93600</color>
+    <color name="brand_amber">#FFB347</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A1A1AA</color>
+</resources>

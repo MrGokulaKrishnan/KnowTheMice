@@ -1,0 +1,54 @@
+# ==========================================
+# Know The Mice - Git Ignore Configuration
+# ==========================================
+
+# Operating System
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# IDE / Editor Files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.idea/
+*.iml
+
+# Node / Web Build
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+website/dist/
+website/.vite/
+
+# .NET / Windows Build Artifacts
+**/[Bb]in/
+**/[Oo]bj/
+*.wixobj
+*.wixpdb
+*.msi
+*.exe
+*.dll
+*.apk
+
+# Android Build Artifacts
+.gradle/
+**/build/
+android/app/build/
+android/.gradle/
+local.properties
+*.hprof
+
+# Firebase Cache
+.firebase/
+firebase-debug.log*
+
+# Logs & Diagnostics
+*.log

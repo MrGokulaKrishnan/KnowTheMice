@@ -1,0 +1,61 @@
+{
+  "name": "Know The Mice Design System",
+  "version": "1.0.0",
+  "identity": {
+    "productName": "Know The Mice",
+    "primaryTagline": "Your phone. Your computer. One powerful remote.",
+    "altTaglines": [
+      "Control without cables.",
+      "Precision in your hands.",
+      "Your phone. Your mouse. Total control.",
+      "Private by design. Fast by nature.",
+      "Move. Type. Play. Present."
+    ],
+    "positioning": "Know The Mice turns your Android phone into a fast, secure, local-network wireless mouse, keyboard, and remote control for your Windows PC — no cloud account, no subscription, no data leaving your network."
+  },
+  "palette": {
+    "background": {
+      "amoled": "#050505",
+      "surface": "#080808",
+      "card": "#0D0D0D",
+      "overlay": "rgba(5, 5, 5, 0.85)"
+    },
+    "orange": {
+      "primary": "#FF5A00",
+      "highlight": "#FF8A00",
+      "deep": "#D93600",
+      "amber": "#FFB347",
+      "glow": "rgba(255, 90, 0, 0.25)"
+    },
+    "glass": {
+      "fill": "rgba(255, 255, 255, 0.04)",
+      "fillHover": "rgba(255, 255, 255, 0.07)",
+      "border": "rgba(255, 165, 80, 0.28)",
+      "borderHover": "rgba(255, 165, 80, 0.50)",
+      "highlight": "rgba(255, 255, 255, 0.16)",
+      "shadow": "0 20px 60px rgba(0, 0, 0, 0.40)",
+      "blur": "24px"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#A1A1AA",
+      "muted": "#71717A"
+    },
+    "status": {
+      "success": "#22C55E",
+      "warning": "#F59E0B",
+      "error": "#EF4444",
+      "info": "#3B82F6"
+    }
+  },
+  "gradients": {
+    "brand": "linear-gradient(135deg, #FF8A00 0%, #FF5A00 45%, #D93600 100%)",
+    "glassCard": "linear-gradient(135deg, rgba(255, 138, 0, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%)",
+    "heroGlow": "radial-gradient(circle at center, rgba(255, 90, 0, 0.15) 0%, rgba(5, 5, 5, 0) 70%)"
+  },
+  "typography": {
+    "heading": "Orbitron, Rajdhani, system-ui, sans-serif",
+    "body": "Inter, Plus Jakarta Sans, system-ui, sans-serif",
+    "code": "JetBrains Mono, monospace"
+  }
+}

@@ -1,0 +1,7 @@
+<resources>
+    <style name="Theme.KnowTheMice" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@color/bg_amoled</item>
+        <item name="android:navigationBarColor">@color/bg_amoled</item>
+        <item name="android:windowBackground">@color/bg_amoled</item>
+    </style>
+</resources>

@@ -1,0 +1,20 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF8A00"/>
+      <stop offset="50%" stop-color="#FF5A00"/>
+      <stop offset="100%" stop-color="#D93600"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#080808"/>
+  <rect width="62" height="62" x="1" y="1" rx="13" stroke="rgba(255, 165, 80, 0.35)" stroke-width="1.5"/>
+  <g transform="translate(13, 10) scale(0.28)">
+    <line x1="5" y1="2" x2="5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="5" y1="74" x2="60" y2="4" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="36" y1="34" x2="66" y2="72" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="65" y1="69" x2="112" y2="69" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="65" y1="111" x2="126" y2="111" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+    <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+  </g>
+</svg>
