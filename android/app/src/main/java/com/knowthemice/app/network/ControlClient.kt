@@ -1,5 +1,6 @@
 package com.knowthemice.app.network
 
+import android.content.Context
 import com.google.gson.Gson
 import com.knowthemice.app.model.*
 import kotlinx.coroutines.*
@@ -25,12 +26,14 @@ class ControlClient {
     private val _currentHost = MutableStateFlow<DiscoveredHost?>(null)
     val currentHost = _currentHost.asStateFlow()
 
-    private val _latencyMs = MutableStateFlow(12L)
+    private val _latencyMs = MutableStateFlow(8L)
     val latencyMs = _latencyMs.asStateFlow()
 
     private var sequenceNumber: Int = 0
+    private var pendingPinCallback: ((Boolean, String) -> Unit)? = null
+    private val clientId = "android-" + (android.os.Build.MODEL ?: "device").replace(" ", "_")
 
-    fun connect(host: DiscoveredHost, onPairingNeeded: () -> Unit, onConnected: () -> Unit) {
+    fun connect(context: Context, host: DiscoveredHost, onPairingNeeded: () -> Unit, onConnected: () -> Unit) {
         disconnect()
         _currentHost.value = host
         _connectionState.value = ConnectionState.CONNECTING
@@ -46,19 +49,27 @@ class ControlClient {
                 inputStream = s.getInputStream()
                 outputStream = s.getOutputStream()
 
-                // Start pairing handshake
-                val pairReq = PairRequestMessage(
-                    clientName = android.os.Build.MODEL ?: "Android Device",
-                    clientId = "android-" + (android.os.Build.ID ?: "dev")
-                )
-                sendJsonMessage(pairReq)
-                _connectionState.value = ConnectionState.PAIRING
-                withContext(Dispatchers.Main) {
-                    onPairingNeeded()
+                val prefs = context.getSharedPreferences("ktm_prefs", Context.MODE_PRIVATE)
+                val savedToken = prefs.getString("token_${host.ip}", null)
+
+                if (!savedToken.isNullOrEmpty()) {
+                    // Fast path: Authenticate with saved token
+                    val authMsg = AuthMessage(
+                        clientId = clientId,
+                        authToken = savedToken
+                    )
+                    sendJsonMessage(authMsg)
+                } else {
+                    // Initial pairing request
+                    val pairReq = PairRequestMessage(
+                        clientName = android.os.Build.MODEL ?: "Android Device",
+                        clientId = clientId
+                    )
+                    sendJsonMessage(pairReq)
                 }
 
                 // Listen for incoming responses (Ping/Pong, Auth, etc.)
-                listenLoop(onConnected)
+                listenLoop(context, onPairingNeeded, onConnected)
             } catch (ex: Exception) {
                 _connectionState.value = ConnectionState.ERROR
             }
@@ -66,10 +77,11 @@ class ControlClient {
     }
 
     fun submitPairingPin(pin: String, onResult: (Boolean, String) -> Unit) {
+        pendingPinCallback = onResult
         scope?.launch {
             try {
                 val verify = PairVerifyMessage(
-                    clientId = "android-" + (android.os.Build.ID ?: "dev"),
+                    clientId = clientId,
                     pin = pin
                 )
                 sendJsonMessage(verify)
@@ -81,8 +93,10 @@ class ControlClient {
         }
     }
 
-    private suspend fun listenLoop(onConnected: () -> Unit) {
+    private suspend fun listenLoop(context: Context, onPairingNeeded: () -> Unit, onConnected: () -> Unit) {
         val header = ByteArray(4)
+        val prefs = context.getSharedPreferences("ktm_prefs", Context.MODE_PRIVATE)
+
         while (scope?.isActive == true && socket?.isConnected == true) {
             try {
                 var read = 0
@@ -105,18 +119,64 @@ class ControlClient {
                 val json = String(body, Charsets.UTF_8)
                 val resp = gson.fromJson(json, BaseMessage::class.java)
 
-                if (resp.type == "PAIR_RESPONSE") {
-                    val pairResp = gson.fromJson(json, PairResponseMessage::class.java)
-                    if (pairResp.success) {
+                when (resp.type) {
+                    "AUTH_SUCCESS" -> {
                         _connectionState.value = ConnectionState.CONNECTED
                         withContext(Dispatchers.Main) {
                             onConnected()
                         }
                         startHeartbeat()
                     }
-                } else if (resp.type == "PONG") {
-                    val rtt = System.currentTimeMillis() - resp.timestamp
-                    _latencyMs.value = Math.max(2L, rtt)
+                    "AUTH_FAILED" -> {
+                        // Token invalid/expired; clear token and request pairing
+                        val currentIp = _currentHost.value?.ip
+                        if (currentIp != null) {
+                            prefs.edit().remove("token_$currentIp").apply()
+                        }
+                        val pairReq = PairRequestMessage(
+                            clientName = android.os.Build.MODEL ?: "Android Device",
+                            clientId = clientId
+                        )
+                        sendJsonMessage(pairReq)
+                    }
+                    "PAIR_RESPONSE" -> {
+                        val pairResp = gson.fromJson(json, PairResponseMessage::class.java)
+                        if (pairResp.success) {
+                            val currentIp = _currentHost.value?.ip
+                            if (currentIp != null && pairResp.authToken.isNotEmpty()) {
+                                prefs.edit().putString("token_$currentIp", pairResp.authToken).apply()
+                            }
+                            _connectionState.value = ConnectionState.CONNECTED
+                            withContext(Dispatchers.Main) {
+                                pendingPinCallback?.invoke(true, pairResp.message)
+                                pendingPinCallback = null
+                                onConnected()
+                            }
+                            startHeartbeat()
+                        } else {
+                            if (pairResp.message == "PIN_REQUIRED") {
+                                _connectionState.value = ConnectionState.PAIRING
+                                withContext(Dispatchers.Main) {
+                                    onPairingNeeded()
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    pendingPinCallback?.invoke(false, pairResp.message)
+                                    pendingPinCallback = null
+                                }
+                            }
+                        }
+                    }
+                    "PAIR_PIN_REQUIRED" -> {
+                        _connectionState.value = ConnectionState.PAIRING
+                        withContext(Dispatchers.Main) {
+                            onPairingNeeded()
+                        }
+                    }
+                    "PONG" -> {
+                        val rtt = System.currentTimeMillis() - resp.timestamp
+                        _latencyMs.value = Math.max(2L, rtt)
+                    }
                 }
             } catch (_: Exception) {
                 break
@@ -128,7 +188,7 @@ class ControlClient {
     private fun startHeartbeat() {
         scope?.launch {
             while (isActive && socket?.isConnected == true) {
-                delay(3000)
+                delay(2000)
                 try {
                     sendJsonMessage(BaseMessage(type = "PING", timestamp = System.currentTimeMillis()))
                 } catch (_: Exception) {}
@@ -162,7 +222,6 @@ class ControlClient {
                 // Checksum
                 var checksum: Byte = 0
                 val array = buffer.array()
-                // Offset 4 to 15 is body
                 for (i in 4 until 16) {
                     checksum = (checksum.toInt() xor array[i].toInt()).toByte()
                 }
@@ -175,7 +234,7 @@ class ControlClient {
     }
 
     fun sendMouseClick(button: String, action: String = "CLICK") {
-        sendJsonMessage(MouseClickMessage(button = button, action = action))
+        sendJsonMessage(MouseClickMessage(button = button.uppercase(), action = action.uppercase()))
     }
 
     fun sendMouseScroll(dx: Float, dy: Float) {
@@ -183,19 +242,19 @@ class ControlClient {
     }
 
     fun sendKey(key: String = "", code: Int = 0, action: String = "PRESS", modifiers: List<String> = emptyList()) {
-        sendJsonMessage(KeyInputMessage(key = key, code = code, action = action, modifiers = modifiers))
+        sendJsonMessage(KeyInputMessage(key = key, code = code, action = action.uppercase(), modifiers = modifiers))
     }
 
     fun sendMedia(action: String) {
-        sendJsonMessage(MediaMessage(action = action))
+        sendJsonMessage(MediaMessage(action = action.uppercase()))
     }
 
     fun sendPresentation(action: String) {
-        sendJsonMessage(PresentationMessage(action = action))
+        sendJsonMessage(PresentationMessage(action = action.uppercase()))
     }
 
     fun sendPower(action: String, targetPc: String) {
-        sendJsonMessage(PowerMessage(action = action, confirmed = true, targetPc = targetPc))
+        sendJsonMessage(PowerMessage(action = action.uppercase(), confirmed = true, targetPc = targetPc))
     }
 
     fun sendAppLaunch(appId: String) {

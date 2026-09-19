@@ -1,20 +1,37 @@
-<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF8A00"/>
-      <stop offset="50%" stop-color="#FF5A00"/>
+    <linearGradient id="km-icon-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA033"/>
+      <stop offset="50%" stop-color="#FF5E00"/>
       <stop offset="100%" stop-color="#D93600"/>
     </linearGradient>
+    <filter id="km-icon-glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="14" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="14" fill="#080808"/>
-  <rect width="62" height="62" x="1" y="1" rx="13" stroke="rgba(255, 165, 80, 0.35)" stroke-width="1.5"/>
-  <g transform="translate(13, 10) scale(0.28)">
-    <line x1="5" y1="2" x2="5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="5" y1="74" x2="60" y2="4" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="36" y1="34" x2="66" y2="72" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="65" y1="69" x2="112" y2="69" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="65" y1="111" x2="126" y2="111" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
-    <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="url(#icon-grad)" stroke-width="14" stroke-linecap="round"/>
+
+  <!-- AMOLED Black Background -->
+  <rect width="512" height="512" rx="112" fill="#000000"/>
+  <rect width="508" height="508" x="2" y="2" rx="110" stroke="#FF5E00" stroke-opacity="0.35" stroke-width="3"/>
+
+  <!-- Glowing Aura -->
+  <circle cx="256" cy="256" r="160" fill="#FF5E00" opacity="0.18" filter="url(#km-icon-glow)"/>
+
+  <g transform="translate(36, 40) scale(0.98)" filter="url(#km-icon-glow)">
+    <!-- Cursor Arrow on top of M -->
+    <path d="M300 24 C306 20, 314 22, 320 28 L380 76 C386 82, 384 92, 376 94 L338 98 L354 136 C356 140, 352 144, 348 144 L328 144 C324 144, 320 140, 318 136 L304 100 L294 128 C290 136, 280 134, 280 126 L280 40 C280 32, 288 24, 300 24 Z" fill="url(#km-icon-grad)"/>
+
+    <!-- 'K' Left Stem with Lightning Zag -->
+    <path d="M72 100 L124 100 L102 196 L138 196 L72 320 L100 256 L64 256 Z" fill="url(#km-icon-grad)"/>
+    <!-- 'K' Upper Branch -->
+    <path d="M114 190 L186 100 L242 100 L166 200 Z" fill="url(#km-icon-grad)"/>
+    <!-- 'K' Lower Branch -->
+    <path d="M142 184 L230 300 L174 300 L104 208 Z" fill="url(#km-icon-grad)"/>
+
+    <!-- 'M' Left Leg with Lightning Zag -->
+    <path d="M246 100 L292 100 L272 200 L304 200 L234 320 L266 256 L236 256 Z" fill="url(#km-icon-grad)"/>
+    <!-- 'M' Center Peak & Right Leg -->
+    <path d="M288 100 L340 230 L392 100 L436 100 L436 300 L390 300 L390 180 L354 266 L326 266 L292 180 L292 300 L252 300 Z" fill="url(#km-icon-grad)"/>
   </g>
 </svg>

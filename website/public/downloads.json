@@ -1,36 +1,20 @@
 {
+  "latestVersion": "1.1.0",
+  "releaseDate": "2026-09-19",
   "windows": {
-    "version": "1.0.0",
-    "name": "Know The Mice for Windows",
-    "filename": "KnowTheMice-Setup-x64.exe",
-    "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    "size": "343 KB",
-    "sha256": "C924D91944BEBEE0AA326D8A0AE48A4C889B385A17D07257B2E0AFF8A14845A7",
-    "releaseDate": "September 19, 2026",
-    "platform": "Windows 10 / 11 (64-bit)",
-    "requirements": [
-      "Windows 10 (Build 19041+) or Windows 11",
-      "x64 Architecture (64-bit)",
-      "Local Wi-Fi network interface",
-      "RAM: < 25MB footprint"
-    ],
-    "description": "Native Windows Host installer with auto-start, system tray service, firewall rules, and desktop shortcuts."
+    "version": "1.1.0",
+    "versionCode": 110,
+    "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
+    "sha256": "7589C7A1B1814BA508B9005D24621F6AD6A5DCDEEBE7A5EB18E6F24BFCE36B86",
+    "changelog": "- New brand logo & visual identity\n- High-performance Win32 input injector with 20ms click retention\n- Direct Connect mode on local Wi-Fi\n- Built-in 1-click OTA update and restart system",
+    "mandatory": false
   },
   "android": {
-    "version": "1.0.0",
-    "name": "Know The Mice for Android",
-    "filename": "KnowTheMice-Android.apk",
-    "url": "/downloads/android/KnowTheMice-Android.apk",
-    "size": "1.91 MB",
-    "sha256": "0FE87663D420B6940796EB41301DC4D979918D0166D40FEAAC96C91DD1FC0518",
-    "releaseDate": "September 19, 2026",
-    "platform": "Android 10.0+ (API 29+)",
-    "requirements": [
-      "Android 10 or newer (API 29+)",
-      "Connected to the same local Wi-Fi as your PC",
-      "Gyroscope & Accelerometer (for Air Mouse mode)",
-      "Vibration motor (for tactile haptic feedback)"
-    ],
-    "description": "Touchpad with multi-touch gestures, Gyroscope Air Mouse with complementary filter, full virtual keyboard, universal media deck, and presentation controls."
+    "version": "1.1.0",
+    "versionCode": 2,
+    "downloadUrl": "https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk",
+    "sha256": "18E65EAC732CC1A4FD55061400136C8E20E8F98DEB739162B9D404AB7DC4F25F",
+    "changelog": "- New brand logo & adaptive launcher icons\n- Redesigned precision touchpad with touch ripple\n- Tactile Left/Right click bar and smooth scroll strip\n- Floating glass mode dock\n- 1-tap in-app Over-The-Air update installation",
+    "mandatory": false
   }
 }

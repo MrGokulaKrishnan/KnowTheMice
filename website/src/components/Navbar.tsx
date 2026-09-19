@@ -26,23 +26,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage }) => 
           onClick={() => setActivePage('home')}
           className="flex items-center space-x-3 group text-left focus:outline-none"
         >
-          <div className="w-10 h-10 rounded-xl bg-background-surface border border-orange-500/30 flex items-center justify-center p-1.5 shadow-glow-orange group-hover:border-orange-500/60 transition-all">
-            <svg viewBox="0 0 132 152" fill="none" className="w-full h-full">
-              <defs>
-                <linearGradient id="nav-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#FF8A00"/>
-                  <stop offset="50%" stopColor="#FF5A00"/>
-                  <stop offset="100%" stopColor="#D93600"/>
-                </linearGradient>
-              </defs>
-              <line x1="5" y1="2" x2="5" y2="150" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="5" y1="74" x2="60" y2="4" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="36" y1="34" x2="66" y2="72" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="65" y1="69" x2="112" y2="69" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="65" y1="111" x2="126" y2="111" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-              <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="url(#nav-grad)" strokeWidth="12" strokeLinecap="round"/>
-            </svg>
+          <div className="w-10 h-10 rounded-xl bg-background-surface border border-orange-500/30 flex items-center justify-center p-1 shadow-glow-orange group-hover:border-orange-500/60 transition-all overflow-hidden">
+            <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain rounded-lg" />
           </div>
           <div>
             <span className="font-orbitron font-bold text-lg tracking-wider text-white group-hover:text-brand-highlight transition-colors">

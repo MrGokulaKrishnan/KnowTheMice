@@ -1,11 +1,14 @@
 package com.knowthemice.app.ui.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -14,16 +17,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.knowthemice.app.R
 import com.knowthemice.app.model.ConnectionState
 import com.knowthemice.app.model.DiscoveredHost
 import com.knowthemice.app.ui.components.GlassSurface
-import com.knowthemice.app.ui.components.GradientButton
 import com.knowthemice.app.ui.components.StatusBadge
 import com.knowthemice.app.ui.theme.*
+import com.knowthemice.app.update.AndroidUpdateInfo
 
 @Composable
 fun HomeScreen(
@@ -31,6 +37,9 @@ fun HomeScreen(
     currentHost: DiscoveredHost?,
     latencyMs: Long,
     discoveredHosts: List<DiscoveredHost>,
+    availableUpdate: AndroidUpdateInfo? = null,
+    updateProgress: Int? = null,
+    onInstallUpdate: (String) -> Unit = {},
     onConnectHost: (DiscoveredHost) -> Unit,
     onDisconnect: () -> Unit,
     onManualConnect: (String, Int) -> Unit,
@@ -42,66 +51,183 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(BgAmoled)
-            .padding(horizontal = 20.dp, vertical = 24.dp)
+            .padding(horizontal = 18.dp, vertical = 20.dp)
     ) {
-        // Top Header
+        // Brand Header with Modern KM Logo
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(
-                    text = "KNOW THE MICE",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp,
-                    letterSpacing = 2.sp
-                )
-                Text(
-                    text = "Local Wireless Controller",
-                    color = TextSecondary,
-                    fontSize = 12.sp
-                )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(46.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0xFF000000))
+                        .border(1.5.dp, BrandHighlight, RoundedCornerShape(12.dp))
+                        .padding(4.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_monogram),
+                        contentDescription = "KM Logo",
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Column {
+                    Text(
+                        text = "KNOW THE MICE",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        letterSpacing = 1.5.sp
+                    )
+                    Text(
+                        text = "Wireless PC Remote Controller",
+                        color = TextSecondary,
+                        fontSize = 11.sp
+                    )
+                }
             }
 
-            StatusBadge(
-                isConnected = connectionState == ConnectionState.CONNECTED,
-                label = if (connectionState == ConnectionState.CONNECTED) "● Connected" else "○ Searching"
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                StatusBadge(
+                    isConnected = connectionState == ConnectionState.CONNECTED,
+                    label = if (connectionState == ConnectionState.CONNECTED) "Connected" else "Scanning"
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                IconButton(
+                    onClick = { onNavigate("settings") },
+                    modifier = Modifier.size(36.dp)
+                ) {
+                    Icon(
+                        Icons.Default.Settings,
+                        contentDescription = "Settings",
+                        tint = TextSecondary
+                    )
+                }
+            }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // OTA Update Notification Banner
+        AnimatedVisibility(visible = availableUpdate != null) {
+            availableUpdate?.let { update ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(Color(0x35FF5E00), Color(0x15FFA550))
+                            )
+                        )
+                        .border(1.5.dp, BrandHighlight, RoundedCornerShape(16.dp))
+                        .padding(14.dp)
+                ) {
+                    Column {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(text = "⚡", fontSize = 16.sp)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "UPDATE AVAILABLE v${update.version}",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.sp
+                                    )
+                                }
+                                Text(
+                                    text = if (update.changelog.isNotBlank()) update.changelog else "New features and optimizations",
+                                    color = Color(0xCCFFFFFF),
+                                    fontSize = 11.sp,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
+
+                            if (updateProgress != null && updateProgress >= 0) {
+                                CircularProgressIndicator(
+                                    progress = { updateProgress / 100f },
+                                    modifier = Modifier.size(32.dp),
+                                    color = BrandHighlight,
+                                    trackColor = Color(0x30FFFFFF)
+                                )
+                            } else {
+                                Button(
+                                    onClick = { onInstallUpdate(update.downloadUrl) },
+                                    colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight),
+                                    shape = RoundedCornerShape(10.dp),
+                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                                ) {
+                                    Text(
+                                        text = "UPDATE",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 11.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(14.dp))
 
         // Active Connected Host Card
         if (connectionState == ConnectionState.CONNECTED && currentHost != null) {
-            GlassSurface(
-                modifier = Modifier.fillMaxWidth()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(Color(0xFF0F131C))
+                    .border(1.5.dp, Color(0x4022C55E), RoundedCornerShape(18.dp))
+                    .padding(18.dp)
             ) {
-                Column(modifier = Modifier.padding(20.dp)) {
+                Column {
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Column {
-                            Text(
-                                text = currentHost.name,
-                                color = Color.White,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 18.sp
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(StatusSuccess)
                             )
-                            Text(
-                                text = "${currentHost.ip} · ${currentHost.os}",
-                                color = TextSecondary,
-                                fontSize = 12.sp
-                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    text = currentHost.name,
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 17.sp
+                                )
+                                Text(
+                                    text = "${currentHost.ip} · Windows Host",
+                                    color = TextSecondary,
+                                    fontSize = 12.sp
+                                )
+                            }
                         }
                         Text(
                             text = "${latencyMs}ms",
                             color = BrandHighlight,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 14.sp
+                            fontSize = 13.sp
                         )
                     }
 
@@ -117,13 +243,17 @@ fun HomeScreen(
                             shape = RoundedCornerShape(12.dp),
                             modifier = Modifier.weight(1f)
                         ) {
-                            Text("Touchpad", color = Color.White, fontWeight = FontWeight.Bold)
+                            Icon(Icons.Default.TouchApp, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Open Remote", color = Color.White, fontWeight = FontWeight.Bold)
                         }
 
                         OutlinedButton(
                             onClick = onDisconnect,
                             colors = ButtonDefaults.outlinedButtonColors(contentColor = StatusError),
-                            border = ButtonDefaults.outlinedButtonBorder.copy(brush = androidx.compose.ui.graphics.SolidColor(StatusError)),
+                            border = ButtonDefaults.outlinedButtonBorder.copy(
+                                brush = androidx.compose.ui.graphics.SolidColor(StatusError)
+                            ),
                             shape = RoundedCornerShape(12.dp)
                         ) {
                             Text("Disconnect")
@@ -131,8 +261,15 @@ fun HomeScreen(
                     }
                 }
             }
-        } else {
-            // Discovered Computers Section
+            Spacer(modifier = Modifier.height(18.dp))
+        }
+
+        // Section Title: Available Computers
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Text(
                 text = "AVAILABLE COMPUTERS",
                 color = BrandHighlight,
@@ -141,84 +278,109 @@ fun HomeScreen(
                 letterSpacing = 1.sp
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            TextButton(
+                onClick = { showManualDialog = true },
+                contentPadding = PaddingValues(horizontal = 6.dp, vertical = 2.dp)
+            ) {
+                Text(
+                    text = "+ Manual IP",
+                    color = TextSecondary,
+                    fontSize = 12.sp
+                )
+            }
+        }
 
-            if (discoveredHosts.isEmpty()) {
-                GlassSurface(
-                    modifier = Modifier.fillMaxWidth()
+        Spacer(modifier = Modifier.height(10.dp))
+
+        if (discoveredHosts.isEmpty()) {
+            GlassSurface(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(28.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column(
+                    CircularProgressIndicator(
+                        color = BrandHighlight,
+                        modifier = Modifier.size(34.dp)
+                    )
+                    Spacer(modifier = Modifier.height(14.dp))
+                    Text(
+                        text = "Searching on Wi-Fi...",
+                        color = Color.White,
+                        fontWeight = FontWeight.SemiBold,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "Ensure Know The Mice Host is running on your PC",
+                        color = TextSecondary,
+                        fontSize = 11.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(discoveredHosts) { host ->
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(28.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .clip(RoundedCornerShape(14.dp))
+                            .background(Color(0xFF0D1017))
+                            .border(1.dp, Color(0x25FFFFFF), RoundedCornerShape(14.dp))
+                            .clickable { onConnectHost(host) }
+                            .padding(14.dp)
                     ) {
-                        CircularProgressIndicator(
-                            color = BrandHighlight,
-                            modifier = Modifier.size(36.dp)
-                        )
-                        Spacer(modifier = Modifier.height(14.dp))
-                        Text(
-                            text = "Scanning Local Wi-Fi...",
-                            color = Color.White,
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 14.sp
-                        )
-                        Text(
-                            text = "Ensure Know The Mice Host is running on your PC",
-                            color = TextSecondary,
-                            fontSize = 12.sp,
-                            modifier = Modifier.padding(top = 4.dp)
-                        )
-                    }
-                }
-            } else {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    items(discoveredHosts) { host ->
-                        GlassSurface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onConnectHost(host) }
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Row(verticalAlignment = Alignment.CenterVertically) {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(38.dp)
+                                        .clip(CircleShape)
+                                        .background(Color(0x15FF5E00)),
+                                    contentAlignment = Alignment.Center
+                                ) {
                                     Icon(
                                         Icons.Default.Computer,
                                         contentDescription = null,
                                         tint = BrandHighlight,
-                                        modifier = Modifier.size(28.dp)
+                                        modifier = Modifier.size(20.dp)
                                     )
-                                    Spacer(modifier = Modifier.width(14.dp))
-                                    Column {
-                                        Text(
-                                            text = host.name,
-                                            color = Color.White,
-                                            fontWeight = FontWeight.Bold,
-                                            fontSize = 15.sp
-                                        )
-                                        Text(
-                                            text = "${host.ip}:${host.port}",
-                                            color = TextSecondary,
-                                            fontSize = 12.sp
-                                        )
-                                    }
                                 }
 
-                                Text(
-                                    text = "PAIR",
-                                    color = BrandOrange,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 12.sp
-                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+
+                                Column {
+                                    Text(
+                                        text = host.name,
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 15.sp
+                                    )
+                                    Text(
+                                        text = "${host.ip}:${host.port}",
+                                        color = TextSecondary,
+                                        fontSize = 12.sp
+                                    )
+                                }
+                            }
+
+                            Button(
+                                onClick = { onConnectHost(host) },
+                                colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 14.dp, vertical = 6.dp)
+                            ) {
+                                Text("CONNECT", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 11.sp)
                             }
                         }
                     }
@@ -227,25 +389,13 @@ fun HomeScreen(
         }
 
         Spacer(modifier = Modifier.weight(1f))
-
-        // Connect Manually Option
-        TextButton(
-            onClick = { showManualDialog = true },
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        ) {
-            Text(
-                text = "Connect Manually by IP",
-                color = TextSecondary,
-                fontSize = 13.sp
-            )
-        }
     }
 
     if (showManualDialog) {
         var ipInput by remember { mutableStateOf("192.168.1.") }
         AlertDialog(
             onDismissRequest = { showManualDialog = false },
-            title = { Text("Connect Manually", color = Color.White) },
+            title = { Text("Connect Manually", color = Color.White, fontWeight = FontWeight.Bold) },
             text = {
                 Column {
                     Text("Enter PC's local IP address:", color = TextSecondary, fontSize = 12.sp)
@@ -263,11 +413,14 @@ fun HomeScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = {
-                    showManualDialog = false
-                    onManualConnect(ipInput, 52841)
-                }) {
-                    Text("Connect", color = BrandHighlight)
+                Button(
+                    onClick = {
+                        showManualDialog = false
+                        onManualConnect(ipInput, 52841)
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight)
+                ) {
+                    Text("Connect", color = Color.White)
                 }
             },
             dismissButton = {
@@ -275,7 +428,7 @@ fun HomeScreen(
                     Text("Cancel", color = TextSecondary)
                 }
             },
-            containerColor = BgSurface
+            containerColor = Color(0xFF0F1218)
         )
     }
 }

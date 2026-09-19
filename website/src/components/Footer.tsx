@@ -13,16 +13,8 @@ export const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg bg-black border border-orange-500/40 flex items-center justify-center p-1 shadow-glow-orange">
-                <svg viewBox="0 0 132 152" fill="none" className="w-full h-full">
-                  <line x1="5" y1="2" x2="5" y2="150" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="5" y1="74" x2="60" y2="4" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="36" y1="34" x2="66" y2="72" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="65" y1="69" x2="112" y2="69" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="65" y1="111" x2="126" y2="111" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                  <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="#FF8A00" strokeWidth="12" strokeLinecap="round"/>
-                </svg>
+              <div className="w-9 h-9 rounded-lg bg-black border border-orange-500/40 flex items-center justify-center p-0.5 shadow-glow-orange overflow-hidden">
+                <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain rounded-md" />
               </div>
               <span className="font-orbitron font-bold text-xl tracking-wider text-white">
                 KNOW THE MICE

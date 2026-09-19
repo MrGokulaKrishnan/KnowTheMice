@@ -26,12 +26,12 @@ interface DownloadsConfig {
 
 const DEFAULT_CONFIG: DownloadsConfig = {
   windows: {
-    version: "1.0.0",
+    version: "1.1.0",
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "343 KB",
-    sha256: "C924D91944BEBEE0AA326D8A0AE48A4C889B385A17D07257B2E0AFF8A14845A7",
+    size: "922 KB",
+    sha256: "7589C7A1B1814BA508B9005D24621F6AD6A5DCDEEBE7A5EB18E6F24BFCE36B86",
     releaseDate: "September 19, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
@@ -43,12 +43,12 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     description: "Native Windows Host installer with auto-start, system tray service, firewall rules, and desktop shortcuts."
   },
   android: {
-    version: "1.0.0",
+    version: "1.1.0",
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "1.91 MB",
-    sha256: "0FE87663D420B6940796EB41301DC4D979918D0166D40FEAAC96C91DD1FC0518",
+    size: "2.11 MB",
+    sha256: "18E65EAC732CC1A4FD55061400136C8E20E8F98DEB739162B9D404AB7DC4F25F",
     releaseDate: "September 19, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [

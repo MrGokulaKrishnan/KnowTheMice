@@ -49,6 +49,7 @@ public class NetworkServer : IDisposable
     public PinManager PinManager => _pinManager;
     public TrustedDeviceStore DeviceStore => _deviceStore;
     public InputInjector InputInjector => _inputInjector;
+    public bool AllowDirectConnectOnLan { get; set; } = true;
 
     public int ActiveClientCount
     {
@@ -174,15 +175,34 @@ public class NetworkServer : IDisposable
                     {
                         session.ClientId = pairReq.ClientId;
                         session.ClientName = pairReq.ClientName;
-                        string pin = _pinManager.GenerateNewPin();
-                        OnPairingRequested?.Invoke(pairReq.ClientName, pin);
 
-                        var resp = new PairResponseMessage
+                        if (AllowDirectConnectOnLan)
                         {
-                            Success = true,
-                            Message = "PIN generated. Please enter the 6-digit code shown on your PC."
-                        };
-                        await SendJsonAsync(session.Stream, resp);
+                            string authToken = Guid.NewGuid().ToString("N");
+                            _deviceStore.SaveDevice(session.ClientId, session.ClientName, authToken);
+                            session.IsAuthenticated = true;
+                            OnClientConnected?.Invoke(session.ClientId, session.ClientName);
+
+                            var resp = new PairResponseMessage
+                            {
+                                Success = true,
+                                AuthToken = authToken,
+                                Message = "Direct connection approved."
+                            };
+                            await SendJsonAsync(session.Stream, resp);
+                        }
+                        else
+                        {
+                            string pin = _pinManager.GenerateNewPin();
+                            OnPairingRequested?.Invoke(pairReq.ClientName, pin);
+
+                            var resp = new PairResponseMessage
+                            {
+                                Success = false,
+                                Message = "PIN_REQUIRED"
+                            };
+                            await SendJsonAsync(session.Stream, resp);
+                        }
                     }
                     break;
 

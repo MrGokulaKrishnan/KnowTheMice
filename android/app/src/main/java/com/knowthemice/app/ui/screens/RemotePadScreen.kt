@@ -1,10 +1,13 @@
 package com.knowthemice.app.ui.screens
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -13,13 +16,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.knowthemice.app.model.DiscoveredHost
-import com.knowthemice.app.ui.components.GlassSurface
 import com.knowthemice.app.ui.theme.*
 
 @Composable
@@ -32,222 +37,495 @@ fun RemotePadScreen(
     onMouseScroll: (dx: Float, dy: Float) -> Unit,
     onToggleAirMouse: () -> Unit,
     onOpenPower: () -> Unit,
+    onDisconnect: () -> Unit = {},
     onNavigate: (String) -> Unit
 ) {
     var isTouching by remember { mutableStateOf(false) }
+    var touchPosition by remember { mutableStateOf<Offset?>(null) }
+    var isDraggingLock by remember { mutableStateOf(false) }
+    var isLeftPressed by remember { mutableStateOf(false) }
+    var isRightPressed by remember { mutableStateOf(false) }
+    var isMidPressed by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BgAmoled)
-            .padding(16.dp)
+            .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
-        // Top Compact Status Pill
+        // Top Modern Header Status Bar
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(Color(0xFF0F1218))
+                .border(1.dp, Color(0x25FFFFFF), RoundedCornerShape(16.dp))
+                .padding(horizontal = 14.dp, vertical = 10.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Connected Host Pill
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(8.dp)
-                        .clip(RoundedCornerShape(4.dp))
+                        .size(10.dp)
+                        .clip(CircleShape)
                         .background(StatusSuccess)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = currentHost?.name ?: "Connected PC",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 14.sp
-                )
+                Spacer(modifier = Modifier.width(10.dp))
+                Column {
+                    Text(
+                        text = currentHost?.name ?: "Connected PC",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = currentHost?.ip ?: "127.0.0.1",
+                        color = TextMuted,
+                        fontSize = 10.sp
+                    )
+                }
             }
 
+            // Right Badges & Action Buttons
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = "${latencyMs}ms",
-                    color = BrandHighlight,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                IconButton(onClick = onOpenPower, modifier = Modifier.size(28.dp)) {
-                    Icon(Icons.Default.PowerSettingsNew, contentDescription = "Power", tint = BrandOrange)
+                // Latency Badge
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(Color(0x18FF5E00))
+                        .border(1.dp, Color(0x40FF5E00), RoundedCornerShape(12.dp))
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                ) {
+                    Text(
+                        text = "${latencyMs}ms",
+                        color = BrandHighlight,
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(10.dp))
+
+                // Power Controls
+                IconButton(
+                    onClick = onOpenPower,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(Color(0x20FF5E00))
+                ) {
+                    Icon(
+                        Icons.Default.PowerSettingsNew,
+                        contentDescription = "Power",
+                        tint = BrandOrange,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(6.dp))
+
+                // Disconnect
+                IconButton(
+                    onClick = onDisconnect,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clip(CircleShape)
+                        .background(Color(0x15FFFFFF))
+                ) {
+                    Icon(
+                        Icons.Default.Close,
+                        contentDescription = "Disconnect",
+                        tint = TextSecondary,
+                        modifier = Modifier.size(16.dp)
+                    )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
-        // Giant Interactive Touchpad Surface
-        GlassSurface(
+        // Giant Ergonomic Touchpad Area with Scroll Strip
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = {
-                            onMouseClick("LEFT", "CLICK")
-                        },
-                        onDoubleTap = {
-                            onMouseClick("DOUBLE", "CLICK")
-                        },
-                        onLongPress = {
-                            onMouseClick("RIGHT", "CLICK")
-                        }
+                .clip(RoundedCornerShape(20.dp))
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF0D1017),
+                            Color(0xFF07090D)
+                        )
                     )
-                }
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = { isTouching = true },
-                        onDragEnd = { isTouching = false },
-                        onDragCancel = { isTouching = false },
-                        onDrag = { change, dragAmount ->
-                            change.consume()
-                            onMouseMove(dragAmount.x, dragAmount.y)
-                        }
-                    )
-                },
-            borderBrush = androidx.compose.ui.graphics.SolidColor(
-                if (isTouching) BrandHighlight else GlassBorder
-            )
+                )
+                .border(
+                    1.5.dp,
+                    if (isDraggingLock) SolidColor(StatusWarning)
+                    else if (isTouching) SolidColor(BrandHighlight)
+                    else SolidColor(Color(0x25FF5E00)),
+                    RoundedCornerShape(20.dp)
+                )
         ) {
+            // Touchpad Main Surface Area
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(end = 46.dp) // Leave room for dedicated scroll strip
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onTap = { offset ->
+                                touchPosition = offset
+                                onMouseClick("LEFT", "CLICK")
+                            },
+                            onDoubleTap = { offset ->
+                                touchPosition = offset
+                                onMouseClick("DOUBLE", "CLICK")
+                            },
+                            onLongPress = { offset ->
+                                touchPosition = offset
+                                isDraggingLock = true
+                                onMouseClick("LEFT", "DOWN")
+                            }
+                        )
+                    }
+                    .pointerInput(Unit) {
+                        detectDragGestures(
+                            onDragStart = { offset ->
+                                isTouching = true
+                                touchPosition = offset
+                            },
+                            onDragEnd = {
+                                isTouching = false
+                                touchPosition = null
+                                if (isDraggingLock) {
+                                    isDraggingLock = false
+                                    onMouseClick("LEFT", "UP")
+                                }
+                            },
+                            onDragCancel = {
+                                isTouching = false
+                                touchPosition = null
+                                if (isDraggingLock) {
+                                    isDraggingLock = false
+                                    onMouseClick("LEFT", "UP")
+                                }
+                            },
+                            onDrag = { change, dragAmount ->
+                                change.consume()
+                                touchPosition = change.position
+                                onMouseMove(dragAmount.x, dragAmount.y)
+                            }
+                        )
+                    },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = if (isAirMouseActive) "AIR MOUSE ACTIVE (GYRO)" else "TOUCHPAD SURFACE",
-                    color = if (isAirMouseActive) BrandHighlight else Color(0x30FFFFFF),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 13.sp,
-                    letterSpacing = 2.sp
-                )
+                // Subtle Center Branding / Status
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = if (isAirMouseActive) "AIR MOUSE ACTIVE (GYRO)"
+                        else if (isDraggingLock) "DRAG LOCK ACTIVE"
+                        else "PRECISION TRACKPAD",
+                        color = if (isAirMouseActive || isDraggingLock) BrandHighlight else Color(0x35FFFFFF),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        letterSpacing = 2.sp
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = "1-Tap: Left · 2-Tap: Right · Hold: Drag",
+                        color = Color(0x20FFFFFF),
+                        fontSize = 10.sp
+                    )
+                }
 
-                // Scroll strip indicator on right edge
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .width(36.dp)
-                        .fillMaxHeight()
-                        .padding(vertical = 24.dp, horizontal = 8.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0x08FFFFFF))
-                        .pointerInput(Unit) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                onMouseScroll(0f, dragAmount.y * 0.1f)
-                            }
+                // Dynamic Touch Indicator
+                if (isTouching && touchPosition != null) {
+                    touchPosition?.let { pos ->
+                        Box(
+                            modifier = Modifier
+                                .offset(x = (pos.x - 24).dp, y = (pos.y - 24).dp)
+                                .size(48.dp)
+                                .clip(CircleShape)
+                                .background(Color(0x18FF5E00))
+                                .border(1.5.dp, Color(0x60FF5E00), CircleShape)
+                        )
+                    }
+                }
+            }
+
+            // Dedicated Ergonomic Vertical Scroll Strip on Right Margin
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .width(46.dp)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp))
+                    .background(Color(0xFF0B0D12))
+                    .border(
+                        1.dp,
+                        Color(0x15FFFFFF),
+                        RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp)
+                    )
+                    .pointerInput(Unit) {
+                        detectDragGestures { change, dragAmount ->
+                            change.consume()
+                            // Smooth scroll events
+                            onMouseScroll(0f, dragAmount.y * 0.12f)
                         }
+                    },
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 18.dp)
                 ) {
+                    Icon(
+                        Icons.Default.KeyboardArrowUp,
+                        contentDescription = "Scroll Up",
+                        tint = Color(0x50FFA550),
+                        modifier = Modifier.size(18.dp)
+                    )
+
+                    // Scroll Handle Pill
                     Box(
                         modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(width = 4.dp, height = 32.dp)
-                            .clip(RoundedCornerShape(2.dp))
-                            .background(Color(0x40FFA550))
+                            .width(5.dp)
+                            .height(48.dp)
+                            .clip(RoundedCornerShape(3.dp))
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(BrandHighlight, BrandOrange)
+                                )
+                            )
+                    )
+
+                    Icon(
+                        Icons.Default.KeyboardArrowDown,
+                        contentDescription = "Scroll Down",
+                        tint = Color(0x50FFA550),
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(14.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
-        // Mouse Button Bar
+        // Tactile Ergonomic Click Bar (Left, Mid, Right)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(60.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+                .height(64.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            Button(
-                onClick = { onMouseClick("LEFT", "CLICK") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0x18FFFFFF)),
-                shape = RoundedCornerShape(14.dp),
-                border = ButtonDefaults.outlinedButtonBorder.copy(brush = androidx.compose.ui.graphics.SolidColor(GlassBorder)),
+            // LEFT CLICK BUTTON (Large tactile area)
+            Box(
                 modifier = Modifier
-                    .weight(1.5f)
+                    .weight(1.6f)
                     .fillMaxHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        if (isLeftPressed) Color(0x35FF5E00) else Color(0xFF131720)
+                    )
+                    .border(
+                        1.5.dp,
+                        if (isLeftPressed) BrandHighlight else Color(0x30FF5E00),
+                        RoundedCornerShape(16.dp)
+                    )
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                isLeftPressed = true
+                                onMouseClick("LEFT", "DOWN")
+                                tryAwaitRelease()
+                                isLeftPressed = false
+                                onMouseClick("LEFT", "UP")
+                            }
+                        )
+                    },
+                contentAlignment = Alignment.Center
             ) {
-                Text("LEFT", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        Icons.Default.TouchApp,
+                        contentDescription = null,
+                        tint = if (isLeftPressed) BrandHighlight else Color.White,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(
+                        text = "LEFT CLICK",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        letterSpacing = 1.sp
+                    )
+                }
             }
 
-            Button(
-                onClick = { onMouseClick("MIDDLE", "CLICK") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0x10FFFFFF)),
-                shape = RoundedCornerShape(14.dp),
-                border = ButtonDefaults.outlinedButtonBorder.copy(brush = androidx.compose.ui.graphics.SolidColor(GlassBorder)),
+            // MIDDLE CLICK BUTTON
+            Box(
                 modifier = Modifier
-                    .weight(1f)
+                    .weight(0.8f)
                     .fillMaxHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        if (isMidPressed) Color(0x25FF5E00) else Color(0xFF10131A)
+                    )
+                    .border(
+                        1.dp,
+                        if (isMidPressed) BrandHighlight else Color(0x20FFFFFF),
+                        RoundedCornerShape(16.dp)
+                    )
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                isMidPressed = true
+                                onMouseClick("MIDDLE", "CLICK")
+                                tryAwaitRelease()
+                                isMidPressed = false
+                            }
+                        )
+                    },
+                contentAlignment = Alignment.Center
             ) {
-                Text("MID", color = TextSecondary, fontWeight = FontWeight.Bold, fontSize = 11.sp)
+                Text(
+                    text = "MID",
+                    color = TextSecondary,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 11.sp
+                )
             }
 
-            Button(
-                onClick = { onMouseClick("RIGHT", "CLICK") },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0x18FFFFFF)),
-                shape = RoundedCornerShape(14.dp),
-                border = ButtonDefaults.outlinedButtonBorder.copy(brush = androidx.compose.ui.graphics.SolidColor(GlassBorder)),
+            // RIGHT CLICK BUTTON
+            Box(
                 modifier = Modifier
-                    .weight(1.5f)
+                    .weight(1.6f)
                     .fillMaxHeight()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        if (isRightPressed) Color(0x35FF5E00) else Color(0xFF131720)
+                    )
+                    .border(
+                        1.5.dp,
+                        if (isRightPressed) BrandHighlight else Color(0x30FF5E00),
+                        RoundedCornerShape(16.dp)
+                    )
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                isRightPressed = true
+                                onMouseClick("RIGHT", "DOWN")
+                                tryAwaitRelease()
+                                isRightPressed = false
+                                onMouseClick("RIGHT", "UP")
+                            }
+                        )
+                    },
+                contentAlignment = Alignment.Center
             ) {
-                Text("RIGHT", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "RIGHT CLICK",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp,
+                        letterSpacing = 1.sp
+                    )
+                }
             }
         }
 
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(10.dp))
 
-        // Floating Quick Tools Bar
+        // Floating Glass Mode Dock
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(18.dp))
+                .background(Color(0xFF0F1218))
+                .border(1.dp, Color(0x20FFFFFF), RoundedCornerShape(18.dp))
+                .padding(horizontal = 6.dp, vertical = 6.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            FilledTonalButton(
-                onClick = onToggleAirMouse,
-                colors = ButtonDefaults.filledTonalButtonColors(
-                    containerColor = if (isAirMouseActive) BrandHighlight else Color(0x15FFFFFF),
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(Icons.Default.Navigation, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Air Mouse", fontSize = 11.sp)
-            }
+            // Trackpad Mode (Active)
+            DockItem(
+                icon = Icons.Default.Mouse,
+                label = "Mouse",
+                isActive = !isAirMouseActive,
+                onClick = { if (isAirMouseActive) onToggleAirMouse() }
+            )
 
-            FilledTonalButton(
-                onClick = { onNavigate("keyboard") },
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color(0x15FFFFFF), contentColor = Color.White),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(Icons.Default.Keyboard, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Keys", fontSize = 11.sp)
-            }
+            // Air Mouse (Gyro)
+            DockItem(
+                icon = Icons.Default.Navigation,
+                label = "Air Mouse",
+                isActive = isAirMouseActive,
+                onClick = onToggleAirMouse
+            )
 
-            FilledTonalButton(
-                onClick = { onNavigate("media") },
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color(0x15FFFFFF), contentColor = Color.White),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Media", fontSize = 11.sp)
-            }
+            // Keyboard
+            DockItem(
+                icon = Icons.Default.Keyboard,
+                label = "Keys",
+                isActive = false,
+                onClick = { onNavigate("keyboard") }
+            )
 
-            FilledTonalButton(
-                onClick = { onNavigate("presentation") },
-                colors = ButtonDefaults.filledTonalButtonColors(containerColor = Color(0x15FFFFFF), contentColor = Color.White),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Icon(Icons.Default.Slideshow, contentDescription = null, modifier = Modifier.size(16.dp))
-                Spacer(modifier = Modifier.width(6.dp))
-                Text("Slides", fontSize = 11.sp)
-            }
+            // Media
+            DockItem(
+                icon = Icons.Default.PlayArrow,
+                label = "Media",
+                isActive = false,
+                onClick = { onNavigate("media") }
+            )
+
+            // Slides
+            DockItem(
+                icon = Icons.Default.Slideshow,
+                label = "Slides",
+                isActive = false,
+                onClick = { onNavigate("presentation") }
+            )
+        }
+    }
+}
+
+@Composable
+private fun DockItem(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    isActive: Boolean,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (isActive) Color(0x25FF5E00) else Color.Transparent)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 10.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                tint = if (isActive) BrandHighlight else Color(0x80FFFFFF),
+                modifier = Modifier.size(18.dp)
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = label,
+                color = if (isActive) Color.White else Color(0x60FFFFFF),
+                fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
+                fontSize = 10.sp
+            )
         }
     }
 }

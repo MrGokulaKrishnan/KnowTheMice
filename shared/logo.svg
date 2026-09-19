@@ -1,50 +1,41 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="ktm-brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FF8A00"/>
-      <stop offset="45%" stop-color="#FF5A00"/>
+    <linearGradient id="km-glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFA033"/>
+      <stop offset="50%" stop-color="#FF5E00"/>
       <stop offset="100%" stop-color="#D93600"/>
     </linearGradient>
-    <filter id="ktm-glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="16" result="blur" />
+    <filter id="km-shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12" result="blur" />
       <feComposite in="SourceGraphic" in2="blur" operator="over" />
     </filter>
-    <linearGradient id="ktm-bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#120D08"/>
-      <stop offset="50%" stop-color="#080808"/>
-      <stop offset="100%" stop-color="#050505"/>
-    </linearGradient>
   </defs>
-  
-  <!-- App Icon Squircle Background -->
-  <rect width="512" height="512" rx="112" fill="url(#ktm-bg-grad)"/>
-  <rect width="510" height="510" x="1" y="1" rx="111" stroke="rgba(255, 165, 80, 0.22)" stroke-width="2"/>
-  
-  <!-- Subtle Ambient Orange Glow behind mark -->
-  <circle cx="256" cy="256" r="140" fill="#FF5A00" opacity="0.12" filter="url(#ktm-glow)"/>
-  
-  <!-- Scaled and Centered KTM Monogram Geometric Paths -->
-  <!-- Scaled ~2.2x from 132x152, centered at offset (110, 88) -->
-  <g transform="translate(110, 88) scale(2.2)" filter="url(#ktm-glow)">
-    <!-- Left vertical stem (K) -->
-    <line x1="5" y1="2" x2="5" y2="150" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Top diagonal branch (K upper) -->
-    <line x1="5" y1="74" x2="60" y2="4" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Mid diagonal connector (K lower to T stem) -->
-    <line x1="36" y1="34" x2="66" y2="72" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Center vertical stem (T & M) -->
-    <line x1="65.5" y1="72" x2="65.5" y2="150" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Upper horizontal bar (T crossbar) -->
-    <line x1="65" y1="69" x2="112" y2="69" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Lower horizontal bar (M connector) -->
-    <line x1="65" y1="111" x2="126" y2="111" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
-    
-    <!-- Right vertical stem (M right edge) -->
-    <line x1="126.5" y1="2" x2="126.5" y2="150" stroke="url(#ktm-brand-grad)" stroke-width="12" stroke-linecap="round"/>
+
+  <!-- True AMOLED Black Background -->
+  <rect width="512" height="512" rx="112" fill="#000000"/>
+  <rect width="510" height="510" x="1" y="1" rx="111" stroke="#FF5E00" stroke-opacity="0.3" stroke-width="2"/>
+
+  <!-- Glowing Ambient Radial Light -->
+  <circle cx="256" cy="240" r="150" fill="#FF5E00" opacity="0.16" filter="url(#km-shadow)"/>
+
+  <g transform="translate(48, 48) scale(0.81)" filter="url(#km-shadow)">
+    <!-- Stylized KM Monogram Paths -->
+    <!-- Cursor Arrow on top of M -->
+    <path d="M336 24 C342 20, 350 22, 356 28 L430 84 C438 90, 436 102, 426 104 L378 108 L398 152 C400 156, 396 160, 392 160 L368 160 C364 160, 360 156, 358 152 L340 110 L330 144 C326 154, 314 152, 314 142 L314 40 C314 32, 324 24, 336 24 Z" fill="url(#km-glow-grad)"/>
+
+    <!-- 'K' Left Stem with Lightning Zag -->
+    <path d="M80 120 L136 120 L112 216 L148 216 L80 340 L108 276 L72 276 Z" fill="url(#km-glow-grad)"/>
+    <!-- 'K' Upper Branch -->
+    <path d="M124 210 L196 120 L256 120 L176 220 Z" fill="url(#km-glow-grad)"/>
+    <!-- 'K' Lower Branch -->
+    <path d="M152 204 L244 320 L184 320 L112 228 Z" fill="url(#km-glow-grad)"/>
+
+    <!-- 'M' Left Leg with Lightning Zag -->
+    <path d="M260 120 L308 120 L288 220 L320 220 L248 340 L280 276 L250 276 Z" fill="url(#km-glow-grad)"/>
+    <!-- 'M' Center Peak & Diagonal -->
+    <path d="M304 120 L356 250 L408 120 L452 120 L452 320 L404 320 L404 200 L370 286 L342 286 L308 200 L308 320 L268 320 Z" fill="url(#km-glow-grad)"/>
+
+    <!-- Futuristic Under-Text 'Know The Mice' -->
+    <text x="256" y="440" font-family="'Orbitron', 'Inter', 'Segoe UI', sans-serif" font-weight="900" font-size="34" letter-spacing="4" fill="url(#km-glow-grad)" text-anchor="middle">KNOW THE MICE</text>
   </g>
 </svg>

@@ -37,6 +37,8 @@ website/.vite/
 *.exe
 *.dll
 *.apk
+windows/publish_host/
+windows/publish_setup/
 
 # Android Build Artifacts
 .gradle/

@@ -5,12 +5,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import com.knowthemice.app.model.ConnectionState
 import com.knowthemice.app.model.DiscoveredHost
 import com.knowthemice.app.network.ControlClient
@@ -19,6 +21,9 @@ import com.knowthemice.app.sensor.AirMouseEngine
 import com.knowthemice.app.ui.screens.*
 import com.knowthemice.app.ui.theme.BgAmoled
 import com.knowthemice.app.ui.theme.KnowTheMiceTheme
+import com.knowthemice.app.update.AndroidUpdateInfo
+import com.knowthemice.app.update.UpdateManager
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -26,6 +31,9 @@ class MainActivity : ComponentActivity() {
     private val controlClient = ControlClient()
     private var airMouseEngine: AirMouseEngine? = null
     private var vibrator: Vibrator? = null
+
+    private var availableUpdate by mutableStateOf<AndroidUpdateInfo?>(null)
+    private var updateProgress by mutableStateOf<Int?>(null)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +47,33 @@ class MainActivity : ComponentActivity() {
             controlClient.sendMouseMove(dx, dy)
         }
 
+        // Check for OTA updates on app launch
+        lifecycleScope.launch {
+            try {
+                availableUpdate = UpdateManager.checkForUpdates(BuildConfig.VERSION_CODE)
+            } catch (_: Exception) {}
+        }
+
         setContent {
             KnowTheMiceTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = BgAmoled) {
                     MainAppContent()
                 }
+            }
+        }
+    }
+
+    private fun startApkInstallation(downloadUrl: String) {
+        lifecycleScope.launch {
+            updateProgress = 0
+            val result = UpdateManager.downloadAndInstallApk(
+                context = this@MainActivity,
+                downloadUrl = downloadUrl,
+                onProgress = { pct -> updateProgress = pct }
+            )
+            updateProgress = null
+            result.onFailure { ex ->
+                Toast.makeText(this@MainActivity, "Update error: ${ex.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -84,8 +114,12 @@ class MainActivity : ComponentActivity() {
                     currentHost = currentHost,
                     latencyMs = latencyMs,
                     discoveredHosts = hostList,
+                    availableUpdate = availableUpdate,
+                    updateProgress = updateProgress,
+                    onInstallUpdate = { url -> startApkInstallation(url) },
                     onConnectHost = { host ->
                         controlClient.connect(
+                            context = this@MainActivity,
                             host = host,
                             onPairingNeeded = { showPairingDialog = true },
                             onConnected = {
@@ -105,6 +139,7 @@ class MainActivity : ComponentActivity() {
                             port = port
                         )
                         controlClient.connect(
+                            context = this@MainActivity,
                             host = manualHost,
                             onPairingNeeded = { showPairingDialog = true },
                             onConnected = {
@@ -142,6 +177,10 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onOpenPower = { showPowerDialog = true },
+                    onDisconnect = {
+                        controlClient.disconnect()
+                        currentScreen = "home"
+                    },
                     onNavigate = { screen -> currentScreen = screen }
                 )
             }
@@ -223,6 +262,8 @@ class MainActivity : ComponentActivity() {
                         if (success) {
                             showPairingDialog = false
                             currentScreen = "remote"
+                        } else {
+                            Toast.makeText(this@MainActivity, "PIN verification failed: $msg", Toast.LENGTH_SHORT).show()
                         }
                     }
                 },

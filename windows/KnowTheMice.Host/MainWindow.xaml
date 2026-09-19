@@ -44,33 +44,56 @@
         </Grid.RowDefinitions>
 
         <!-- Top Header Bar -->
-        <Border Grid.Row="0" Style="{StaticResource GlassBorder}" Padding="20,16" Margin="0,0,0,20">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Width="40" Height="40" Background="#0A0A0A" BorderBrush="#FF5A00" BorderThickness="1.5" CornerRadius="10" Margin="0,0,16,0">
-                        <TextBlock Text="K" FontWeight="Bold" FontSize="20" Foreground="{StaticResource BrandHighlight}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    </Border>
-                    <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="18" Foreground="White"/>
-                        <TextBlock Text="Local Wireless Remote Control Host · v1.0.0" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
-                    </StackPanel>
-                </StackPanel>
-
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="#1522C55E" BorderBrush="#3022C55E" BorderThickness="1" CornerRadius="20" Padding="14,6">
-                        <StackPanel Orientation="Horizontal">
-                            <Ellipse Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0"/>
-                            <TextBlock Text="HOST ONLINE" FontWeight="Bold" FontSize="11" Foreground="#22C55E"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
+            <!-- OTA Update Notification Banner -->
+            <Border x:Name="UpdateBanner" Margin="0,0,0,14" Background="#30FF5E00" BorderBrush="#FF5E00" BorderThickness="1.5" CornerRadius="12" Padding="16,10" Visibility="Collapsed">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="⚡" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                        <StackPanel>
+                            <TextBlock x:Name="TxtUpdateTitle" Text="New Update Available!" FontWeight="Bold" FontSize="13" Foreground="White"/>
+                            <TextBlock x:Name="TxtUpdateDesc" Text="Faster input engine, new UI/UX, and performance enhancements." FontSize="11" Foreground="{StaticResource TextSecondary}"/>
                         </StackPanel>
-                    </Border>
-                </StackPanel>
-            </Grid>
-        </Border>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <ProgressBar x:Name="PrgUpdate" Width="100" Height="10" Margin="0,0,12,0" Visibility="Collapsed"/>
+                        <Button x:Name="BtnRestartUpdate" Content="RESTART TO UPDATE" Style="{StaticResource PrimaryButton}" Click="BtnRestartUpdate_Click" Padding="14,6" FontSize="11"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Border Style="{StaticResource GlassBorder}" Padding="20,16">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Width="42" Height="42" Background="#000000" BorderBrush="#FF5E00" BorderThickness="1.5" CornerRadius="10" Margin="0,0,16,0" ClipToBounds="True">
+                            <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="18" Foreground="White"/>
+                            <TextBlock Text="Local Wireless Remote Control Host · v1.1.0" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Border Background="#1522C55E" BorderBrush="#3022C55E" BorderThickness="1" CornerRadius="20" Padding="14,6">
+                            <StackPanel Orientation="Horizontal">
+                                <Ellipse Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0"/>
+                                <TextBlock Text="HOST ONLINE" FontWeight="Bold" FontSize="11" Foreground="#22C55E"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </StackPanel>
 
         <!-- Main Body Content Grid -->
         <Grid Grid.Row="1">
@@ -138,6 +161,7 @@
                         <Slider x:Name="SliderSensitivity" Minimum="0.2" Maximum="3.0" Value="1.0" ValueChanged="SliderSensitivity_ValueChanged" Margin="0,0,0,12"/>
 
                         <CheckBox x:Name="ChkNaturalScroll" Content="Natural Two-Finger Scrolling" Foreground="White" IsChecked="True" Checked="ChkNaturalScroll_Checked" Unchecked="ChkNaturalScroll_Unchecked" Margin="0,0,0,8"/>
+                        <CheckBox x:Name="ChkDirectConnect" Content="Direct Connect on Local LAN (No PIN)" Foreground="White" IsChecked="True" Checked="ChkDirectConnect_Checked" Unchecked="ChkDirectConnect_Unchecked" Margin="0,0,0,8"/>
                         <CheckBox x:Name="ChkStartWithWindows" Content="Start Minimized with Windows" Foreground="White" Margin="0,0,0,8"/>
                     </StackPanel>
                 </Border>
@@ -162,7 +186,10 @@
         <Border Grid.Row="2" Margin="0,16,0,0" Padding="12,0">
             <Grid>
                 <TextBlock x:Name="TxtStatusLog" Text="● Ready for connections on 0.0.0.0:52841" FontSize="11" Foreground="{StaticResource TextSecondary}"/>
-                <TextBlock Text="Zero Cloud · End-to-End Local Encryption" FontSize="11" Foreground="#80FFFFFF" HorizontalAlignment="Right"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button x:Name="BtnCheckUpdates" Content="Check for Updates" Background="Transparent" Foreground="#80FFFFFF" BorderThickness="0" FontSize="11" Cursor="Hand" Click="BtnCheckUpdates_Click" Margin="0,0,16,0"/>
+                    <TextBlock Text="Zero Cloud · End-to-End Local Encryption" FontSize="11" Foreground="#80FFFFFF" VerticalAlignment="Center"/>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

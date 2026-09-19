@@ -11,6 +11,8 @@ public partial class MainWindow : Window
 {
     private readonly DiscoveryBeacon _beacon = new();
     private readonly NetworkServer _server = new();
+    private readonly UpdateService _updateService = new();
+    private PlatformUpdate? _availableUpdate;
     private DispatcherTimer? _pinCountdownTimer;
     private int _remainingSeconds = 0;
 
@@ -27,11 +29,15 @@ public partial class MainWindow : Window
         _server.OnPairingRequested += HandlePairingRequested;
         _server.OnStatusChanged += HandleStatusChanged;
 
+        // Default to direct connect for zero-friction local Wi-Fi control
+        _server.AllowDirectConnectOnLan = true;
+
         // Start services
         _server.Start();
         _beacon.Start();
 
         RefreshTrustedDevices();
+        _ = CheckForUpdatesAsync();
     }
 
     private string GetLocalIpAddress()
@@ -151,6 +157,77 @@ public partial class MainWindow : Window
     private void ChkNaturalScroll_Unchecked(object sender, RoutedEventArgs e)
     {
         if (_server != null) _server.InputInjector.NaturalScrolling = false;
+    }
+
+    private void ChkDirectConnect_Checked(object sender, RoutedEventArgs e)
+    {
+        if (_server != null) _server.AllowDirectConnectOnLan = true;
+    }
+
+    private void ChkDirectConnect_Unchecked(object sender, RoutedEventArgs e)
+    {
+        if (_server != null) _server.AllowDirectConnectOnLan = false;
+    }
+
+    private async Task CheckForUpdatesAsync()
+    {
+        var update = await _updateService.CheckForUpdatesAsync("1.1.0");
+        if (update != null)
+        {
+            Dispatcher.Invoke(() =>
+            {
+                _availableUpdate = update;
+                TxtUpdateTitle.Text = $"Update Available: v{update.Version}";
+                TxtUpdateDesc.Text = string.IsNullOrWhiteSpace(update.Changelog) ? "New performance enhancements and features." : update.Changelog;
+                UpdateBanner.Visibility = Visibility.Visible;
+            });
+        }
+    }
+
+    private async void BtnRestartUpdate_Click(object sender, RoutedEventArgs e)
+    {
+        if (_availableUpdate == null) return;
+        BtnRestartUpdate.IsEnabled = false;
+        BtnRestartUpdate.Content = "DOWNLOADING...";
+        PrgUpdate.Visibility = Visibility.Visible;
+        PrgUpdate.Value = 0;
+
+        try
+        {
+            await _updateService.DownloadAndRestartAsync(_availableUpdate.DownloadUrl, pct =>
+            {
+                Dispatcher.Invoke(() => PrgUpdate.Value = pct);
+            });
+        }
+        catch (Exception ex)
+        {
+            System.Windows.MessageBox.Show($"Failed to download update: {ex.Message}", "Update Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            BtnRestartUpdate.IsEnabled = true;
+            BtnRestartUpdate.Content = "RESTART TO UPDATE";
+            PrgUpdate.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    private async void BtnCheckUpdates_Click(object sender, RoutedEventArgs e)
+    {
+        BtnCheckUpdates.IsEnabled = false;
+        TxtStatusLog.Text = "● Checking for updates...";
+        var update = await _updateService.CheckForUpdatesAsync("1.1.0");
+        BtnCheckUpdates.IsEnabled = true;
+
+        if (update != null)
+        {
+            _availableUpdate = update;
+            TxtUpdateTitle.Text = $"Update Available: v{update.Version}";
+            TxtUpdateDesc.Text = update.Changelog;
+            UpdateBanner.Visibility = Visibility.Visible;
+            TxtStatusLog.Text = $"● New update v{update.Version} found!";
+        }
+        else
+        {
+            TxtStatusLog.Text = "● Know The Mice is up to date (v1.1.0).";
+            System.Windows.MessageBox.Show("Know The Mice is up to date (v1.1.0).", "Check for Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
     }
 
     private void RefreshTrustedDevices()

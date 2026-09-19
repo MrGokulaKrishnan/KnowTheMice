@@ -71,11 +71,13 @@ public class InputInjector
 
         if (button == MouseButton.DOUBLE)
         {
-            // Double-click sequence
+            // Double-click sequence with clean separation
             SendMouseButton(downFlag);
+            Thread.Sleep(15);
             SendMouseButton(upFlag);
-            Thread.Sleep(30);
+            Thread.Sleep(40);
             SendMouseButton(downFlag);
+            Thread.Sleep(15);
             SendMouseButton(upFlag);
             return;
         }
@@ -91,6 +93,7 @@ public class InputInjector
         else // CLICK
         {
             SendMouseButton(downFlag);
+            Thread.Sleep(20); // Vital 20ms hold so Windows and apps detect the click reliably
             SendMouseButton(upFlag);
         }
     }
