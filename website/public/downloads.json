@@ -1,0 +1,36 @@
+{
+  "windows": {
+    "version": "1.0.0",
+    "name": "Know The Mice for Windows",
+    "filename": "KnowTheMice-Setup-x64.exe",
+    "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
+    "size": "343 KB",
+    "sha256": "C924D91944BEBEE0AA326D8A0AE48A4C889B385A17D07257B2E0AFF8A14845A7",
+    "releaseDate": "September 19, 2026",
+    "platform": "Windows 10 / 11 (64-bit)",
+    "requirements": [
+      "Windows 10 (Build 19041+) or Windows 11",
+      "x64 Architecture (64-bit)",
+      "Local Wi-Fi network interface",
+      "RAM: < 25MB footprint"
+    ],
+    "description": "Native Windows Host installer with auto-start, system tray service, firewall rules, and desktop shortcuts."
+  },
+  "android": {
+    "version": "1.0.0",
+    "name": "Know The Mice for Android",
+    "filename": "KnowTheMice-Android.apk",
+    "url": "/downloads/android/KnowTheMice-Android.apk",
+    "size": "1.91 MB",
+    "sha256": "0FE87663D420B6940796EB41301DC4D979918D0166D40FEAAC96C91DD1FC0518",
+    "releaseDate": "September 19, 2026",
+    "platform": "Android 10.0+ (API 29+)",
+    "requirements": [
+      "Android 10 or newer (API 29+)",
+      "Connected to the same local Wi-Fi as your PC",
+      "Gyroscope & Accelerometer (for Air Mouse mode)",
+      "Vibration motor (for tactile haptic feedback)"
+    ],
+    "description": "Touchpad with multi-touch gestures, Gyroscope Air Mouse with complementary filter, full virtual keyboard, universal media deck, and presentation controls."
+  }
+}

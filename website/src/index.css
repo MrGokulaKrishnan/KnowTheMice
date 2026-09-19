@@ -10,12 +10,13 @@
   body {
     background-color: #050505;
     color: #FFFFFF;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     overflow-x: hidden;
   }
 
-  h1, h2, h3, .font-orbitron {
-    font-family: 'Orbitron', sans-serif;
+  h1, h2, h3, .font-display, .font-orbitron {
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+    letter-spacing: -0.025em;
   }
 }
 

@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <AssemblyName>KnowTheMice-Setup-x64</AssemblyName>
+    <RootNamespace>KnowTheMice.Setup</RootNamespace>
+    <AssemblyTitle>Know The Mice Setup</AssemblyTitle>
+    <AssemblyProduct>Know The Mice</AssemblyProduct>
+    <AssemblyCompany>Know The Mice Team</AssemblyCompany>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="payload.zip" />
+    <EmbeddedResource Include="icon.ico" />
+  </ItemGroup>
+
+</Project>

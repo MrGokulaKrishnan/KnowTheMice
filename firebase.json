@@ -6,13 +6,75 @@
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-    ],
     "headers": [
+      {
+        "source": "/downloads/windows/KnowTheMice-Setup-x64.exe",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.microsoft.portable-executable"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment; filename=\"KnowTheMice-Setup-x64.exe\""
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/windows/latest",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.microsoft.portable-executable"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment; filename=\"KnowTheMice-Setup-x64.exe\""
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/android/KnowTheMice-Android.apk",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.android.package-archive"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment; filename=\"KnowTheMice-Android.apk\""
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "/downloads/android/latest",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.android.package-archive"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment; filename=\"KnowTheMice-Android.apk\""
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
       {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|js|css|woff|woff2)",
         "headers": [
@@ -21,6 +83,28 @@
             "value": "max-age=31536000"
           }
         ]
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/downloads/windows/KnowTheMice-Setup-x64.exe",
+        "destination": "/downloads/windows/KnowTheMice-Setup-x64.bin"
+      },
+      {
+        "source": "/downloads/windows/latest",
+        "destination": "/downloads/windows/KnowTheMice-Setup-x64.bin"
+      },
+      {
+        "source": "/downloads/android/KnowTheMice-Android.apk",
+        "destination": "/downloads/android/KnowTheMice-Android.bin"
+      },
+      {
+        "source": "/downloads/android/latest",
+        "destination": "/downloads/android/KnowTheMice-Android.bin"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
       }
     ]
   }
