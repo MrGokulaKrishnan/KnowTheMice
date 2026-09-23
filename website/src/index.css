@@ -64,10 +64,43 @@
   -webkit-backdrop-filter: blur(16px);
 }
 
-.gradient-orange-text {
-  background: linear-gradient(135deg, #FFB347 0%, #FF8A00 40%, #FF5A00 75%, #D93600 100%);
+/* Unified 9-Gradient Design System Tokens */
+.gradient-primary {
+  background: linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, rgba(255, 138, 0, 0.16) 0%, rgba(217, 54, 0, 0.05) 100%);
+}
+
+.gradient-accent {
+  background: linear-gradient(135deg, #FFA333 0%, #FF5A00 100%);
+}
+
+.gradient-text, .gradient-orange-text {
+  background: linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+}
+
+.gradient-border {
+  border-image: linear-gradient(135deg, rgba(255, 138, 0, 0.45) 0%, rgba(255, 90, 0, 0.20) 50%, rgba(217, 54, 0, 0.35) 100%) 1;
+}
+
+.gradient-surface {
+  background: linear-gradient(180deg, rgba(20, 20, 20, 0.70) 0%, rgba(10, 10, 10, 0.90) 100%);
+}
+
+.gradient-hover {
+  background: linear-gradient(135deg, #FFA033 0%, #FF6B1A 50%, #E64000 100%);
+}
+
+.gradient-active {
+  background: linear-gradient(135deg, #E65000 0%, #CC4500 50%, #B32D00 100%);
+}
+
+.gradient-disabled {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
 }
 
 .gradient-brand-button {
@@ -77,9 +110,13 @@
 }
 
 .gradient-brand-button:hover {
-  background: linear-gradient(135deg, #FF9A2E 0%, #FF6A00 50%, #E04500 100%);
+  background: linear-gradient(135deg, #FFA033 0%, #FF6B1A 50%, #E64000 100%);
   box-shadow: 0 6px 28px rgba(255, 90, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   transform: translateY(-1px);
+}
+
+.gradient-brand-button:active {
+  background: linear-gradient(135deg, #E65000 0%, #CC4500 50%, #B32D00 100%);
 }
 
 /* Grid & Glow Animations */

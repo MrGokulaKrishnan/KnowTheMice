@@ -18,6 +18,7 @@ BRANDING_MASTER = os.path.join(BRANDING_DIR, "master")
 BRANDING_WEB = os.path.join(BRANDING_DIR, "web")
 BRANDING_ANDROID = os.path.join(BRANDING_DIR, "android")
 BRANDING_WINDOWS = os.path.join(BRANDING_DIR, "windows")
+BRANDING_LINUX = os.path.join(BRANDING_DIR, "linux")
 
 WEBSITE_PUBLIC = os.path.join(ROOT, "website", "public")
 ANDROID_RES = os.path.join(ROOT, "android", "app", "src", "main", "res")
@@ -27,7 +28,7 @@ WINDOWS_SETUP = os.path.join(ROOT, "windows", "KnowTheMice.Setup")
 
 def ensure_dirs():
     dirs = [
-        BRANDING_MASTER, BRANDING_WEB, BRANDING_ANDROID, BRANDING_WINDOWS,
+        BRANDING_MASTER, BRANDING_WEB, BRANDING_ANDROID, BRANDING_WINDOWS, BRANDING_LINUX,
         WEBSITE_PUBLIC,
         os.path.join(ANDROID_RES, "drawable"),
         os.path.join(ANDROID_RES, "drawable-mdpi"),
@@ -126,10 +127,50 @@ def make_round_icon(square_img: Image.Image) -> Image.Image:
     return out
 
 
-def make_ico(img_list, output_path):
-    """Saves multiple RGBA images into Windows .ICO format."""
-    rgba_list = [img.convert("RGBA") for img in img_list]
-    rgba_list[0].save(output_path, format="ICO", sizes=[img.size for img in rgba_list], append_images=rgba_list[1:])
+def create_tray_badge(trans_symbol: Image.Image, size: int = 256) -> Image.Image:
+    """Creates a high-contrast AMOLED black squircle badge with flame orange border and centered symbol for system tray."""
+    badge = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(badge)
+    
+    radius = int(size * 0.20)
+    # Subtle outer glow border
+    for r_offset, alpha in [(4, 40), (2, 80)]:
+        draw.rounded_rectangle(
+            [2 - r_offset, 2 - r_offset, size - 3 + r_offset, size - 3 + r_offset],
+            radius=radius + r_offset,
+            outline=(255, 90, 0, alpha),
+            width=2
+        )
+
+    # Solid AMOLED black background
+    draw.rounded_rectangle(
+        [2, 2, size - 3, size - 3],
+        radius=radius,
+        fill=(0, 0, 0, 255),
+        outline=(255, 90, 0, 255),
+        width=max(2, int(size * 0.024))
+    )
+
+    pad = int(size * 0.11)
+    inner_w = size - 2 * pad
+    inner_h = size - 2 * pad
+    sym_w, sym_h = trans_symbol.size
+    scale = min(inner_w / sym_w, inner_h / sym_h)
+    new_w = max(1, int(sym_w * scale))
+    new_h = max(1, int(sym_h * scale))
+    resized_sym = trans_symbol.resize((new_w, new_h), Image.Resampling.LANCZOS)
+
+    pos_x = (size - new_w) // 2
+    pos_y = (size - new_h) // 2
+    badge.paste(resized_sym, (pos_x, pos_y), resized_sym)
+    return badge
+
+
+def make_ico_from_master(master_img: Image.Image, output_path: str, sizes: list):
+    """Saves multiple RGBA resolutions into Windows .ICO format using PIL's sizes parameter."""
+    master_rgba = master_img.convert("RGBA")
+    size_tuples = [(s, s) for s in sizes]
+    master_rgba.save(output_path, format="ICO", sizes=size_tuples)
 
 
 def make_svg_wrapper(png_image: Image.Image, output_path: str):
@@ -217,16 +258,10 @@ def main():
     fav_32.save(os.path.join(BRANDING_WEB, "favicon-32x32.png"))
     fav_48.save(os.path.join(BRANDING_WEB, "favicon-48x48.png"))
 
-    # Favicon ICO (16, 24, 32, 48, 64)
-    fav_ico_images = [
-        fav_64,
-        fav_48,
-        fav_32,
-        place_in_canvas(crop_symbol, 24, 0.95, bg_color=None),
-        fav_16
-    ]
-    make_ico(fav_ico_images, os.path.join(WEBSITE_PUBLIC, "favicon.ico"))
-    make_ico(fav_ico_images, os.path.join(BRANDING_WEB, "favicon.ico"))
+    # Favicon ICO (64, 48, 32, 24, 16)
+    fav_master = place_in_canvas(crop_symbol, 256, 0.95, bg_color=None)
+    make_ico_from_master(fav_master, os.path.join(WEBSITE_PUBLIC, "favicon.ico"), [64, 48, 32, 24, 16])
+    make_ico_from_master(fav_master, os.path.join(BRANDING_WEB, "favicon.ico"), [64, 48, 32, 24, 16])
 
     # Apple Touch Icon (180x180, pure black background, logo centered)
     apple_icon = place_in_canvas(crop_full, 180, 0.80, bg_color=(0, 0, 0, 255))
@@ -291,22 +326,43 @@ def main():
 
     # 6. Windows Assets
     win_sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
-    win_images = [place_in_canvas(crop_full, s, 0.88, bg_color=(0, 0, 0, 255)) for s in win_sizes]
+    make_ico_from_master(master_full_black, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)
+    make_ico_from_master(master_full_black, os.path.join(WINDOWS_SETUP, "icon.ico"), win_sizes)
+    make_ico_from_master(master_full_black, os.path.join(BRANDING_WINDOWS, "app.ico"), win_sizes)
+    make_ico_from_master(master_full_black, os.path.join(BRANDING_WINDOWS, "installer.ico"), win_sizes)
 
-    make_ico(win_images, os.path.join(WINDOWS_HOST, "icon.ico"))
-    make_ico(win_images, os.path.join(WINDOWS_SETUP, "icon.ico"))
-    make_ico(win_images, os.path.join(BRANDING_WINDOWS, "app.ico"))
-    make_ico(win_images, os.path.join(BRANDING_WINDOWS, "installer.ico"))
-
-    # Windows Tray Icon: SYMBOL-ONLY with TRANSPARENT background (48, 32, 24, 16)
-    tray_sizes = [48, 32, 24, 16]
-    tray_images = [place_in_canvas(crop_symbol, s, 0.95, bg_color=None) for s in tray_sizes]
-    make_ico(tray_images, os.path.join(WINDOWS_HOST, "tray.ico"))
-    make_ico(tray_images, os.path.join(BRANDING_WINDOWS, "tray.ico"))
+    # Windows Tray Icon: High-contrast AMOLED black squircle badge with vibrant orange border
+    # Contains all Windows taskbar DPI resolutions: 16, 20, 24, 32, 48, 64
+    tray_badge_master = create_tray_badge(master_symbol_trans, 256)
+    tray_badge_master.save(os.path.join(BRANDING_WINDOWS, "tray_badge.png"))
+    tray_sizes = [16, 20, 24, 32, 48, 64]
+    make_ico_from_master(tray_badge_master, os.path.join(WINDOWS_HOST, "tray.ico"), tray_sizes)
+    make_ico_from_master(tray_badge_master, os.path.join(BRANDING_WINDOWS, "tray.ico"), tray_sizes)
 
     # Windows Host & Setup window logos
     master_full_black.save(os.path.join(WINDOWS_HOST, "logo.png"))
     master_full_black.save(os.path.join(WINDOWS_SETUP, "logo.png"))
+
+    # 7. Linux Assets
+    make_svg_wrapper(master_full_black, os.path.join(BRANDING_LINUX, "knowthemice.svg"))
+    linux_sizes = [16, 24, 32, 48, 64, 128, 256, 512]
+    for s in linux_sizes:
+        icon_linux = place_in_canvas(crop_full, s, 0.86, bg_color=(0, 0, 0, 255))
+        icon_linux.save(os.path.join(BRANDING_LINUX, f"knowthemice-{s}.png"))
+    master_full_black.save(os.path.join(BRANDING_LINUX, "knowthemice.png"))
+
+    desktop_entry = """[Desktop Entry]
+Name=Know The Mice
+Comment=Seamless Android to PC Remote Control
+Exec=knowthemice
+Icon=knowthemice
+Terminal=false
+Type=Application
+Categories=Utility;RemoteAccess;
+Keywords=Remote;Mouse;Keyboard;Trackpad;
+"""
+    with open(os.path.join(BRANDING_LINUX, "knowthemice.desktop"), "w", encoding="utf-8") as f:
+        f.write(desktop_entry)
 
     print("Brand asset pipeline successfully generated all cross-platform assets!")
 

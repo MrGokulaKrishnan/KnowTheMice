@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Know The Mice
+Comment=Seamless Android to PC Remote Control
+Exec=knowthemice
+Icon=knowthemice
+Terminal=false
+Type=Application
+Categories=Utility;RemoteAccess;
+Keywords=Remote;Mouse;Keyboard;Trackpad;

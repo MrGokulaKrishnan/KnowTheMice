@@ -1,7 +1,8 @@
 <Application x:Class="KnowTheMice.Host.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <!-- Liquid Glass System Theme Brushes -->
         <SolidColorBrush x:Key="AmoledBackground" Color="#000000"/>
@@ -17,6 +18,50 @@
             <GradientStop Color="#FF8A00" Offset="0"/>
             <GradientStop Color="#FF5A00" Offset="0.5"/>
             <GradientStop Color="#D93600" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF8A00" Offset="0"/>
+            <GradientStop Color="#FF5A00" Offset="0.5"/>
+            <GradientStop Color="#D93600" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="SecondaryGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#29FF8A00" Offset="0"/>
+            <GradientStop Color="#0DD93600" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFA333" Offset="0"/>
+            <GradientStop Color="#FF5A00" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="BorderGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#73FF8A00" Offset="0"/>
+            <GradientStop Color="#33FF5A00" Offset="0.5"/>
+            <GradientStop Color="#59D93600" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="SurfaceGradient" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#B3141414" Offset="0"/>
+            <GradientStop Color="#E60A0A0A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="HoverGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFA033" Offset="0"/>
+            <GradientStop Color="#FF6B1A" Offset="0.5"/>
+            <GradientStop Color="#E64000" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="ActiveGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#E65000" Offset="0"/>
+            <GradientStop Color="#CC4500" Offset="0.5"/>
+            <GradientStop Color="#B32D00" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="DisabledGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#14FFFFFF" Offset="0"/>
+            <GradientStop Color="#08FFFFFF" Offset="1"/>
         </LinearGradientBrush>
 
         <LinearGradientBrush x:Key="GlassPanelGradient" StartPoint="0,0" EndPoint="1,1">

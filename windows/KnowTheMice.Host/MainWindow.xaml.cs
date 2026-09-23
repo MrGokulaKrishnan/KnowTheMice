@@ -23,6 +23,7 @@ public partial class MainWindow : Window
 
     public MainWindow()
     {
+        App.Log("MainWindow constructor started");
         InitializeComponent();
 
         TxtPcName.Text = Environment.MachineName;
@@ -43,6 +44,7 @@ public partial class MainWindow : Window
 
         RefreshTrustedDevices();
         _ = CheckForUpdatesAsync();
+        App.Log("MainWindow constructor completed");
     }
 
     public void NavigateToTab(string tabName)
@@ -388,11 +390,14 @@ public partial class MainWindow : Window
 
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
     {
-        if (ChkMinimizeToTray != null && ChkMinimizeToTray.IsChecked == true)
+        if (ChkMinimizeToTray == null || ChkMinimizeToTray.IsChecked != false)
         {
-            // Minimize to system tray instead of closing completely
+            // Minimize to system tray instead of terminating background service
             e.Cancel = true;
             Hide();
+            App.Instance.ShowTrayNotification(
+                "Know The Mice Host is running in background",
+                "Click or double-click the system tray icon to reopen the dashboard.");
         }
     }
 }

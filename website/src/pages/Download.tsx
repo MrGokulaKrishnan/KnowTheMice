@@ -26,13 +26,13 @@ interface DownloadsConfig {
 
 const DEFAULT_CONFIG: DownloadsConfig = {
   windows: {
-    version: "1.1.0",
+    version: "1.2.0",
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "1.33 MB",
-    sha256: "51581B5510D5D4DA9D0C1513F2469E9A0DA0C667333AB3EDED560DB0B19F0B46",
-    releaseDate: "September 19, 2026",
+    size: "1.38 MB",
+    sha256: "CBA5ABFE81857C49485E471E89B3E741B1CDA373142F694F17E7F2984D7C46E2",
+    releaseDate: "September 23, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
       "Windows 10 (Build 19041+) or Windows 11",
@@ -43,13 +43,13 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     description: "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts."
   },
   android: {
-    version: "1.1.0",
+    version: "1.2.0",
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
     size: "2.45 MB",
-    sha256: "DBA4A8DC7D2B661803E7C7665204D121336FA64EB7C99AB4FD0D06F762F2F1DB",
-    releaseDate: "September 19, 2026",
+    sha256: "18DB03C2AECCF938A5D055A925C894B167B48ED62D81DE24A315592F6416C3A5",
+    releaseDate: "September 23, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [
       "Android 10 or newer (API 29+)",
@@ -57,7 +57,7 @@ const DEFAULT_CONFIG: DownloadsConfig = {
       "Gyroscope & Accelerometer (for Air Mouse mode)",
       "Vibration motor (for tactile haptic feedback)"
     ],
-    description: "Touchpad with multi-touch gestures, Gyroscope Air Mouse with complementary filter, full virtual keyboard, universal media deck, and presentation controls."
+    description: "Native Android System IME integration (Gboard, Samsung Keyboard), Voice Typing dictation, Touchpad with multi-touch gestures, Gyroscope Air Mouse, universal media deck, and presentation controls."
   }
 };
 

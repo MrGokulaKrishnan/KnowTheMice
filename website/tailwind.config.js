@@ -29,6 +29,17 @@ export default {
           highlight: "rgba(255, 255, 255, 0.16)"
         }
       },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%)',
+        'gradient-secondary': 'linear-gradient(135deg, rgba(255, 138, 0, 0.16) 0%, rgba(217, 54, 0, 0.05) 100%)',
+        'gradient-accent': 'linear-gradient(135deg, #FFA333 0%, #FF5A00 100%)',
+        'gradient-text': 'linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%)',
+        'gradient-border': 'linear-gradient(135deg, rgba(255, 138, 0, 0.45) 0%, rgba(255, 90, 0, 0.20) 50%, rgba(217, 54, 0, 0.35) 100%)',
+        'gradient-surface': 'linear-gradient(180deg, rgba(20, 20, 20, 0.70) 0%, rgba(10, 10, 10, 0.90) 100%)',
+        'gradient-hover': 'linear-gradient(135deg, #FFA033 0%, #FF6B1A 50%, #E64000 100%)',
+        'gradient-active': 'linear-gradient(135deg, #E65000 0%, #CC4500 50%, #B32D00 100%)',
+        'gradient-disabled': 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)',
+      },
       boxShadow: {
         'glass': 'inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 20px 60px rgba(0, 0, 0, 0.40), 0 0 35px rgba(255, 90, 0, 0.10)',
         'glass-hover': 'inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 24px 70px rgba(0, 0, 0, 0.50), 0 0 45px rgba(255, 90, 0, 0.22)',

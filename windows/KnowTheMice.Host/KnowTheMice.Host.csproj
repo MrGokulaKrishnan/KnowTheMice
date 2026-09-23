@@ -26,6 +26,8 @@
     <Resource Include="icon.ico" />
     <Resource Include="tray.ico" />
     <Resource Include="logo.png" />
+    <EmbeddedResource Include="tray.ico" />
+    <EmbeddedResource Include="icon.ico" />
     <None Update="tray.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

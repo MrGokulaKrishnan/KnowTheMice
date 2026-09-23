@@ -49,7 +49,16 @@
     }
   },
   "gradients": {
-    "brand": "linear-gradient(135deg, #FF8A00 0%, #FF5A00 45%, #D93600 100%)",
+    "primary": "linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%)",
+    "secondary": "linear-gradient(135deg, rgba(255, 138, 0, 0.16) 0%, rgba(217, 54, 0, 0.05) 100%)",
+    "accent": "linear-gradient(135deg, #FFA333 0%, #FF5A00 100%)",
+    "text": "linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%)",
+    "border": "linear-gradient(135deg, rgba(255, 138, 0, 0.45) 0%, rgba(255, 90, 0, 0.20) 50%, rgba(217, 54, 0, 0.35) 100%)",
+    "surface": "linear-gradient(180deg, rgba(20, 20, 20, 0.70) 0%, rgba(10, 10, 10, 0.90) 100%)",
+    "hover": "linear-gradient(135deg, #FFA033 0%, #FF6B1A 50%, #E64000 100%)",
+    "active": "linear-gradient(135deg, #E65000 0%, #CC4500 50%, #B32D00 100%)",
+    "disabled": "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%)",
+    "brand": "linear-gradient(135deg, #FF8A00 0%, #FF5A00 50%, #D93600 100%)",
     "glassCard": "linear-gradient(135deg, rgba(255, 138, 0, 0.14) 0%, rgba(255, 255, 255, 0.04) 100%)",
     "heroGlow": "radial-gradient(circle at center, rgba(255, 90, 0, 0.15) 0%, rgba(5, 5, 5, 0) 70%)"
   },
