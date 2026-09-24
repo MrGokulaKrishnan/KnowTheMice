@@ -30,6 +30,7 @@ import com.knowthemice.app.ui.components.GlassSurface
 import com.knowthemice.app.ui.components.StatusBadge
 import com.knowthemice.app.ui.theme.*
 import com.knowthemice.app.update.AndroidUpdateInfo
+import com.knowthemice.app.update.AndroidUpdateState
 
 @Composable
 fun HomeScreen(
@@ -37,9 +38,10 @@ fun HomeScreen(
     currentHost: DiscoveredHost?,
     latencyMs: Long,
     discoveredHosts: List<DiscoveredHost>,
-    availableUpdate: AndroidUpdateInfo? = null,
-    updateProgress: Int? = null,
-    onInstallUpdate: (String) -> Unit = {},
+    updateState: AndroidUpdateState = AndroidUpdateState.Idle,
+    onDownloadUpdate: (AndroidUpdateInfo) -> Unit = {},
+    onInstallStagedUpdate: () -> Unit = {},
+    onRetryUpdate: (AndroidUpdateInfo?) -> Unit = {},
     onConnectHost: (DiscoveredHost) -> Unit,
     onDisconnect: () -> Unit,
     onManualConnect: (String, Int) -> Unit,
@@ -115,28 +117,49 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // OTA Update Notification Banner
-        AnimatedVisibility(visible = availableUpdate != null) {
-            availableUpdate?.let { update ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(16.dp))
-                        .background(
-                            Brush.horizontalGradient(
-                                listOf(Color(0x35FF5E00), Color(0x15FFA550))
-                            )
+        // Explicit OTA Update State Banner
+        val isUpdateBannerVisible = updateState !is AndroidUpdateState.Idle && updateState !is AndroidUpdateState.UpToDate
+        AnimatedVisibility(visible = isUpdateBannerVisible) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(
+                        Brush.horizontalGradient(
+                            listOf(Color(0x35FF5E00), Color(0x15FFA550))
                         )
-                        .border(1.5.dp, BrandHighlight, RoundedCornerShape(16.dp))
-                        .padding(14.dp)
-                ) {
-                    Column {
+                    )
+                    .border(1.5.dp, BrandHighlight, RoundedCornerShape(16.dp))
+                    .padding(14.dp)
+            ) {
+                when (updateState) {
+                    is AndroidUpdateState.Checking -> {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = BrandHighlight,
+                                strokeWidth = 2.dp
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Checking for updates...",
+                                color = Color.White,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+
+                    is AndroidUpdateState.UpdateAvailable -> {
+                        val update = updateState.info
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Column {
+                            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     Text(text = "⚡", fontSize = 16.sp)
                                     Spacer(modifier = Modifier.width(6.dp))
@@ -154,31 +177,135 @@ fun HomeScreen(
                                     modifier = Modifier.padding(top = 2.dp)
                                 )
                             }
-
-                            if (updateProgress != null && updateProgress >= 0) {
-                                CircularProgressIndicator(
-                                    progress = { updateProgress / 100f },
-                                    modifier = Modifier.size(32.dp),
-                                    color = BrandHighlight,
-                                    trackColor = Color(0x30FFFFFF)
+                            Button(
+                                onClick = { onDownloadUpdate(update) },
+                                colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = "DOWNLOAD",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp
                                 )
-                            } else {
-                                Button(
-                                    onClick = { onInstallUpdate(update.downloadUrl) },
-                                    colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight),
-                                    shape = RoundedCornerShape(10.dp),
-                                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
-                                ) {
-                                    Text(
-                                        text = "UPDATE",
-                                        color = Color.White,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 11.sp
-                                    )
-                                }
                             }
                         }
                     }
+
+                    is AndroidUpdateState.Downloading -> {
+                        val update = updateState.info
+                        val pct = updateState.progressPct
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                                Text(
+                                    text = "DOWNLOADING v${update.version}",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 13.sp
+                                )
+                                Text(
+                                    text = "Please wait while update is prepared ($pct%)...",
+                                    color = Color(0xCCFFFFFF),
+                                    fontSize = 11.sp,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
+                            CircularProgressIndicator(
+                                progress = { pct / 100f },
+                                modifier = Modifier.size(32.dp),
+                                color = BrandHighlight,
+                                trackColor = Color(0x30FFFFFF)
+                            )
+                        }
+                    }
+
+                    is AndroidUpdateState.Ready -> {
+                        val update = updateState.info
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(text = "✅", fontSize = 16.sp)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "UPDATE READY v${update.version}",
+                                        color = Color.White,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.sp
+                                    )
+                                }
+                                Text(
+                                    text = "Restart the app to finish installing update.",
+                                    color = Color(0xCCFFFFFF),
+                                    fontSize = 11.sp,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
+                            Button(
+                                onClick = onInstallStagedUpdate,
+                                colors = ButtonDefaults.buttonColors(containerColor = BrandHighlight),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = "RESTART TO UPDATE",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp
+                                )
+                            }
+                        }
+                    }
+
+                    is AndroidUpdateState.Failed -> {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Text(text = "⚠️", fontSize = 16.sp)
+                                    Spacer(modifier = Modifier.width(6.dp))
+                                    Text(
+                                        text = "UPDATE FAILED",
+                                        color = StatusError,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 13.sp
+                                    )
+                                }
+                                Text(
+                                    text = updateState.error,
+                                    color = Color(0xCCFFFFFF),
+                                    fontSize = 11.sp,
+                                    modifier = Modifier.padding(top = 2.dp)
+                                )
+                            }
+                            Button(
+                                onClick = { onRetryUpdate(updateState.info) },
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0x30FFFFFF)),
+                                shape = RoundedCornerShape(10.dp),
+                                contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp)
+                            ) {
+                                Text(
+                                    text = "RETRY",
+                                    color = Color.White,
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 11.sp
+                                )
+                            }
+                        }
+                    }
+
+                    else -> {}
                 }
             }
         }

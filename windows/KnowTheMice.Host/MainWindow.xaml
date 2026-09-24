@@ -120,7 +120,7 @@
                         </Border>
                         <StackPanel VerticalAlignment="Center">
                             <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="15" Foreground="White"/>
-                            <TextBlock Text="Host Service · v1.1.0" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
+                            <TextBlock Text="Host Service · v1.2.0" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
@@ -166,7 +166,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="⚡" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TxtUpdateIcon" Text="⚡" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
                             <StackPanel>
                                 <TextBlock x:Name="TxtUpdateTitle" Text="New Update Available!" FontWeight="Bold" FontSize="13" Foreground="White"/>
                                 <TextBlock x:Name="TxtUpdateDesc" Text="Faster input engine, modern UI/UX, and performance enhancements." FontSize="11" Foreground="{StaticResource TextSecondary}"/>
@@ -174,7 +174,7 @@
                         </StackPanel>
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                             <ProgressBar x:Name="PrgUpdate" Width="100" Height="10" Margin="0,0,12,0" Visibility="Collapsed"/>
-                            <Button x:Name="BtnRestartUpdate" Content="RESTART TO UPDATE" Style="{StaticResource PrimaryButton}" Click="BtnRestartUpdate_Click" Padding="14,6" FontSize="11"/>
+                            <Button x:Name="BtnUpdateAction" Content="DOWNLOAD UPDATE" Style="{StaticResource PrimaryButton}" Click="BtnUpdateAction_Click" Padding="14,6" FontSize="11"/>
                         </StackPanel>
                     </Grid>
                 </Border>
@@ -389,7 +389,7 @@
                                 <TextBlock Text="SOFTWARE UPDATES" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
                                 <StackPanel Orientation="Horizontal">
                                     <Button x:Name="BtnCheckUpdates" Content="CHECK FOR UPDATES" Style="{StaticResource PrimaryButton}" Click="BtnCheckUpdates_Click" Margin="0,0,14,0"/>
-                                    <TextBlock Text="Current Version: v1.1.0" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" FontSize="12"/>
+                                    <TextBlock Text="Current Version: v1.2.0" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" FontSize="12"/>
                                 </StackPanel>
                             </StackPanel>
                         </Border>
@@ -402,7 +402,7 @@
                 <Grid>
                     <TextBlock x:Name="TxtStatusLog" Text="● Ready for connections on 0.0.0.0:52841" FontSize="11" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="Zero Cloud · Local E2EE · Know The Mice v1.1.0" FontSize="11" Foreground="#70FFFFFF" VerticalAlignment="Center"/>
+                        <TextBlock Text="Zero Cloud · Local E2EE · Know The Mice v1.2.0" FontSize="11" Foreground="#70FFFFFF" VerticalAlignment="Center"/>
                     </StackPanel>
                 </Grid>
             </Border>

@@ -16,10 +16,11 @@ public partial class MainWindow : Window
     private readonly DiscoveryBeacon _beacon = new();
     private readonly NetworkServer _server = new();
     private readonly UpdateService _updateService = new();
-    private PlatformUpdate? _availableUpdate;
     private DispatcherTimer? _pinCountdownTimer;
     private int _remainingSeconds = 0;
     private bool _isPaused = false;
+
+    public const string APP_VERSION = "1.2.0";
 
     public MainWindow()
     {
@@ -43,7 +44,12 @@ public partial class MainWindow : Window
         _beacon.Start();
 
         RefreshTrustedDevices();
+
+        // Wire UpdateService state machine
+        _updateService.OnStateChanged += HandleUpdateStateChanged;
+        _updateService.InitializeState(APP_VERSION);
         _ = CheckForUpdatesAsync();
+
         App.Log("MainWindow constructor completed");
     }
 
@@ -299,42 +305,99 @@ public partial class MainWindow : Window
         App.Instance.NotificationsEnabled = false;
     }
 
-    private async Task CheckForUpdatesAsync()
+    private void HandleUpdateStateChanged(UpdateState state, PlatformUpdate? update, string? error)
     {
-        var update = await _updateService.CheckForUpdatesAsync("1.1.0");
-        if (update != null)
+        Dispatcher.Invoke(() =>
         {
-            Dispatcher.Invoke(() =>
+            switch (state)
             {
-                _availableUpdate = update;
-                TxtUpdateTitle.Text = $"Update Available: v{update.Version}";
-                TxtUpdateDesc.Text = string.IsNullOrWhiteSpace(update.Changelog) ? "New performance enhancements and features." : update.Changelog;
-                UpdateBanner.Visibility = Visibility.Visible;
-            });
-        }
+                case UpdateState.Idle:
+                case UpdateState.UpToDate:
+                    UpdateBanner.Visibility = Visibility.Collapsed;
+                    PrgUpdate.Visibility = Visibility.Collapsed;
+                    break;
+
+                case UpdateState.Checking:
+                    TxtUpdateIcon.Text = "🔄";
+                    TxtUpdateTitle.Text = "Checking for updates...";
+                    TxtUpdateDesc.Text = "Connecting to Know The Mice update service...";
+                    PrgUpdate.Visibility = Visibility.Collapsed;
+                    BtnUpdateAction.Visibility = Visibility.Collapsed;
+                    UpdateBanner.Visibility = Visibility.Visible;
+                    break;
+
+                case UpdateState.UpdateAvailable:
+                    TxtUpdateIcon.Text = "⚡";
+                    TxtUpdateTitle.Text = $"Update Available: v{update?.Version}";
+                    TxtUpdateDesc.Text = string.IsNullOrWhiteSpace(update?.Changelog) ? "New performance enhancements and features." : update.Changelog;
+                    PrgUpdate.Visibility = Visibility.Collapsed;
+                    BtnUpdateAction.Content = "DOWNLOAD UPDATE";
+                    BtnUpdateAction.IsEnabled = true;
+                    BtnUpdateAction.Visibility = Visibility.Visible;
+                    UpdateBanner.Visibility = Visibility.Visible;
+                    break;
+
+                case UpdateState.Downloading:
+                    TxtUpdateIcon.Text = "⏳";
+                    TxtUpdateTitle.Text = "Downloading update...";
+                    TxtUpdateDesc.Text = $"Preparing Know The Mice v{update?.Version} ({_updateService.DownloadProgress}%)...";
+                    PrgUpdate.Visibility = Visibility.Visible;
+                    PrgUpdate.Value = _updateService.DownloadProgress;
+                    BtnUpdateAction.Content = "DOWNLOADING...";
+                    BtnUpdateAction.IsEnabled = false;
+                    BtnUpdateAction.Visibility = Visibility.Visible;
+                    UpdateBanner.Visibility = Visibility.Visible;
+                    break;
+
+                case UpdateState.Ready:
+                    TxtUpdateIcon.Text = "✅";
+                    TxtUpdateTitle.Text = $"Update Ready (v{update?.Version})";
+                    TxtUpdateDesc.Text = "Restart the application to finish installing the update.";
+                    PrgUpdate.Visibility = Visibility.Collapsed;
+                    BtnUpdateAction.Content = "RESTART TO UPDATE";
+                    BtnUpdateAction.IsEnabled = true;
+                    BtnUpdateAction.Visibility = Visibility.Visible;
+                    UpdateBanner.Visibility = Visibility.Visible;
+                    break;
+
+                case UpdateState.Failed:
+                    TxtUpdateIcon.Text = "⚠️";
+                    TxtUpdateTitle.Text = "Update Failed";
+                    TxtUpdateDesc.Text = error ?? "Failed to download update.";
+                    PrgUpdate.Visibility = Visibility.Collapsed;
+                    BtnUpdateAction.Content = "RETRY";
+                    BtnUpdateAction.IsEnabled = true;
+                    BtnUpdateAction.Visibility = Visibility.Visible;
+                    UpdateBanner.Visibility = Visibility.Visible;
+                    break;
+            }
+        });
     }
 
-    private async void BtnRestartUpdate_Click(object sender, RoutedEventArgs e)
+    private async Task CheckForUpdatesAsync()
     {
-        if (_availableUpdate == null) return;
-        BtnRestartUpdate.IsEnabled = false;
-        BtnRestartUpdate.Content = "DOWNLOADING...";
-        PrgUpdate.Visibility = Visibility.Visible;
-        PrgUpdate.Value = 0;
+        await _updateService.CheckForUpdatesAsync(APP_VERSION);
+    }
 
-        try
+    private async void BtnUpdateAction_Click(object sender, RoutedEventArgs e)
+    {
+        switch (_updateService.CurrentState)
         {
-            await _updateService.DownloadAndRestartAsync(_availableUpdate.DownloadUrl, pct =>
-            {
-                Dispatcher.Invoke(() => PrgUpdate.Value = pct);
-            });
-        }
-        catch (Exception ex)
-        {
-            System.Windows.MessageBox.Show($"Failed to download update: {ex.Message}", "Update Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            BtnRestartUpdate.IsEnabled = true;
-            BtnRestartUpdate.Content = "RESTART TO UPDATE";
-            PrgUpdate.Visibility = Visibility.Collapsed;
+            case UpdateState.UpdateAvailable:
+            case UpdateState.Failed:
+                await _updateService.DownloadUpdateAsync(pct =>
+                {
+                    Dispatcher.Invoke(() =>
+                    {
+                        PrgUpdate.Value = pct;
+                        TxtUpdateDesc.Text = $"Downloading update... {pct}%";
+                    });
+                });
+                break;
+
+            case UpdateState.Ready:
+                _updateService.ApplyRestartToUpdate();
+                break;
         }
     }
 
@@ -342,21 +405,22 @@ public partial class MainWindow : Window
     {
         BtnCheckUpdates.IsEnabled = false;
         TxtStatusLog.Text = "● Checking for updates...";
-        var update = await _updateService.CheckForUpdatesAsync("1.1.0");
+        var update = await _updateService.CheckForUpdatesAsync(APP_VERSION);
         BtnCheckUpdates.IsEnabled = true;
 
         if (update != null)
         {
-            _availableUpdate = update;
-            TxtUpdateTitle.Text = $"Update Available: v{update.Version}";
-            TxtUpdateDesc.Text = update.Changelog;
-            UpdateBanner.Visibility = Visibility.Visible;
             TxtStatusLog.Text = $"● New update v{update.Version} found!";
+        }
+        else if (_updateService.CurrentState == UpdateState.Failed)
+        {
+            TxtStatusLog.Text = $"● Update check failed: {_updateService.ErrorMessage}";
+            System.Windows.MessageBox.Show(_updateService.ErrorMessage ?? "Failed to check for updates.", "Update Error", MessageBoxButton.OK, MessageBoxImage.Warning);
         }
         else
         {
-            TxtStatusLog.Text = "● Know The Mice is up to date (v1.1.0).";
-            System.Windows.MessageBox.Show("Know The Mice is up to date (v1.1.0).", "Check for Updates", MessageBoxButton.OK, MessageBoxImage.Information);
+            TxtStatusLog.Text = $"● Know The Mice is up to date (v{APP_VERSION}).";
+            System.Windows.MessageBox.Show($"Know The Mice is up to date (v{APP_VERSION}).", "Check for Updates", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 

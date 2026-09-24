@@ -32,9 +32,6 @@ class MainActivity : ComponentActivity() {
     private var airMouseEngine: AirMouseEngine? = null
     private var vibrator: Vibrator? = null
 
-    private var availableUpdate by mutableStateOf<AndroidUpdateInfo?>(null)
-    private var updateProgress by mutableStateOf<Int?>(null)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,10 +44,11 @@ class MainActivity : ComponentActivity() {
             controlClient.sendMouseMove(dx, dy)
         }
 
-        // Check for OTA updates on app launch
+        // Initialize UpdateManager with state persistence
+        UpdateManager.initialize(this, BuildConfig.VERSION_CODE)
         lifecycleScope.launch {
             try {
-                availableUpdate = UpdateManager.checkForUpdates(BuildConfig.VERSION_CODE)
+                UpdateManager.checkForUpdates(this@MainActivity, BuildConfig.VERSION_CODE)
             } catch (_: Exception) {}
         }
 
@@ -59,21 +57,6 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = BgAmoled) {
                     MainAppContent()
                 }
-            }
-        }
-    }
-
-    private fun startApkInstallation(downloadUrl: String) {
-        lifecycleScope.launch {
-            updateProgress = 0
-            val result = UpdateManager.downloadAndInstallApk(
-                context = this@MainActivity,
-                downloadUrl = downloadUrl,
-                onProgress = { pct -> updateProgress = pct }
-            )
-            updateProgress = null
-            result.onFailure { ex ->
-                Toast.makeText(this@MainActivity, "Update error: ${ex.message}", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -94,6 +77,7 @@ class MainActivity : ComponentActivity() {
         val latencyMs by controlClient.latencyMs.collectAsState()
         val hostsMap by discoveryClient.discoveredHosts.collectAsState()
         val hostList = hostsMap.values.toList()
+        val updateState by UpdateManager.updateState.collectAsState()
 
         fun triggerHaptic() {
             if (!hapticsEnabled) return
@@ -114,9 +98,24 @@ class MainActivity : ComponentActivity() {
                     currentHost = currentHost,
                     latencyMs = latencyMs,
                     discoveredHosts = hostList,
-                    availableUpdate = availableUpdate,
-                    updateProgress = updateProgress,
-                    onInstallUpdate = { url -> startApkInstallation(url) },
+                    updateState = updateState,
+                    onDownloadUpdate = { info ->
+                        lifecycleScope.launch {
+                            UpdateManager.downloadUpdate(this@MainActivity, info)
+                        }
+                    },
+                    onInstallStagedUpdate = {
+                        UpdateManager.installStagedUpdate(this@MainActivity)
+                    },
+                    onRetryUpdate = { info ->
+                        lifecycleScope.launch {
+                            if (info != null) {
+                                UpdateManager.downloadUpdate(this@MainActivity, info)
+                            } else {
+                                UpdateManager.checkForUpdates(this@MainActivity, BuildConfig.VERSION_CODE)
+                            }
+                        }
+                    },
                     onConnectHost = { host ->
                         controlClient.connect(
                             context = this@MainActivity,

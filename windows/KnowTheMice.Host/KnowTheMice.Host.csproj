@@ -11,8 +11,8 @@
     <AssemblyTitle>Know The Mice Host</AssemblyTitle>
     <Company>Know The Mice Team</Company>
     <Product>Know The Mice</Product>
-    <Version>1.1.0</Version>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.2.0</Version>
+    <FileVersion>1.2.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

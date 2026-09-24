@@ -127,6 +127,20 @@ def make_round_icon(square_img: Image.Image) -> Image.Image:
     return out
 
 
+def make_rounded_icon(square_img: Image.Image, radius_pct: float = 0.15) -> Image.Image:
+    """Creates a 15% rounded corner container icon for Android launcher icon."""
+    size = square_img.size
+    radius = int(min(size) * radius_pct)
+    mask = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle([0, 0, size[0], size[1]], radius=radius, fill=255)
+
+    out = Image.new("RGBA", size, (0, 0, 0, 0))
+    out.paste(square_img, (0, 0))
+    out.putalpha(mask)
+    return out
+
+
 def create_tray_badge(trans_symbol: Image.Image, size: int = 256) -> Image.Image:
     """Creates a high-contrast AMOLED black squircle badge with flame orange border and centered symbol for system tray."""
     badge = Image.new("RGBA", (size, size), (0, 0, 0, 0))
@@ -213,8 +227,8 @@ def main():
     trans_master = extract_transparent(src)
 
     # 2. Extract components
-    crop_full = crop_artwork(trans_master, y_start=0, y_end=900)
-    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=700)
+    crop_full = crop_artwork(trans_master, y_start=0, y_end=850)
+    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=665)
 
     # 3. Canonical Master Assets
     master_full_black = place_in_canvas(crop_full, 1024, 0.86, bg_color=(0, 0, 0, 255))
@@ -318,11 +332,18 @@ def main():
         "xxxhdpi": 192
     }
     for density, size in mipmap_sizes.items():
-        legacy_square = place_in_canvas(crop_full, size, 0.76, bg_color=(0, 0, 0, 255))
+        legacy_square = place_in_canvas(crop_full, size, 0.78, bg_color=(0, 0, 0, 255))
+        legacy_rounded_15 = make_rounded_icon(legacy_square, 0.15)
         legacy_round = make_round_icon(legacy_square)
 
-        legacy_square.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
+        legacy_rounded_15.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
         legacy_round.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher_round.png"))
+
+    # 512x512 Master APK icon with 15% corner radius container
+    apk_512 = place_in_canvas(crop_full, 512, 0.78, bg_color=(0, 0, 0, 255))
+    apk_15 = make_rounded_icon(apk_512, 0.15)
+    apk_15.save(os.path.join(BRANDING_ANDROID, "ic_launcher_15pct.png"))
+    apk_15.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 
     # 6. Windows Assets
     win_sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]

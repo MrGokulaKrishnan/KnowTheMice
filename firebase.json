@@ -76,6 +76,23 @@
         ]
       },
       {
+        "source": "/downloads/windows/KnowTheMice-Setup-x64.msi",
+        "headers": [
+          {
+            "key": "Content-Type",
+            "value": "application/x-msi"
+          },
+          {
+            "key": "Content-Disposition",
+            "value": "attachment; filename=\"KnowTheMice-Setup-x64.msi\""
+          },
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
         "source": "**/*.@(jpg|jpeg|gif|png|svg|webp|js|css|woff|woff2)",
         "headers": [
           {
@@ -93,6 +110,10 @@
       {
         "source": "/downloads/windows/latest",
         "destination": "/downloads/windows/KnowTheMice-Setup-x64.bin"
+      },
+      {
+        "source": "/downloads/windows/KnowTheMice-Setup-x64.msi",
+        "destination": "/downloads/windows/KnowTheMice-Setup-x64.msi.bin"
       },
       {
         "source": "/downloads/android/KnowTheMice-Android.apk",

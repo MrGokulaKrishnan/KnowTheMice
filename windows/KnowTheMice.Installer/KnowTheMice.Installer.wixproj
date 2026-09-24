@@ -2,6 +2,6 @@
   <PropertyGroup>
     <OutputType>Package</OutputType>
     <Platform>x64</Platform>
-    <OutputName>KnowTheMice-Setup-v1.0.0-win-x64</OutputName>
+    <OutputName>KnowTheMice-Setup-x64</OutputName>
   </PropertyGroup>
 </Project>

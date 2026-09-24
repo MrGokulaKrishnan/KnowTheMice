@@ -1,6 +1,6 @@
 {
   "latestVersion": "1.2.0",
-  "releaseDate": "2026-09-23",
+  "releaseDate": "2026-09-24",
   "windows": {
     "version": "1.2.0",
     "versionCode": 120,
@@ -8,9 +8,9 @@
     "filename": "KnowTheMice-Setup-x64.exe",
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
-    "size": "1.38 MB",
-    "sha256": "CBA5ABFE81857C49485E471E89B3E741B1CDA373142F694F17E7F2984D7C46E2",
-    "releaseDate": "September 23, 2026",
+    "size": "1.44 MB",
+    "sha256": "49E6C14B51C6195881EDF7D3A55A1FF74352D25FB2EB41738F47B9A0200598BD",
+    "releaseDate": "September 24, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
       "Windows 10 (Build 19041+) or Windows 11",
@@ -19,7 +19,15 @@
       "RAM: < 25MB footprint"
     ],
     "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
-    "changelog": "- High-contrast AMOLED squircle system tray icon with orange border\n- Background process stability & minimize-to-tray\n- Unified 9-token gradient system across all surfaces\n- Single-file setup installer with auto-start",
+    "changelog": "- High-contrast AMOLED squircle system tray icon with orange border\n- Background process stability & minimize-to-tray\n- Unified 9-token gradient system across all surfaces\n- Single-file setup installer and enterprise WiX MSI package\n- Two-phase update verification state machine",
+    "msi": {
+      "name": "Know The Mice Windows Installer (MSI)",
+      "filename": "KnowTheMice-Setup-x64.msi",
+      "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
+      "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
+      "size": "224 KB",
+      "sha256": "971F51E1C884EE6A9142F1717DAF6C09EF6182D8B0FE2C5566609B9A46CD8945"
+    },
     "mandatory": false
   },
   "android": {
@@ -29,9 +37,9 @@
     "filename": "KnowTheMice-Android.apk",
     "url": "/downloads/android/KnowTheMice-Android.apk",
     "downloadUrl": "https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk",
-    "size": "2.45 MB",
-    "sha256": "18DB03C2AECCF938A5D055A925C894B167B48ED62D81DE24A315592F6416C3A5",
-    "releaseDate": "September 23, 2026",
+    "size": "2.49 MB",
+    "sha256": "79674423793820E9C8A64086627E9118E3AF7811BE0C4B347A2597F31840CE49",
+    "releaseDate": "September 24, 2026",
     "platform": "Android 10.0+ (API 29+)",
     "requirements": [
       "Android 10 or newer (API 29+)",
@@ -40,7 +48,7 @@
       "Vibration motor (for tactile haptic feedback)"
     ],
     "description": "Native Android System IME integration (Gboard, Samsung Keyboard), Voice Typing dictation, Touchpad with multi-touch gestures, Gyroscope Air Mouse, universal media deck, and presentation controls.",
-    "changelog": "- Native Android System Keyboard IME (Gboard, Samsung Keyboard, SwiftKey)\n- Voice dictation typing support directly to PC\n- Configurable input modes (Text, Multiline, Number, URL, Email, Password)\n- Compact PC modifier toolbar (Ctrl, Alt, Shift, Win, Esc, Tab, arrows, shortcuts)\n- Adaptive icon safe-zone alignment (60% scale within 108dp canvas)",
+    "changelog": "- Authoritative Know The Mice brand identity with 15% corner radius container\n- Two-phase update state machine with staged verification\n- Native Android System Keyboard IME (Gboard, Samsung Keyboard, SwiftKey)\n- Voice dictation typing support directly to PC\n- Adaptive icon safe-zone alignment (60% scale within 108dp canvas)",
     "mandatory": false
   }
 }

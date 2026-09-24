@@ -30,9 +30,9 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "1.38 MB",
-    sha256: "CBA5ABFE81857C49485E471E89B3E741B1CDA373142F694F17E7F2984D7C46E2",
-    releaseDate: "September 23, 2026",
+    size: "1.44 MB",
+    sha256: "49E6C14B51C6195881EDF7D3A55A1FF74352D25FB2EB41738F47B9A0200598BD",
+    releaseDate: "September 24, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
       "Windows 10 (Build 19041+) or Windows 11",
@@ -47,9 +47,9 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "2.45 MB",
-    sha256: "18DB03C2AECCF938A5D055A925C894B167B48ED62D81DE24A315592F6416C3A5",
-    releaseDate: "September 23, 2026",
+    size: "2.49 MB",
+    sha256: "79674423793820E9C8A64086627E9118E3AF7811BE0C4B347A2597F31840CE49",
+    releaseDate: "September 24, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [
       "Android 10 or newer (API 29+)",
@@ -314,9 +314,12 @@ export const DownloadPage: React.FC = () => {
                   <Download className="w-4 h-4" />
                   <span>DOWNLOAD FOR WINDOWS</span>
                 </a>
-                <div className="text-center pt-1">
-                  <span className="text-[11px] text-zinc-500">
-                    Direct file: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
+                <div className="text-center pt-1 space-y-1">
+                  <span className="text-[11px] text-zinc-500 block">
+                    Direct executable: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
+                  </span>
+                  <span className="text-[11px] text-zinc-500 block">
+                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (224 KB)
                   </span>
                 </div>
               </div>
@@ -472,6 +475,23 @@ export const DownloadPage: React.FC = () => {
             >
               {copiedHash === 'full-win' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copiedHash === 'full-win' ? "Copied" : "Copy SHA-256"}</span>
+            </button>
+          </div>
+
+          <div className="p-3.5 rounded-xl bg-black/40 border border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="overflow-hidden space-y-1">
+              <div className="flex items-center space-x-2">
+                <span className="text-orange-400 font-semibold">KnowTheMice-Setup-x64.msi</span>
+                <span className="text-[10px] text-zinc-500 uppercase">(224 KB)</span>
+              </div>
+              <span className="text-zinc-500 truncate block text-[11px] select-all">971F51E1C884EE6A9142F1717DAF6C09EF6182D8B0FE2C5566609B9A46CD8945</span>
+            </div>
+            <button
+              onClick={() => copyToClipboard('971F51E1C884EE6A9142F1717DAF6C09EF6182D8B0FE2C5566609B9A46CD8945', 'full-msi')}
+              className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 text-[11px] flex items-center space-x-1.5 self-start sm:self-auto shrink-0 transition-colors"
+            >
+              {copiedHash === 'full-msi' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{copiedHash === 'full-msi' ? "Copied" : "Copy SHA-256"}</span>
             </button>
           </div>
 
