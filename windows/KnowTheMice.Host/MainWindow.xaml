@@ -115,7 +115,7 @@
                 <!-- Brand Header -->
                 <StackPanel Grid.Row="0" Margin="0,0,0,24">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Width="38" Height="38" Background="#000000" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1.5" CornerRadius="9" Margin="0,0,12,0" ClipToBounds="True">
+                        <Border Width="38" Height="38" Background="#000000" BorderThickness="0" CornerRadius="6" Margin="0,0,12,0" ClipToBounds="True">
                             <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
                         <StackPanel VerticalAlignment="Center">

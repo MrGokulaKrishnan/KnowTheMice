@@ -30,8 +30,8 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "1.44 MB",
-    sha256: "49E6C14B51C6195881EDF7D3A55A1FF74352D25FB2EB41738F47B9A0200598BD",
+    size: "1.37 MB",
+    sha256: "A6F24FBE9295B55FEF015D7869F4887C7BF576CAA0A005EF06E4AAFD8026F17D",
     releaseDate: "September 24, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
@@ -47,8 +47,8 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "2.49 MB",
-    sha256: "79674423793820E9C8A64086627E9118E3AF7811BE0C4B347A2597F31840CE49",
+    size: "2.58 MB",
+    sha256: "1CC08EDFD0950E68D8F93F7D86A5EC2ED330C8658AC85CFE1101D42661A73B9B",
     releaseDate: "September 24, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [
@@ -319,7 +319,7 @@ export const DownloadPage: React.FC = () => {
                     Direct executable: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
                   </span>
                   <span className="text-[11px] text-zinc-500 block">
-                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (224 KB)
+                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (220 KB)
                   </span>
                 </div>
               </div>
@@ -482,12 +482,12 @@ export const DownloadPage: React.FC = () => {
             <div className="overflow-hidden space-y-1">
               <div className="flex items-center space-x-2">
                 <span className="text-orange-400 font-semibold">KnowTheMice-Setup-x64.msi</span>
-                <span className="text-[10px] text-zinc-500 uppercase">(224 KB)</span>
+                <span className="text-[10px] text-zinc-500 uppercase">(220 KB)</span>
               </div>
-              <span className="text-zinc-500 truncate block text-[11px] select-all">971F51E1C884EE6A9142F1717DAF6C09EF6182D8B0FE2C5566609B9A46CD8945</span>
+              <span className="text-zinc-500 truncate block text-[11px] select-all">8BD295F7E1DE401DCF4C48447EBF1B1593AF64F2670FC8A12ACA4C721D2C7AD6</span>
             </div>
             <button
-              onClick={() => copyToClipboard('971F51E1C884EE6A9142F1717DAF6C09EF6182D8B0FE2C5566609B9A46CD8945', 'full-msi')}
+              onClick={() => copyToClipboard('8BD295F7E1DE401DCF4C48447EBF1B1593AF64F2670FC8A12ACA4C721D2C7AD6', 'full-msi')}
               className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 text-[11px] flex items-center space-x-1.5 self-start sm:self-auto shrink-0 transition-colors"
             >
               {copiedHash === 'full-msi' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}

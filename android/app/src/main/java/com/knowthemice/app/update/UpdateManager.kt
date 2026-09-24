@@ -4,23 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.security.MessageDigest
-
-data class UpdateMetadata(
-    val latestVersion: String = "",
-    val releaseDate: String = "",
-    val android: AndroidUpdateInfo? = null
-)
 
 data class AndroidUpdateInfo(
     val version: String = "",
@@ -29,14 +23,6 @@ data class AndroidUpdateInfo(
     val sha256: String = "",
     val changelog: String = "",
     val mandatory: Boolean = false
-)
-
-data class StagedAndroidInfo(
-    val version: String = "",
-    val versionCode: Int = 0,
-    val apkPath: String = "",
-    val sha256: String = "",
-    val changelog: String = ""
 )
 
 sealed class AndroidUpdateState {
@@ -51,7 +37,6 @@ sealed class AndroidUpdateState {
 
 object UpdateManager {
     const val METADATA_URL = "https://knowthemice.web.app/downloads.json"
-    private val gson = Gson()
 
     private val _updateState = MutableStateFlow<AndroidUpdateState>(AndroidUpdateState.Idle)
     val updateState: StateFlow<AndroidUpdateState> = _updateState.asStateFlow()
@@ -62,25 +47,32 @@ object UpdateManager {
 
         if (!stagedJson.isNullOrBlank()) {
             try {
-                val staged = gson.fromJson(stagedJson, StagedAndroidInfo::class.java)
-                val apkFile = File(staged.apkPath)
+                val stagedObj = JSONObject(stagedJson)
+                val version = stagedObj.optString("version", "")
+                val versionCode = stagedObj.optInt("versionCode", 0)
+                val apkPath = stagedObj.optString("apkPath", "")
+                val sha256 = stagedObj.optString("sha256", "")
+                val changelog = stagedObj.optString("changelog", "")
+                val apkFile = File(apkPath)
 
-                if (staged.versionCode > currentVersionCode && apkFile.exists()) {
-                    if (staged.sha256.isBlank() || verifySha256(apkFile, staged.sha256)) {
+                if (versionCode > currentVersionCode && apkFile.exists()) {
+                    if (sha256.isBlank() || verifySha256(apkFile, sha256)) {
                         val info = AndroidUpdateInfo(
-                            version = staged.version,
-                            versionCode = staged.versionCode,
+                            version = version,
+                            versionCode = versionCode,
                             downloadUrl = "",
-                            sha256 = staged.sha256,
-                            changelog = staged.changelog
+                            sha256 = sha256,
+                            changelog = changelog
                         )
-                        _updateState.value = AndroidUpdateState.Ready(info, staged.apkPath)
+                        _updateState.value = AndroidUpdateState.Ready(info, apkPath)
                         return
                     }
                 }
 
                 // If running code >= staged code, or file missing/invalid, clean up
-                apkFile.delete()
+                if (apkFile.exists()) {
+                    apkFile.delete()
+                }
                 prefs.edit().remove("staged_update").apply()
             } catch (_: Exception) {}
         }
@@ -107,12 +99,33 @@ object UpdateManager {
 
                 if (conn.responseCode == 200) {
                     val json = conn.inputStream.bufferedReader().use { it.readText() }
-                    val meta = gson.fromJson(json, UpdateMetadata::class.java)
-                    val androidInfo = meta.android
+                    val root = JSONObject(json)
+                    val androidObj = root.optJSONObject("android")
 
-                    if (androidInfo != null && androidInfo.versionCode > currentVersionCode) {
-                        _updateState.value = AndroidUpdateState.UpdateAvailable(androidInfo)
-                        return@withContext
+                    if (androidObj != null) {
+                        val version = androidObj.optString("version", "")
+                        val versionCode = androidObj.optInt("versionCode", 0)
+                        val downloadUrl = if (androidObj.has("downloadUrl") && androidObj.getString("downloadUrl").isNotBlank()) {
+                            androidObj.getString("downloadUrl")
+                        } else {
+                            androidObj.optString("url", "")
+                        }
+                        val sha256 = androidObj.optString("sha256", "")
+                        val changelog = androidObj.optString("changelog", "")
+                        val mandatory = androidObj.optBoolean("mandatory", false)
+
+                        if (versionCode > currentVersionCode) {
+                            val info = AndroidUpdateInfo(
+                                version = version,
+                                versionCode = versionCode,
+                                downloadUrl = downloadUrl,
+                                sha256 = sha256,
+                                changelog = changelog,
+                                mandatory = mandatory
+                            )
+                            _updateState.value = AndroidUpdateState.UpdateAvailable(info)
+                            return@withContext
+                        }
                     }
                 }
 
@@ -165,17 +178,17 @@ object UpdateManager {
                     throw IllegalStateException("APK SHA-256 verification failed.")
                 }
 
-                // Persist staged update
-                val staged = StagedAndroidInfo(
-                    version = info.version,
-                    versionCode = info.versionCode,
-                    apkPath = apkFile.absolutePath,
-                    sha256 = info.sha256,
-                    changelog = info.changelog
-                )
+                // Persist staged update via JSON
+                val stagedObj = JSONObject().apply {
+                    put("version", info.version)
+                    put("versionCode", info.versionCode)
+                    put("apkPath", apkFile.absolutePath)
+                    put("sha256", info.sha256)
+                    put("changelog", info.changelog)
+                }
                 context.getSharedPreferences("knowthemice_update", Context.MODE_PRIVATE)
                     .edit()
-                    .putString("staged_update", gson.toJson(staged))
+                    .putString("staged_update", stagedObj.toString())
                     .apply()
 
                 _updateState.value = AndroidUpdateState.Ready(info, apkFile.absolutePath)

@@ -3,5 +3,6 @@
     <OutputType>Package</OutputType>
     <Platform>x64</Platform>
     <OutputName>KnowTheMice-Setup-x64</OutputName>
+    <SuppressIces>ICE43;ICE57;ICE69</SuppressIces>
   </PropertyGroup>
 </Project>

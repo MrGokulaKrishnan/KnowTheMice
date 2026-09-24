@@ -142,30 +142,19 @@ def make_rounded_icon(square_img: Image.Image, radius_pct: float = 0.15) -> Imag
 
 
 def create_tray_badge(trans_symbol: Image.Image, size: int = 256) -> Image.Image:
-    """Creates a high-contrast AMOLED black squircle badge with flame orange border and centered symbol for system tray."""
+    """Creates an AMOLED black squircle badge (15% corner radius, no border) for system tray matching default logo."""
     badge = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(badge)
+    radius = int(size * 0.15)
     
-    radius = int(size * 0.20)
-    # Subtle outer glow border
-    for r_offset, alpha in [(4, 40), (2, 80)]:
-        draw.rounded_rectangle(
-            [2 - r_offset, 2 - r_offset, size - 3 + r_offset, size - 3 + r_offset],
-            radius=radius + r_offset,
-            outline=(255, 90, 0, alpha),
-            width=2
-        )
+    # 15% rounded black container with zero border
+    mask = Image.new("L", (size, size), 0)
+    draw_mask = ImageDraw.Draw(mask)
+    draw_mask.rounded_rectangle([0, 0, size, size], radius=radius, fill=255)
+    
+    bg = Image.new("RGBA", (size, size), (0, 0, 0, 255))
+    badge.paste(bg, (0, 0), mask)
 
-    # Solid AMOLED black background
-    draw.rounded_rectangle(
-        [2, 2, size - 3, size - 3],
-        radius=radius,
-        fill=(0, 0, 0, 255),
-        outline=(255, 90, 0, 255),
-        width=max(2, int(size * 0.024))
-    )
-
-    pad = int(size * 0.11)
+    pad = int(size * 0.12)
     inner_w = size - 2 * pad
     inner_h = size - 2 * pad
     sym_w, sym_h = trans_symbol.size
@@ -345,14 +334,15 @@ def main():
     apk_15.save(os.path.join(BRANDING_ANDROID, "ic_launcher_15pct.png"))
     apk_15.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 
-    # 6. Windows Assets
+    # 6. Windows Assets (15% corner radius container, AMOLED black, NO border)
     win_sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
-    make_ico_from_master(master_full_black, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)
-    make_ico_from_master(master_full_black, os.path.join(WINDOWS_SETUP, "icon.ico"), win_sizes)
-    make_ico_from_master(master_full_black, os.path.join(BRANDING_WINDOWS, "app.ico"), win_sizes)
-    make_ico_from_master(master_full_black, os.path.join(BRANDING_WINDOWS, "installer.ico"), win_sizes)
+    win_master_15 = make_rounded_icon(master_full_black, 0.15)
+    make_ico_from_master(win_master_15, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)
+    make_ico_from_master(win_master_15, os.path.join(WINDOWS_SETUP, "icon.ico"), win_sizes)
+    make_ico_from_master(win_master_15, os.path.join(BRANDING_WINDOWS, "app.ico"), win_sizes)
+    make_ico_from_master(win_master_15, os.path.join(BRANDING_WINDOWS, "installer.ico"), win_sizes)
 
-    # Windows Tray Icon: High-contrast AMOLED black squircle badge with vibrant orange border
+    # Windows Tray Icon: AMOLED black squircle badge (15% corner radius, NO border)
     # Contains all Windows taskbar DPI resolutions: 16, 20, 24, 32, 48, 64
     tray_badge_master = create_tray_badge(master_symbol_trans, 256)
     tray_badge_master.save(os.path.join(BRANDING_WINDOWS, "tray_badge.png"))
@@ -360,9 +350,9 @@ def main():
     make_ico_from_master(tray_badge_master, os.path.join(WINDOWS_HOST, "tray.ico"), tray_sizes)
     make_ico_from_master(tray_badge_master, os.path.join(BRANDING_WINDOWS, "tray.ico"), tray_sizes)
 
-    # Windows Host & Setup window logos
-    master_full_black.save(os.path.join(WINDOWS_HOST, "logo.png"))
-    master_full_black.save(os.path.join(WINDOWS_SETUP, "logo.png"))
+    # Windows Host & Setup window logos (15% corner radius, NO border)
+    win_master_15.save(os.path.join(WINDOWS_HOST, "logo.png"))
+    win_master_15.save(os.path.join(WINDOWS_SETUP, "logo.png"))
 
     # 7. Linux Assets
     make_svg_wrapper(master_full_black, os.path.join(BRANDING_LINUX, "knowthemice.svg"))

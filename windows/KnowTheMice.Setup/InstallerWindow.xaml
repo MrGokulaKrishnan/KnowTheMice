@@ -85,7 +85,7 @@
             <Border Grid.Row="0" Background="#060606" CornerRadius="17,17,0,0" BorderBrush="#15FFFFFF" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseDown">
                 <Grid Margin="18,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Width="20" Height="20" Background="#000000" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1" CornerRadius="5" Margin="0,0,10,0" ClipToBounds="True">
+                        <Border Width="20" Height="20" Background="#000000" BorderThickness="0" CornerRadius="3" Margin="0,0,10,0" ClipToBounds="True">
                             <Image Source="pack://application:,,,/logo.png" Stretch="Uniform"/>
                         </Border>
                         <TextBlock Text="Know The Mice — Setup Wizard" Foreground="{StaticResource TextSecondary}" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
@@ -100,8 +100,8 @@
                 <!-- STEP 1: WELCOME SCREEN -->
                 <Grid x:Name="StepWelcome" Visibility="Visible">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <!-- Glowing Logo Container -->
-                        <Border Width="96" Height="96" Background="#000000" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="2" CornerRadius="24" HorizontalAlignment="Center" Margin="0,0,0,20" ClipToBounds="True">
+                        <!-- Borderless 15% Logo Container -->
+                        <Border Width="96" Height="96" Background="#000000" BorderThickness="0" CornerRadius="14" HorizontalAlignment="Center" Margin="0,0,0,20" ClipToBounds="True">
                             <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
 

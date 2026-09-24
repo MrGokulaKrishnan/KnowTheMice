@@ -65,7 +65,10 @@ fun RemotePadScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             // Connected Host Pill
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.weight(1f, fill = false),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Box(
                     modifier = Modifier
                         .size(10.dp)
@@ -78,18 +81,26 @@ fun RemotePadScreen(
                         text = currentHost?.name ?: "Connected PC",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 14.sp
+                        fontSize = 14.sp,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                     Text(
                         text = currentHost?.ip ?: "127.0.0.1",
                         color = TextMuted,
-                        fontSize = 10.sp
+                        fontSize = 10.sp,
+                        maxLines = 1
                     )
                 }
             }
 
+            Spacer(modifier = Modifier.width(8.dp))
+
             // Right Badges & Action Buttons
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 // Latency Badge
                 Box(
                     modifier = Modifier
@@ -106,39 +117,37 @@ fun RemotePadScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(10.dp))
-
                 // Power Controls
-                IconButton(
-                    onClick = onOpenPower,
+                Box(
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
                         .background(Color(0x20FF5E00))
+                        .clickable(onClick = onOpenPower),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.PowerSettingsNew,
                         contentDescription = "Power",
                         tint = BrandOrange,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
 
-                Spacer(modifier = Modifier.width(6.dp))
-
                 // Disconnect
-                IconButton(
-                    onClick = onDisconnect,
+                Box(
                     modifier = Modifier
-                        .size(32.dp)
+                        .size(34.dp)
                         .clip(CircleShape)
                         .background(Color(0x15FFFFFF))
+                        .clickable(onClick = onDisconnect),
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         Icons.Default.Close,
                         contentDescription = "Disconnect",
                         tint = TextSecondary,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(18.dp)
                     )
                 }
             }
@@ -456,6 +465,7 @@ fun RemotePadScreen(
         ) {
             // Trackpad Mode (Active)
             DockItem(
+                modifier = Modifier.weight(1f),
                 icon = Icons.Default.Mouse,
                 label = "Mouse",
                 isActive = !isAirMouseActive,
@@ -464,6 +474,7 @@ fun RemotePadScreen(
 
             // Air Mouse (Gyro)
             DockItem(
+                modifier = Modifier.weight(1f),
                 icon = Icons.Default.Navigation,
                 label = "Air Mouse",
                 isActive = isAirMouseActive,
@@ -472,6 +483,7 @@ fun RemotePadScreen(
 
             // Keyboard
             DockItem(
+                modifier = Modifier.weight(1f),
                 icon = Icons.Default.Keyboard,
                 label = "Keys",
                 isActive = false,
@@ -480,6 +492,7 @@ fun RemotePadScreen(
 
             // Media
             DockItem(
+                modifier = Modifier.weight(1f),
                 icon = Icons.Default.PlayArrow,
                 label = "Media",
                 isActive = false,
@@ -488,6 +501,7 @@ fun RemotePadScreen(
 
             // Slides
             DockItem(
+                modifier = Modifier.weight(1f),
                 icon = Icons.Default.Slideshow,
                 label = "Slides",
                 isActive = false,
@@ -502,14 +516,15 @@ private fun DockItem(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     isActive: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(if (isActive) Color(0x25FF5E00) else Color.Transparent)
             .clickable(onClick = onClick)
-            .padding(horizontal = 10.dp, vertical = 8.dp),
+            .padding(horizontal = 4.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

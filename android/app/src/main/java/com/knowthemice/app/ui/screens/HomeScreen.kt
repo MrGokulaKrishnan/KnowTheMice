@@ -65,10 +65,8 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .size(46.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(Color(0xFF000000))
-                        .border(1.5.dp, BrandHighlight, RoundedCornerShape(12.dp))
-                        .padding(4.dp),
+                        .clip(RoundedCornerShape(7.dp))
+                        .background(Color(0xFF000000)),
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
