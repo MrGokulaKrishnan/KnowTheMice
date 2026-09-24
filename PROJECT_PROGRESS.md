@@ -1,18 +1,18 @@
 # Know The Mice — Project Progress & State Resume
 
 ## Current Phase
-PHASE 10 — Authoritative Media Logo Synchronization, Emoji Removal, Apple-Grade Clean UI & Live Deployment — COMPLETED
+PHASE 11 — Single Source of Truth Master Logo Sync, Android Splash Engine, 15% Windows Icons & Multi-Artifact Production Deployment — COMPLETED
 
 ## Current Task
 Executed all instructions from the latest prompt:
-1. Updated authoritative master logo across Android, Windows, and Website from `media_1790243099468.jpg` (SHA256: `010f43af6cf21999b661ea9bbc9882041258e7a6470af4cf3becdf0dfa2f51c6`).
-2. Completely removed emojis across the entire project (Windows `MainWindow.xaml`, `MainWindow.xaml.cs`, Android `HomeScreen.kt`, `KeyboardScreen.kt`, and website) and replaced them with Apple-grade clean vector icons (`Path` geometries, Material Icons, Lucide vector icons).
-3. Windows logo has NO borders anywhere (borderless default logo) with 15% corner radius for icons and window display.
-4. Resolved Android navbar overlapping icons by adding a dedicated "Home" dock navigation button, creating a prominent elevated center Mouse button, and adding text overflow protection (`maxLines = 1`, `softWrap = false`, `overflow = TextOverflow.Ellipsis`).
-5. Resolved Android update error in `UpdateManager.kt` with multi-hop HTTP redirect handling (`openConnectionWithRedirects`), explicit User-Agent headers, and comprehensive error logging.
-6. Recompiled Windows Host, single-file Setup EXE, and enterprise WiX MSI installer with 0 warnings/errors.
-7. Recompiled Android production release APK with R8 shrinking and signing.
-8. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
+1. Updated authoritative master logo across Android, Windows, and Website from `media_1790256187709.jpg` (SHA256: `86eaaf677a7b4ebd06dcf5164e7b169cb31c5d54854fb4ae32554e8512b06454`).
+2. Implemented native Android hardware-accelerated splash screen (`SplashScreen.kt`) with radial energy glow and reduced-motion accessibility support.
+3. Windows 15% rounded-corner container mask applied to all icon assets across multi-resolution mipmaps (16px to 512px) without artificial borders.
+4. Android adaptive icon foreground safe area strictly centered at 60% inside 108dp canvas on pure AMOLED black (`#000000`).
+5. Recompiled Windows Host, single-file Setup EXE, and enterprise WiX MSI installer with 0 warnings/errors.
+6. Recompiled Android production release APK with R8 shrinking and signing.
+7. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
+8. Generated `DEVELOPMENT_STATUS.md` recording PASS for all Section 16 verification requirements.
 
 ## Overall Status
 COMPLETED & VERIFIED
@@ -22,41 +22,42 @@ COMPLETED & VERIFIED
 ## Checkpoint Status
 
 - [x] **CHECKPOINT 01 — Master Artwork Updated**:
-  - `shared/logo.jpg` updated with `media_1790243099468.jpg`.
-  - Regenerated all cross-platform assets with `branding/build-brand-assets.py`: master PNG/SVG, web favicons/PWA/OG, Android adaptive drawables/mipmaps, Windows `.ico` multi-resolution files, and Linux icons.
-- [x] **CHECKPOINT 02 — Emoji Removal & Vector Icons Across Platforms**:
-  - Windows Host (`MainWindow.xaml`): Replaced all navigation and quick action emojis with crisp SVG vector `<Path>` icons with dynamic foreground binding.
-  - Windows Update Banner (`MainWindow.xaml.cs`): Replaced emoji glyphs (`🔄`, `⚡`, `✅`, `⚠️`) with vector geometry paths.
-  - Windows Setup (`InstallerWindow.xaml`): Replaced unicode glyphs with vector checkmark path, removed border from logo in Step 3 (`BorderThickness="0"`, `CornerRadius="10"`).
-  - Android App (`HomeScreen.kt` & `KeyboardScreen.kt`): Replaced emojis in OTA banner and hints with native Material icons.
-  - Website (`Navbar.tsx`, `Footer.tsx`, `AboutAndContact.tsx`): Removed border and shadow glow from logo containers, replaced unicode checkmark with Lucide `Check`.
-- [x] **CHECKPOINT 03 — Android Mouse Section Navbar & Overlap Fix**:
-  - Added "Home" icon to `RemotePadScreen.kt` dock to allow returning home without disconnecting.
-  - Rebuilt dock items with overflow protection, preventing touch target and text collisions on any screen size.
-  - Highlighted active Mouse action with prominent Apple-style pill elevation and subtle gradient border.
-  - Prevented header overlap between title text and scanning badge in `HomeScreen.kt`.
+  - `shared/logo.jpg` updated with `media_1790256187709.jpg`.
+  - Regenerated all cross-platform assets with `branding/build-brand-assets.py`: master PNG/SVG, web favicons/PWA/OG, Android adaptive drawables/mipmaps, Windows `.ico` multi-resolution files (16px, 24px, 32px, 48px, 64px, 128px, 256px, 512px), and Linux icons.
+- [x] **CHECKPOINT 02 — Android Splash Screen & Startup Performance**:
+  - Created `SplashScreen.kt` with GPU-accelerated graphics layer, radial flame glow, smooth easing, and `isReducedMotion` support via system `ANIMATOR_DURATION_SCALE`.
+  - Updated `MainActivity.kt`: starts on `"splash"`, defers `discoveryClient.startDiscovery()` and `UpdateManager.checkForUpdates()` to background coroutines triggered after splash ends.
+  - Updated `SettingsScreen.kt`: displays master logo in the About card with build info.
+- [x] **CHECKPOINT 03 — Windows 15% Rounded Corner & Multi-res Icons**:
+  - Borderless 15% corner radius icon for Windows desktop, taskbar, ARP, system tray, and installer.
+  - Setup executable embeds 15% rounded multi-res icon.
 - [x] **CHECKPOINT 04 — Dual Windows Packaging**:
-  - Built `KnowTheMice-Setup-x64.exe` (1,514,664 bytes, SHA-256: `5663F20C1A4BA6BF976D8379769743E37D5136EA01560E796A463993E9BF7C18`).
-  - Built `KnowTheMice-Setup-x64.msi` (233,472 bytes, SHA-256: `4FC2F840A25FB6CB430EC0D7467C69B2101E19BE11F66E07D8BC4EA8BAD89313`).
+  - Built `KnowTheMice-Setup-x64.exe` (1,442,472 bytes, SHA-256: `6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E`).
+  - Built `KnowTheMice-Setup-x64.msi` (225,280 bytes, SHA-256: `52972508B1E61698C127D1CB22BAF7D027943BDAECD8359604F0F5C58E478689`).
 - [x] **CHECKPOINT 05 — Android Release Assembly**:
-  - Built `KnowTheMice-Android.apk` (2,752,598 bytes, SHA-256: `4E3BD5784261FBC4C4521E68CE22E46ACDD4C82C3FC4914EBD71F9F1A5CD2AE2`).
+  - Built `KnowTheMice-Android.apk` (3,018,638 bytes, SHA-256: `C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6`).
 - [x] **CHECKPOINT 06 — Production Deployment & Live Verification**:
-  - Updated `downloads.json` and `Download.tsx`.
+  - Updated `downloads.json` and `Download.tsx` with exact binary sizes and checksums.
   - Built web distribution with Vite (`npm run build`).
+  - Synced downloads to `website/dist/downloads/`.
   - Deployed to Firebase Hosting (`https://knowthemice.web.app`).
-  - Verified live via `curl.exe -I` on all endpoints (`downloads.json`, `.exe`, `.msi`, `.apk`, `logo.png`).
+  - Verified live via `curl.exe -I` on all endpoints (`downloads.json`, `.exe`, `.msi`, `.apk`, `logo.png`, `latest` aliases).
+- [x] **CHECKPOINT 07 — Section 16 Verification Matrix**:
+  - Generated `DEVELOPMENT_STATUS.md` with all checks marked PASS.
 
 ---
 
 ## Last Verified State
 - `https://knowthemice.web.app/` -> 200 OK (6,215 bytes)
 - `https://knowthemice.web.app/downloads.json` -> 200 OK (2,880 bytes)
-- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,514,664 bytes)
-- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (233,472 bytes)
-- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,752,598 bytes)
-- `https://knowthemice.web.app/logo.png` -> 200 OK (320,664 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,442,472 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (225,280 bytes)
+- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (3,018,638 bytes)
+- `https://knowthemice.web.app/logo.png` -> 200 OK (298,319 bytes)
+- `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,442,472 bytes)
+- `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (3,018,638 bytes)
 
 ---
 
 ## Last Updated
-2026-09-24 16:25 IST (v1.2.0)
+2026-09-24 19:30 IST (v1.2.0)

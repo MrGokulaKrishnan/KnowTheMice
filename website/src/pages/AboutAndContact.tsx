@@ -5,7 +5,10 @@ import { GlassCard, GlowText } from '../components/UIComponents';
 export const AboutPage: React.FC = () => {
   return (
     <div className="space-y-16 pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-      <div className="text-center max-w-3xl mx-auto">
+      <div className="text-center max-w-3xl mx-auto flex flex-col items-center">
+        <div className="w-20 h-20 rounded-2xl bg-black flex items-center justify-center p-1 mb-4">
+          <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain" />
+        </div>
         <span className="text-xs font-mono font-semibold uppercase tracking-widest text-brand-orange">
           Our Mission
         </span>

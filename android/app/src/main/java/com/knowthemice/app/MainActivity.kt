@@ -23,6 +23,7 @@ import com.knowthemice.app.ui.theme.BgAmoled
 import com.knowthemice.app.ui.theme.KnowTheMiceTheme
 import com.knowthemice.app.update.AndroidUpdateInfo
 import com.knowthemice.app.update.UpdateManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -31,13 +32,12 @@ class MainActivity : ComponentActivity() {
     private val controlClient = ControlClient()
     private var airMouseEngine: AirMouseEngine? = null
     private var vibrator: Vibrator? = null
+    private var backgroundServicesStarted = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         discoveryClient = DiscoveryClient(this)
-        discoveryClient.startDiscovery()
-
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 
         airMouseEngine = AirMouseEngine(this) { dx, dy ->
@@ -46,11 +46,6 @@ class MainActivity : ComponentActivity() {
 
         // Initialize UpdateManager with state persistence
         UpdateManager.initialize(this, BuildConfig.VERSION_CODE)
-        lifecycleScope.launch {
-            try {
-                UpdateManager.checkForUpdates(this@MainActivity, BuildConfig.VERSION_CODE)
-            } catch (_: Exception) {}
-        }
 
         setContent {
             KnowTheMiceTheme {
@@ -61,9 +56,20 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun startBackgroundServices() {
+        if (backgroundServicesStarted) return
+        backgroundServicesStarted = true
+        discoveryClient.startDiscovery()
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                UpdateManager.checkForUpdates(this@MainActivity, BuildConfig.VERSION_CODE)
+            } catch (_: Exception) {}
+        }
+    }
+
     @Composable
     private fun MainAppContent() {
-        var currentScreen by remember { mutableStateOf("home") }
+        var currentScreen by remember { mutableStateOf("splash") }
         var showPairingDialog by remember { mutableStateOf(false) }
         var showPowerDialog by remember { mutableStateOf(false) }
 
@@ -92,6 +98,15 @@ class MainActivity : ComponentActivity() {
         }
 
         when (currentScreen) {
+            "splash" -> {
+                SplashScreen(
+                    onSplashFinished = {
+                        startBackgroundServices()
+                        currentScreen = "home"
+                    }
+                )
+            }
+
             "home" -> {
                 HomeScreen(
                     connectionState = connectionState,

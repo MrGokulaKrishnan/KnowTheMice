@@ -30,8 +30,8 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "1.44 MB",
-    sha256: "5663F20C1A4BA6BF976D8379769743E37D5136EA01560E796A463993E9BF7C18",
+    size: "1.38 MB",
+    sha256: "6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E",
     releaseDate: "September 24, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
@@ -47,8 +47,8 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "2.63 MB",
-    sha256: "4E3BD5784261FBC4C4521E68CE22E46ACDD4C82C3FC4914EBD71F9F1A5CD2AE2",
+    size: "2.88 MB",
+    sha256: "C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6",
     releaseDate: "September 24, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [
@@ -319,7 +319,7 @@ export const DownloadPage: React.FC = () => {
                     Direct executable: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
                   </span>
                   <span className="text-[11px] text-zinc-500 block">
-                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (228 KB)
+                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (220 KB)
                   </span>
                 </div>
               </div>

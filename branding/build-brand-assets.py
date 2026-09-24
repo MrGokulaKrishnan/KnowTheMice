@@ -217,7 +217,7 @@ def main():
 
     # 2. Extract components
     crop_full = crop_artwork(trans_master, y_start=0, y_end=850)
-    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=665)
+    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=685)
 
     # 3. Canonical Master Assets
     master_full_black = place_in_canvas(crop_full, 1024, 0.86, bg_color=(0, 0, 0, 255))
@@ -333,7 +333,7 @@ def main():
     apk_512.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 
     # 6. Windows Assets (WITH 15% RADIUS IN CORNER ONLY IN WINDOWS - AMOLED black, NO border)
-    win_sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
+    win_sizes = [512, 256, 128, 64, 48, 40, 32, 24, 20, 16]
     win_master_15 = make_rounded_icon(master_full_black, 0.15)
     make_ico_from_master(win_master_15, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)
     make_ico_from_master(win_master_15, os.path.join(WINDOWS_SETUP, "icon.ico"), win_sizes)
