@@ -287,10 +287,14 @@ def main():
     og_img.save(os.path.join(BRANDING_WEB, "og-image.png"))
 
     # 5. Android Adaptive Icon & Mipmaps
+    # 5. Android Adaptive Icon & Mipmaps
     # CRITICAL: Android Adaptive Icon Canvas is 108dp x 108dp.
-    # Safe zone is a circle with diameter 66dp (61.1% of canvas).
-    # Foreground MUST be centered inside this 66% circle with transparent padding!
-    # Scale factor: 0.60 guarantees 100% visibility on all circular/squircle masks.
+    # Google Pixel Launcher applies a circular mask with diameter 72dp.
+    # Samsung One UI applies a squircle mask with size 72dp.
+    # Official Android Keyline safe circle is diameter 66dp (61.1% of canvas).
+    # Since the rectangular logo bounding box has corners, scale=0.42 guarantees that
+    # the entire logo (KM monogram + text) fits 100% inside both the 66dp keyline circle
+    # and the 72dp Pixel/Samsung masks without clipping or appearing zoomed in!
     android_fg_scales = {
         "mdpi": 108,
         "hdpi": 162,
@@ -299,12 +303,12 @@ def main():
         "xxxhdpi": 432
     }
     for density, size in android_fg_scales.items():
-        fg_asset = place_in_canvas(crop_full, size, 0.60, bg_color=None)
+        fg_asset = place_in_canvas(crop_full, size, 0.42, bg_color=None)
         fg_path = os.path.join(ANDROID_RES, f"drawable-{density}", "ic_launcher_foreground_asset.png")
         fg_asset.save(fg_path)
 
-    # Base drawable foreground
-    fg_base = place_in_canvas(crop_full, 432, 0.60, bg_color=None)
+    # Base drawable foreground (108x108 for mdpi fallback to prevent overscaling)
+    fg_base = place_in_canvas(crop_full, 108, 0.42, bg_color=None)
     fg_base.save(os.path.join(ANDROID_RES, "drawable", "ic_launcher_foreground_asset.png"))
     fg_base.save(os.path.join(BRANDING_ANDROID, "ic_launcher_foreground.png"))
 
@@ -321,14 +325,14 @@ def main():
         "xxxhdpi": 192
     }
     for density, size in mipmap_sizes.items():
-        legacy_square = place_in_canvas(crop_full, size, 0.86, bg_color=(0, 0, 0, 255))
-        legacy_round = make_round_icon(legacy_square)
+        legacy_square = place_in_canvas(crop_full, size, 0.72, bg_color=(0, 0, 0, 255))
+        legacy_round = make_round_icon(place_in_canvas(crop_full, size, 0.62, bg_color=(0, 0, 0, 255)))
 
         legacy_square.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
         legacy_round.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher_round.png"))
 
-    # 512x512 Master APK icon (SAME AS UPLOADED IN MEDIA)
-    apk_512 = place_in_canvas(crop_full, 512, 0.86, bg_color=(0, 0, 0, 255))
+    # 512x512 Master APK icon (clean proportions, safe padding)
+    apk_512 = place_in_canvas(crop_full, 512, 0.75, bg_color=(0, 0, 0, 255))
     apk_512.save(os.path.join(BRANDING_ANDROID, "ic_launcher.png"))
     apk_512.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 

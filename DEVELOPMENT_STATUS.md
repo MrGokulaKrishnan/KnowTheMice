@@ -16,8 +16,9 @@ PASS
 
 ### ANDROID ADAPTIVE ICON:
 PASS
-- Foreground safe-area constraint met: centered at 60% within 108dp canvas (`ic_launcher_foreground.png`).
-- Zero edge clipping under squircle, circle, rounded rectangle, or teardrop launcher masks.
+- Foreground safe-area constraint met: scaled at 0.42 inside 108dp canvas (`ic_launcher_foreground_asset.png`).
+- Explicit centering and 108dp dimensional constraint enforced in `ic_launcher_foreground.xml` (`android:width="108dp"`, `android:height="108dp"`, `android:gravity="center"`).
+- Zero edge clipping under Samsung squircle and Google Pixel circular launcher masks (all artwork falls comfortably inside 66dp keyline circle).
 - Background layer (`ic_launcher_background.xml`) is solid AMOLED black (`#000000`).
 
 ### ANDROID APP INFO ICON:
@@ -40,13 +41,14 @@ PASS
 PASS
 - Preserves exact aspect ratio of the master logo.
 - No horizontal or vertical stretching, no artificial borders, no cropping.
+- Scaled for safe-zone visibility on Samsung One UI and Google Pixel devices.
 
 ### ANDROID RELEASE APK:
 PASS
 - Production R8-minified and zip-aligned release APK built with `./gradlew.bat assembleRelease --no-daemon`.
 - Binary: `website/public/downloads/android/KnowTheMice-Android.bin` (mapped to `KnowTheMice-Android.apk`).
-- Size: 3,018,638 bytes (2.88 MB).
-- SHA-256: `C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6`.
+- Size: 2,912,990 bytes (2.78 MB).
+- SHA-256: `34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A`.
 
 ### WINDOWS LOGO:
 PASS
@@ -117,9 +119,9 @@ PASS
 | `https://knowthemice.web.app/logo.png` | 200 OK | `image/png` | 298,319 B | `B278011C30AC13EE62328CC9F1D6BF82B7211BB54A7E818B148A400DCA9CDD7F` |
 | `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` | 200 OK | `application/vnd.microsoft.portable-executable` | 1,442,472 B | `6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E` |
 | `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` | 200 OK | `application/x-msi` | 225,280 B | `52972508B1E61698C127D1CB22BAF7D027943BDAECD8359604F0F5C58E478689` |
-| `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` | 200 OK | `application/vnd.android.package-archive` | 3,018,638 B | `C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6` |
+| `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` | 200 OK | `application/vnd.android.package-archive` | 2,912,990 B | `34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A` |
 | `https://knowthemice.web.app/downloads/windows/latest` | 200 OK | `application/vnd.microsoft.portable-executable` | 1,442,472 B | `6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E` |
-| `https://knowthemice.web.app/downloads/android/latest` | 200 OK | `application/vnd.android.package-archive` | 3,018,638 B | `C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6` |
+| `https://knowthemice.web.app/downloads/android/latest` | 200 OK | `application/vnd.android.package-archive` | 2,912,990 B | `34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A` |
 
 ---
 

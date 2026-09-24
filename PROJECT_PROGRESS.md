@@ -1,18 +1,18 @@
 # Know The Mice — Project Progress & State Resume
 
 ## Current Phase
-PHASE 11 — Single Source of Truth Master Logo Sync, Android Splash Engine, 15% Windows Icons & Multi-Artifact Production Deployment — COMPLETED
+PHASE 12 — Android Adaptive Icon Safe-Zone Calibration (Samsung & Pixel Launcher Masks) & Live Production Deployment — COMPLETED
 
 ## Current Task
 Executed all instructions from the latest prompt:
-1. Updated authoritative master logo across Android, Windows, and Website from `media_1790256187709.jpg` (SHA256: `86eaaf677a7b4ebd06dcf5164e7b169cb31c5d54854fb4ae32554e8512b06454`).
-2. Implemented native Android hardware-accelerated splash screen (`SplashScreen.kt`) with radial energy glow and reduced-motion accessibility support.
-3. Windows 15% rounded-corner container mask applied to all icon assets across multi-resolution mipmaps (16px to 512px) without artificial borders.
-4. Android adaptive icon foreground safe area strictly centered at 60% inside 108dp canvas on pure AMOLED black (`#000000`).
-5. Recompiled Windows Host, single-file Setup EXE, and enterprise WiX MSI installer with 0 warnings/errors.
-6. Recompiled Android production release APK with R8 shrinking and signing.
+1. Resolved Android APK icon clipping / zoom-in under Samsung One UI (squircle mask) and Google Pixel Launcher (circular mask).
+2. Recalibrated adaptive icon foreground asset scale to 0.42, keeping the entire rectangular logo comfortably within the 66dp Android keyline safe circle (0 pixels clipped under 72dp Pixel circle and Samsung squircle).
+3. Added explicit 108dp width/height constraint and `gravity="center"` in `ic_launcher_foreground.xml`.
+4. Adjusted legacy round icon scale to 0.62 (0 pixels clipped by circular mask) and square icon scale to 0.72.
+5. Recompiled Android production release APK with R8 shrinking and signing.
+6. Updated `downloads.json` and `Download.tsx` with new checksum and size.
 7. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
-8. Generated `DEVELOPMENT_STATUS.md` recording PASS for all Section 16 verification requirements.
+8. Updated `DEVELOPMENT_STATUS.md` recording PASS for all verification criteria.
 
 ## Overall Status
 COMPLETED & VERIFIED
@@ -34,16 +34,21 @@ COMPLETED & VERIFIED
 - [x] **CHECKPOINT 04 — Dual Windows Packaging**:
   - Built `KnowTheMice-Setup-x64.exe` (1,442,472 bytes, SHA-256: `6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E`).
   - Built `KnowTheMice-Setup-x64.msi` (225,280 bytes, SHA-256: `52972508B1E61698C127D1CB22BAF7D027943BDAECD8359604F0F5C58E478689`).
-- [x] **CHECKPOINT 05 — Android Release Assembly**:
-  - Built `KnowTheMice-Android.apk` (3,018,638 bytes, SHA-256: `C64494F25558DB9C78E5A9BC2D0A3034D01264F51786BA3EC27A4F0E83B848E6`).
-- [x] **CHECKPOINT 06 — Production Deployment & Live Verification**:
+- [x] **CHECKPOINT 05 — Android Icon Safe Zone Calibration**:
+  - Fixed zoom-in and corner clipping on Samsung One UI and Google Pixel launchers.
+  - Scaled foreground asset to 0.42 (108dp canvas), placing all artwork well within the 66dp keyline circle.
+  - Added explicit centering and `width="108dp"`, `height="108dp"` to `ic_launcher_foreground.xml`.
+  - Scaled legacy round icon to 0.62 with zero pixel clipping.
+- [x] **CHECKPOINT 06 — Android Release Assembly**:
+  - Built `KnowTheMice-Android.apk` (2,912,990 bytes, SHA-256: `34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A`).
+- [x] **CHECKPOINT 07 — Production Deployment & Live Verification**:
   - Updated `downloads.json` and `Download.tsx` with exact binary sizes and checksums.
   - Built web distribution with Vite (`npm run build`).
   - Synced downloads to `website/dist/downloads/`.
   - Deployed to Firebase Hosting (`https://knowthemice.web.app`).
   - Verified live via `curl.exe -I` on all endpoints (`downloads.json`, `.exe`, `.msi`, `.apk`, `logo.png`, `latest` aliases).
-- [x] **CHECKPOINT 07 — Section 16 Verification Matrix**:
-  - Generated `DEVELOPMENT_STATUS.md` with all checks marked PASS.
+- [x] **CHECKPOINT 08 — Verification Documentation**:
+  - Updated `DEVELOPMENT_STATUS.md` with all checks marked PASS.
 
 ---
 
@@ -52,12 +57,12 @@ COMPLETED & VERIFIED
 - `https://knowthemice.web.app/downloads.json` -> 200 OK (2,880 bytes)
 - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,442,472 bytes)
 - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (225,280 bytes)
-- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (3,018,638 bytes)
+- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,912,990 bytes)
 - `https://knowthemice.web.app/logo.png` -> 200 OK (298,319 bytes)
 - `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,442,472 bytes)
-- `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (3,018,638 bytes)
+- `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (2,912,990 bytes)
 
 ---
 
 ## Last Updated
-2026-09-24 19:30 IST (v1.2.0)
+2026-09-24 22:50 IST (v1.2.0)
