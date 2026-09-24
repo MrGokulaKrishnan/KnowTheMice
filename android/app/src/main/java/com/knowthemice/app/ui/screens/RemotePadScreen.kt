@@ -452,23 +452,33 @@ fun RemotePadScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // Floating Glass Mode Dock
+        // Floating Glass Mode Dock with Overlapping/Prominent Mouse Action
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(18.dp))
                 .background(Color(0xFF0F1218))
                 .border(1.dp, Color(0x20FFFFFF), RoundedCornerShape(18.dp))
-                .padding(horizontal = 6.dp, vertical = 6.dp),
-            horizontalArrangement = Arrangement.SpaceAround,
+                .padding(horizontal = 4.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Trackpad Mode (Active)
+            // Home (Return to Home Screen)
             DockItem(
                 modifier = Modifier.weight(1f),
+                icon = Icons.Default.Home,
+                label = "Home",
+                isActive = false,
+                onClick = { onNavigate("home") }
+            )
+
+            // Trackpad Mode (Active prominent mouse)
+            DockItem(
+                modifier = Modifier.weight(1.05f),
                 icon = Icons.Default.Mouse,
                 label = "Mouse",
                 isActive = !isAirMouseActive,
+                isProminent = true,
                 onClick = { if (isAirMouseActive) onToggleAirMouse() }
             )
 
@@ -498,15 +508,6 @@ fun RemotePadScreen(
                 isActive = false,
                 onClick = { onNavigate("media") }
             )
-
-            // Slides
-            DockItem(
-                modifier = Modifier.weight(1f),
-                icon = Icons.Default.Slideshow,
-                label = "Slides",
-                isActive = false,
-                onClick = { onNavigate("presentation") }
-            )
         }
     }
 }
@@ -516,30 +517,56 @@ private fun DockItem(
     icon: androidx.compose.ui.graphics.vector.ImageVector,
     label: String,
     isActive: Boolean,
+    isProminent: Boolean = false,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val itemBg = if (isProminent && isActive) {
+        Modifier
+            .clip(RoundedCornerShape(14.dp))
+            .background(
+                Brush.verticalGradient(
+                    listOf(Color(0x40FF5E00), Color(0x20FF8A00))
+                )
+            )
+            .border(1.5.dp, BrandHighlight, RoundedCornerShape(14.dp))
+    } else if (isActive) {
+        Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color(0x25FF5E00))
+            .border(1.dp, Color(0x40FF5E00), RoundedCornerShape(12.dp))
+    } else {
+        Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.Transparent)
+    }
+
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(if (isActive) Color(0x25FF5E00) else Color.Transparent)
+            .then(itemBg)
             .clickable(onClick = onClick)
-            .padding(horizontal = 4.dp, vertical = 8.dp),
+            .padding(horizontal = 2.dp, vertical = 6.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
             Icon(
                 imageVector = icon,
                 contentDescription = label,
                 tint = if (isActive) BrandHighlight else Color(0x80FFFFFF),
-                modifier = Modifier.size(18.dp)
+                modifier = Modifier.size(if (isProminent) 20.dp else 18.dp)
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = label,
                 color = if (isActive) Color.White else Color(0x60FFFFFF),
-                fontWeight = if (isActive) FontWeight.Bold else FontWeight.Normal,
-                fontSize = 10.sp
+                fontWeight = if (isActive) FontWeight.Bold else FontWeight.Medium,
+                fontSize = 10.sp,
+                maxLines = 1,
+                softWrap = false,
+                overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
             )
         }
     }

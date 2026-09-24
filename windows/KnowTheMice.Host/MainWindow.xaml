@@ -127,13 +127,48 @@
 
                 <!-- Sidebar Nav Items -->
                 <StackPanel Grid.Row="1">
-                    <Button x:Name="NavDashboard" Content="📊   Dashboard" Style="{StaticResource ActiveNavButton}" Click="Nav_Click" Tag="Dashboard"/>
-                    <Button x:Name="NavDevices" Content="📱   Devices" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Devices"/>
-                    <Button x:Name="NavRemote" Content="🖱️   Remote &amp; Input" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Remote"/>
-                    <Button x:Name="NavKeyboard" Content="⌨️   Keyboard Monitor" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Keyboard"/>
-                    <Button x:Name="NavMedia" Content="🎵   Media Remote" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Media"/>
-                    <Button x:Name="NavShortcuts" Content="⚡   Shortcuts" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Shortcuts"/>
-                    <Button x:Name="NavSettings" Content="⚙️   Settings" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Settings"/>
+                    <Button x:Name="NavDashboard" Style="{StaticResource ActiveNavButton}" Click="Nav_Click" Tag="Dashboard">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Devices">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Devices" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavRemote" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Remote">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Remote &amp; Input" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavKeyboard" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Keyboard">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Keyboard Monitor" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavMedia" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Media">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Media Remote" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavShortcuts" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Shortcuts">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M7 2v11h3v9l7-12h-4l4-8z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Shortcuts" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="NavSettings" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Settings">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Path Data="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
+                            <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
 
                 <!-- Host Quick Status Pill in Sidebar -->
@@ -166,7 +201,7 @@
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock x:Name="TxtUpdateIcon" Text="⚡" FontSize="16" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                            <Path x:Name="PathUpdateIcon" Data="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" Fill="{StaticResource BrandHighlight}" Width="18" Height="18" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
                             <StackPanel>
                                 <TextBlock x:Name="TxtUpdateTitle" Text="New Update Available!" FontWeight="Bold" FontSize="13" Foreground="White"/>
                                 <TextBlock x:Name="TxtUpdateDesc" Text="Faster input engine, modern UI/UX, and performance enhancements." FontSize="11" Foreground="{StaticResource TextSecondary}"/>
@@ -249,10 +284,30 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Content="🖱️  REMOTE" Style="{StaticResource QuickActionButton}" Margin="0,0,6,0" Click="QuickAction_Click" Tag="Remote"/>
-                            <Button Grid.Column="1" Content="⌨️  KEYBOARD" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Keyboard"/>
-                            <Button Grid.Column="2" Content="🎵  MEDIA" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Media"/>
-                            <Button Grid.Column="3" Content="⚡  SHORTCUTS" Style="{StaticResource QuickActionButton}" Margin="6,0,0,0" Click="QuickAction_Click" Tag="Shortcuts"/>
+                            <Button Grid.Column="0" Style="{StaticResource QuickActionButton}" Margin="0,0,6,0" Click="QuickAction_Click" Tag="Remote">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Path Data="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="REMOTE" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="1" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Keyboard">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Path Data="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="KEYBOARD" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="2" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Media">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Path Data="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="MEDIA" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button Grid.Column="3" Style="{StaticResource QuickActionButton}" Margin="6,0,0,0" Click="QuickAction_Click" Tag="Shortcuts">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <Path Data="M7 2v11h3v9l7-12h-4l4-8z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
+                                    <TextBlock Text="SHORTCUTS" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </Grid>
 
                         <!-- Two Column Dashboard Cards -->

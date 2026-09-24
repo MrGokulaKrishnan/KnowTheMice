@@ -61,10 +61,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.weight(1f, fill = false),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Box(
                     modifier = Modifier
-                        .size(46.dp)
+                        .size(42.dp)
                         .background(Color(0xFF000000)),
                     contentAlignment = Alignment.Center
                 ) {
@@ -75,23 +78,29 @@ fun HomeScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(10.dp))
 
-                Column {
+                Column(modifier = Modifier.weight(1f, fill = false)) {
                     Text(
                         text = "KNOW THE MICE",
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        letterSpacing = 1.5.sp
+                        fontSize = 17.sp,
+                        letterSpacing = 1.2.sp,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                     Text(
                         text = "Wireless PC Remote Controller",
                         color = TextSecondary,
-                        fontSize = 11.sp
+                        fontSize = 11.sp,
+                        maxLines = 1,
+                        overflow = androidx.compose.ui.text.style.TextOverflow.Ellipsis
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.width(8.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 StatusBadge(
@@ -158,7 +167,12 @@ fun HomeScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(text = "⚡", fontSize = 16.sp)
+                                    Icon(
+                                        Icons.Default.CloudDownload,
+                                        contentDescription = null,
+                                        tint = BrandHighlight,
+                                        modifier = Modifier.size(18.dp)
+                                    )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
                                         text = "UPDATE AVAILABLE v${update.version}",
@@ -230,7 +244,12 @@ fun HomeScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(text = "✅", fontSize = 16.sp)
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        tint = StatusSuccess,
+                                        modifier = Modifier.size(18.dp)
+                                    )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
                                         text = "UPDATE READY v${update.version}",
@@ -270,7 +289,12 @@ fun HomeScreen(
                         ) {
                             Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
-                                    Text(text = "⚠️", fontSize = 16.sp)
+                                    Icon(
+                                        Icons.Default.Warning,
+                                        contentDescription = null,
+                                        tint = StatusError,
+                                        modifier = Modifier.size(18.dp)
+                                    )
                                     Spacer(modifier = Modifier.width(6.dp))
                                     Text(
                                         text = "UPDATE FAILED",

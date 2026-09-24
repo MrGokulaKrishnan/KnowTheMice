@@ -164,8 +164,8 @@
                 <!-- STEP 3: INSTALLING PROGRESS SCREEN -->
                 <Grid x:Name="StepInstalling" Visibility="Collapsed">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="480">
-                        <Border Width="64" Height="64" Background="#000000" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="2" CornerRadius="16" HorizontalAlignment="Center" Margin="0,0,0,24" ClipToBounds="True">
-                            <Image Source="pack://application:,,,/logo.png" Stretch="Uniform"/>
+                        <Border Width="64" Height="64" Background="#000000" BorderThickness="0" CornerRadius="10" HorizontalAlignment="Center" Margin="0,0,0,24" ClipToBounds="True">
+                            <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
 
                         <TextBlock Text="INSTALLING KNOW THE MICE..." Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,8"/>
@@ -186,7 +186,7 @@
                 <Grid x:Name="StepCompleted" Visibility="Collapsed">
                     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                         <Border Width="72" Height="72" Background="#1522C55E" BorderBrush="#3022C55E" BorderThickness="2" CornerRadius="36" HorizontalAlignment="Center" Margin="0,0,0,20">
-                            <TextBlock Text="✓" Foreground="#22C55E" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#22C55E" Width="28" Height="28" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
                         <TextBlock Text="KNOW THE MICE IS READY" Foreground="White" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" Margin="0,0,0,6"/>

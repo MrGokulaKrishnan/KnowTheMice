@@ -318,7 +318,8 @@ public partial class MainWindow : Window
                     break;
 
                 case UpdateState.Checking:
-                    TxtUpdateIcon.Text = "🔄";
+                    PathUpdateIcon.Data = Geometry.Parse("M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z");
+                    PathUpdateIcon.Fill = new SolidColorBrush(Color.FromRgb(255, 138, 0));
                     TxtUpdateTitle.Text = "Checking for updates...";
                     TxtUpdateDesc.Text = "Connecting to Know The Mice update service...";
                     PrgUpdate.Visibility = Visibility.Collapsed;
@@ -327,7 +328,8 @@ public partial class MainWindow : Window
                     break;
 
                 case UpdateState.UpdateAvailable:
-                    TxtUpdateIcon.Text = "⚡";
+                    PathUpdateIcon.Data = Geometry.Parse("M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z");
+                    PathUpdateIcon.Fill = new SolidColorBrush(Color.FromRgb(255, 138, 0));
                     TxtUpdateTitle.Text = $"Update Available: v{update?.Version}";
                     TxtUpdateDesc.Text = string.IsNullOrWhiteSpace(update?.Changelog) ? "New performance enhancements and features." : update.Changelog;
                     PrgUpdate.Visibility = Visibility.Collapsed;
@@ -338,7 +340,8 @@ public partial class MainWindow : Window
                     break;
 
                 case UpdateState.Downloading:
-                    TxtUpdateIcon.Text = "⏳";
+                    PathUpdateIcon.Data = Geometry.Parse("M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z");
+                    PathUpdateIcon.Fill = new SolidColorBrush(Color.FromRgb(255, 138, 0));
                     TxtUpdateTitle.Text = "Downloading update...";
                     TxtUpdateDesc.Text = $"Preparing Know The Mice v{update?.Version} ({_updateService.DownloadProgress}%)...";
                     PrgUpdate.Visibility = Visibility.Visible;
@@ -350,7 +353,8 @@ public partial class MainWindow : Window
                     break;
 
                 case UpdateState.Ready:
-                    TxtUpdateIcon.Text = "✅";
+                    PathUpdateIcon.Data = Geometry.Parse("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z");
+                    PathUpdateIcon.Fill = new SolidColorBrush(Color.FromRgb(34, 197, 94));
                     TxtUpdateTitle.Text = $"Update Ready (v{update?.Version})";
                     TxtUpdateDesc.Text = "Restart the application to finish installing the update.";
                     PrgUpdate.Visibility = Visibility.Collapsed;
@@ -361,7 +365,8 @@ public partial class MainWindow : Window
                     break;
 
                 case UpdateState.Failed:
-                    TxtUpdateIcon.Text = "⚠️";
+                    PathUpdateIcon.Data = Geometry.Parse("M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z");
+                    PathUpdateIcon.Fill = new SolidColorBrush(Color.FromRgb(239, 68, 68));
                     TxtUpdateTitle.Text = "Update Failed";
                     TxtUpdateDesc.Text = error ?? "Failed to download update.";
                     PrgUpdate.Visibility = Visibility.Collapsed;

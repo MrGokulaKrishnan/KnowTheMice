@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Award, Shield, Heart, Terminal, Sparkles } from 'lucide-react';
+import { Users, Award, Shield, Heart, Terminal, Sparkles, Check } from 'lucide-react';
 import { GlassCard, GlowText } from '../components/UIComponents';
 
 export const AboutPage: React.FC = () => {
@@ -65,7 +65,7 @@ export const ContactPage: React.FC = () => {
         {submitted ? (
           <div className="p-6 text-center space-y-3">
             <div className="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center">
-              ✓
+              <Check className="w-6 h-6 text-emerald-400" />
             </div>
             <h3 className="text-xl font-orbitron font-bold text-white">Message Received</h3>
             <p className="text-zinc-400 text-sm">Thank you for helping us improve Know The Mice!</p>

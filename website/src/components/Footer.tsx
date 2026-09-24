@@ -13,8 +13,8 @@ export const Footer: React.FC<FooterProps> = ({ setActivePage }) => {
           {/* Col 1: Brand Info */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-lg bg-black border border-orange-500/40 flex items-center justify-center p-0.5 shadow-glow-orange overflow-hidden">
-                <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain rounded-md" />
+              <div className="w-9 h-9 rounded-lg bg-black flex items-center justify-center p-0.5 overflow-hidden">
+                <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain" />
               </div>
               <span className="font-orbitron font-bold text-xl tracking-wider text-white">
                 KNOW THE MICE

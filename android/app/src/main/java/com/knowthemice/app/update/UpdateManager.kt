@@ -89,14 +89,9 @@ object UpdateManager {
         _updateState.value = AndroidUpdateState.Checking
 
         withContext(Dispatchers.IO) {
+            var conn: HttpURLConnection? = null
             try {
-                val url = URL("$METADATA_URL?t=${System.currentTimeMillis()}")
-                val conn = (url.openConnection() as HttpURLConnection).apply {
-                    connectTimeout = 8000
-                    readTimeout = 8000
-                    requestMethod = "GET"
-                }
-
+                conn = openConnectionWithRedirects("$METADATA_URL?t=${System.currentTimeMillis()}")
                 if (conn.responseCode == 200) {
                     val json = conn.inputStream.bufferedReader().use { it.readText() }
                     val root = JSONObject(json)
@@ -132,6 +127,8 @@ object UpdateManager {
                 _updateState.value = AndroidUpdateState.UpToDate
             } catch (ex: Exception) {
                 _updateState.value = AndroidUpdateState.Failed("Check failed: ${ex.message}")
+            } finally {
+                conn?.disconnect()
             }
         }
     }
@@ -140,15 +137,9 @@ object UpdateManager {
         _updateState.value = AndroidUpdateState.Downloading(info, 0)
 
         withContext(Dispatchers.IO) {
+            var conn: HttpURLConnection? = null
             try {
-                val url = URL(info.downloadUrl)
-                val conn = (url.openConnection() as HttpURLConnection).apply {
-                    connectTimeout = 15000
-                    readTimeout = 30000
-                    instanceFollowRedirects = true
-                    requestMethod = "GET"
-                }
-
+                conn = openConnectionWithRedirects(info.downloadUrl)
                 val totalBytes = conn.contentLength.toLong()
                 val cacheDir = context.cacheDir
                 val apkFile = File(cacheDir, "KnowTheMice-Update.apk")
@@ -172,7 +163,7 @@ object UpdateManager {
                     }
                 }
 
-                // Verify SHA-256
+                // Verify SHA-256 if provided
                 if (info.sha256.isNotBlank() && !verifySha256(apkFile, info.sha256)) {
                     apkFile.delete()
                     throw IllegalStateException("APK SHA-256 verification failed.")
@@ -194,8 +185,41 @@ object UpdateManager {
                 _updateState.value = AndroidUpdateState.Ready(info, apkFile.absolutePath)
             } catch (ex: Exception) {
                 _updateState.value = AndroidUpdateState.Failed("Download error: ${ex.message}", info)
+            } finally {
+                conn?.disconnect()
             }
         }
+    }
+
+    private fun openConnectionWithRedirects(initialUrl: String): HttpURLConnection {
+        var curUrl = initialUrl
+        var redirects = 0
+        while (redirects < 5) {
+            val u = URL(curUrl)
+            val conn = (u.openConnection() as HttpURLConnection).apply {
+                connectTimeout = 15000
+                readTimeout = 30000
+                instanceFollowRedirects = true
+                setRequestProperty("User-Agent", "KnowTheMice-Android/1.2.0")
+                requestMethod = "GET"
+            }
+            val code = conn.responseCode
+            if (code in 300..399) {
+                val loc = conn.getHeaderField("Location")
+                conn.disconnect()
+                if (!loc.isNullOrBlank()) {
+                    curUrl = if (loc.startsWith("http://") || loc.startsWith("https://")) loc else URL(u, loc).toString()
+                    redirects++
+                    continue
+                }
+            }
+            if (code != 200) {
+                conn.disconnect()
+                throw IllegalStateException("Server returned HTTP $code: ${conn.responseMessage}")
+            }
+            return conn
+        }
+        throw IllegalStateException("Too many HTTP redirects.")
     }
 
     fun installStagedUpdate(context: Context) {

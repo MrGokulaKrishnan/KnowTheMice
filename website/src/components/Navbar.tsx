@@ -26,8 +26,8 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setActivePage }) => 
           onClick={() => setActivePage('home')}
           className="flex items-center space-x-3 group text-left focus:outline-none"
         >
-          <div className="w-10 h-10 rounded-xl bg-background-surface border border-orange-500/30 flex items-center justify-center p-1 shadow-glow-orange group-hover:border-orange-500/60 transition-all overflow-hidden">
-            <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain rounded-lg" />
+          <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center p-0.5 overflow-hidden">
+            <img src="/logo.png" alt="Know The Mice Logo" className="w-full h-full object-contain" />
           </div>
           <div>
             <span className="font-orbitron font-bold text-lg tracking-wider text-white group-hover:text-brand-highlight transition-colors">

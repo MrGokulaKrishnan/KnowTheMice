@@ -347,7 +347,7 @@ fun KeyboardScreen(
 
                         // Voice Hint
                         Text(
-                            text = "Tip: Tap 🎙 on your keyboard for Voice Typing",
+                            text = "Tip: Tap microphone on your keyboard for Voice Typing",
                             color = TextMuted,
                             fontSize = 10.sp,
                             modifier = Modifier.align(Alignment.CenterVertically)
