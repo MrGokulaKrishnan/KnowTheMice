@@ -65,7 +65,6 @@ fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .size(46.dp)
-                        .clip(RoundedCornerShape(7.dp))
                         .background(Color(0xFF000000)),
                     contentAlignment = Alignment.Center
                 ) {

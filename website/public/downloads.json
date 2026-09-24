@@ -8,8 +8,8 @@
     "filename": "KnowTheMice-Setup-x64.exe",
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
-    "size": "1.37 MB",
-    "sha256": "A6F24FBE9295B55FEF015D7869F4887C7BF576CAA0A005EF06E4AAFD8026F17D",
+    "size": "1.43 MB",
+    "sha256": "D5AD3241A52B489F5B1AD72F9F6B7F28F64ACBA13FC26F5B7E74E6391E1C8E3A",
     "releaseDate": "September 24, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
@@ -19,14 +19,14 @@
       "RAM: < 25MB footprint"
     ],
     "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
-    "changelog": "- High-contrast AMOLED squircle system tray icon with orange border\n- Background process stability & minimize-to-tray\n- Unified 9-token gradient system across all surfaces\n- Single-file setup installer and enterprise WiX MSI package\n- Two-phase update verification state machine",
+    "changelog": "- Borderless 15% corner radius icon for Windows desktop, taskbar, ARP, and installer\n- 15% corner radius inside Windows host and installer applications\n- Background process stability & minimize-to-tray\n- Unified 9-token gradient system across all surfaces\n- Single-file setup installer and enterprise WiX MSI package",
     "msi": {
       "name": "Know The Mice Windows Installer (MSI)",
       "filename": "KnowTheMice-Setup-x64.msi",
       "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
       "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
-      "size": "220 KB",
-      "sha256": "8BD295F7E1DE401DCF4C48447EBF1B1593AF64F2670FC8A12ACA4C721D2C7AD6"
+      "size": "228 KB",
+      "sha256": "73ABD3ABA2F595B615BF54E196A537F78B26752AF1520EE21DEC2A2F872E9FE3"
     },
     "mandatory": false
   },
@@ -37,8 +37,8 @@
     "filename": "KnowTheMice-Android.apk",
     "url": "/downloads/android/KnowTheMice-Android.apk",
     "downloadUrl": "https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk",
-    "size": "2.58 MB",
-    "sha256": "1CC08EDFD0950E68D8F93F7D86A5EC2ED330C8658AC85CFE1101D42661A73B9B",
+    "size": "2.62 MB",
+    "sha256": "86F08DB3D157FCF6DAED10CAB5C312E74335F0465B77B42F61E4BEF6C3A728F8",
     "releaseDate": "September 24, 2026",
     "platform": "Android 10.0+ (API 29+)",
     "requirements": [
@@ -48,7 +48,7 @@
       "Vibration motor (for tactile haptic feedback)"
     ],
     "description": "Native Android System IME integration (Gboard, Samsung Keyboard), Voice Typing dictation, Touchpad with multi-touch gestures, Gyroscope Air Mouse, universal media deck, and presentation controls.",
-    "changelog": "- Authoritative Know The Mice brand identity with 15% corner radius container\n- Two-phase update state machine with staged verification\n- Native Android System Keyboard IME (Gboard, Samsung Keyboard, SwiftKey)\n- Voice dictation typing support directly to PC\n- Adaptive icon safe-zone alignment (60% scale within 108dp canvas)",
+    "changelog": "- Official first-party Know The Mice logo directly matching uploaded media\n- Native Android System Keyboard IME (Gboard, Samsung Keyboard, SwiftKey)\n- Voice dictation typing support directly to PC\n- Decoupled header and dock buttons preventing touch overlap",
     "mandatory": false
   }
 }

@@ -312,7 +312,7 @@ def main():
     master_symbol_trans.save(os.path.join(ANDROID_RES, "drawable", "logo_monogram.png"))
     master_full_black.save(os.path.join(ANDROID_RES, "drawable", "logo_master.png"))
 
-    # Legacy Mipmaps
+    # Legacy Mipmaps (Android: exact artwork as uploaded in media, no artificial corner cutouts)
     mipmap_sizes = {
         "mdpi": 48,
         "hdpi": 72,
@@ -321,20 +321,18 @@ def main():
         "xxxhdpi": 192
     }
     for density, size in mipmap_sizes.items():
-        legacy_square = place_in_canvas(crop_full, size, 0.78, bg_color=(0, 0, 0, 255))
-        legacy_rounded_15 = make_rounded_icon(legacy_square, 0.15)
+        legacy_square = place_in_canvas(crop_full, size, 0.86, bg_color=(0, 0, 0, 255))
         legacy_round = make_round_icon(legacy_square)
 
-        legacy_rounded_15.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
+        legacy_square.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
         legacy_round.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher_round.png"))
 
-    # 512x512 Master APK icon with 15% corner radius container
-    apk_512 = place_in_canvas(crop_full, 512, 0.78, bg_color=(0, 0, 0, 255))
-    apk_15 = make_rounded_icon(apk_512, 0.15)
-    apk_15.save(os.path.join(BRANDING_ANDROID, "ic_launcher_15pct.png"))
-    apk_15.save(os.path.join(ROOT, "shared", "apk_icon.png"))
+    # 512x512 Master APK icon (SAME AS UPLOADED IN MEDIA)
+    apk_512 = place_in_canvas(crop_full, 512, 0.86, bg_color=(0, 0, 0, 255))
+    apk_512.save(os.path.join(BRANDING_ANDROID, "ic_launcher.png"))
+    apk_512.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 
-    # 6. Windows Assets (15% corner radius container, AMOLED black, NO border)
+    # 6. Windows Assets (WITH 15% RADIUS IN CORNER ONLY IN WINDOWS - AMOLED black, NO border)
     win_sizes = [256, 128, 64, 48, 40, 32, 24, 20, 16]
     win_master_15 = make_rounded_icon(master_full_black, 0.15)
     make_ico_from_master(win_master_15, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)

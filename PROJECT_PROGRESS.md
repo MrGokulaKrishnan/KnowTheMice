@@ -1,15 +1,18 @@
 # Know The Mice — Project Progress & State Resume
 
 ## Current Phase
-PHASE 8 — Authoritative Borderless 15% Radius Logo, UI Overlap Fixes & R8 Update Resolution — COMPLETED
+PHASE 9 — Official Logo Update (Media 1790234295905), 15% Windows-Only Corner Radius & Live Deployment — COMPLETED
 
 ## Current Task
-All reported issues from user feedback resolved, built, and verified live:
-1. Borderless logo with 15% corner radius container standardized across Android and Windows (.exe, .msi, app.ico, tray.ico, installer.ico).
-2. Resolved icon overlap in Android Mouse section (decoupled action buttons with explicit 34dp touch containers and weighted dock navigation).
-3. Resolved R8/Gson "Abstract classes can't be instantiated" update error by migrating `UpdateManager.kt` to zero-reflection native `org.json.JSONObject` + comprehensive ProGuard rules.
-4. Clean WiX v5 MSI package built and published alongside single-file EXE.
-5. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
+Executed all instructions from the latest prompt:
+1. Updated authoritative master logo across Android and Windows from `media_1790234295905.jpg`.
+2. Android APK file logo set SAME AS UPLOADED IN MEDIA (no artificial corner cutouts).
+3. Windows `.exe`, `.msi`, and `.ico` files generated with 15% corner radius container on AMOLED black with zero border.
+4. Inside Windows applications (`MainWindow.xaml`, `InstallerWindow.xaml`), logo containers set to 15% corner radius.
+5. Inside Android application (`HomeScreen.kt`), logo container set to square matching uploaded media.
+6. Recompiled Windows Host, single-file Setup EXE, and enterprise WiX MSI installer.
+7. Recompiled Android release APK with R8 minification and signing.
+8. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
 
 ## Overall Status
 COMPLETED & VERIFIED
@@ -18,39 +21,37 @@ COMPLETED & VERIFIED
 
 ## Checkpoint Status
 
-- [x] **CHECKPOINT 01 — Authoritative Borderless 15% Logo Pipeline**:
-  - `shared/logo.jpg` updated from user-uploaded authoritative artwork (`media_1790216927404.jpg`).
-  - Removed all artificial border strokes in `create_tray_badge`, `MainWindow.xaml`, `InstallerWindow.xaml`, and `HomeScreen.kt`.
-  - Applied 15% corner radius container across Windows `.ico` assets and Android launcher mipmaps.
-- [x] **CHECKPOINT 02 — Android Mouse Section Header Overlap Fix**:
-  - Replaced Material3 `IconButton` (which enforces 48dp min touch constraints causing collision) with clean 34dp circular Box containers with `Arrangement.spacedBy(8.dp)`.
-  - Added `Modifier.weight(1f, fill = false)` and single-line text truncation to host pill.
-  - Added `Modifier.weight(1f)` to each bottom dock item to prevent navbar overlap on any screen width.
-- [x] **CHECKPOINT 03 — R8 / Gson Update Failure Resolution**:
-  - Replaced Gson in `UpdateManager.kt` with Android runtime `org.json.JSONObject` (zero reflection, immune to R8 minification/obfuscation).
-  - Added `-keep class com.knowthemice.app.update.** { *; }` and Gson ProGuard rules to `proguard-rules.pro`.
-  - Updated Android `versionCode = 3`, `versionName = "1.2.0"`.
-- [x] **CHECKPOINT 04 — Dual Windows Packaging (EXE + WiX MSI)**:
-  - Built `KnowTheMice-Setup-x64.exe` (1,439,912 bytes, SHA-256: `A6F24FBE9295B55FEF015D7869F4887C7BF576CAA0A005EF06E4AAFD8026F17D`).
-  - Built `KnowTheMice-Setup-x64.msi` (225,280 bytes, SHA-256: `8BD295F7E1DE401DCF4C48447EBF1B1593AF64F2670FC8A12ACA4C721D2C7AD6`).
-- [x] **CHECKPOINT 05 — Production Deployment & Live Verification**:
-  - Built `KnowTheMice-Android.apk` (2,707,506 bytes, SHA-256: `1CC08EDFD0950E68D8F93F7D86A5EC2ED330C8658AC85CFE1101D42661A73B9B`).
+- [x] **CHECKPOINT 01 — Master Artwork Updated**:
+  - `shared/logo.jpg` updated with `media_1790234295905.jpg` (SHA256: `85e9285abf609843b5721df462d2c4d32c1d61cc70afc72887fba0fe067f46b6`).
+  - Extracted full artwork (y: 168 to 783, x: 200 to 827) and isolated symbol (y: 168 to 645).
+- [x] **CHECKPOINT 02 — Android APK Logo Same as Uploaded Media**:
+  - Launcher mipmaps (`ic_launcher.png`) and 512x512 APK icon (`shared/apk_icon.png`) generated square without artificial radius cutouts.
+  - Adaptive icon safe-zone centering at 60% scale within 108dp canvas (`ic_launcher_background.xml`).
+  - Android in-app header logo in `HomeScreen.kt` rendered square matching media.
+- [x] **CHECKPOINT 03 — Windows 15% Radius in Corner (EXE, MSI, and Inside App)**:
+  - `icon.ico`, `app.ico`, `installer.ico`, and `tray.ico` generated with 15% corner radius container on AMOLED black with no border.
+  - `MainWindow.xaml`: Logo container set to 15% corner radius (`CornerRadius="6"` on 38px).
+  - `InstallerWindow.xaml`: Logo container set to 15% corner radius (`CornerRadius="14"` on 96px).
+- [x] **CHECKPOINT 04 — Dual Windows Packaging**:
+  - Built `KnowTheMice-Setup-x64.exe` (1,496,744 bytes, SHA-256: `D5AD3241A52B489F5B1AD72F9F6B7F28F64ACBA13FC26F5B7E74E6391E1C8E3A`).
+  - Built `KnowTheMice-Setup-x64.msi` (233,472 bytes, SHA-256: `73ABD3ABA2F595B615BF54E196A537F78B26752AF1520EE21DEC2A2F872E9FE3`).
+- [x] **CHECKPOINT 05 — Android Release Assembly**:
+  - Built `KnowTheMice-Android.apk` (2,744,778 bytes, SHA-256: `86F08DB3D157FCF6DAED10CAB5C312E74335F0465B77B42F61E4BEF6C3A728F8`).
+- [x] **CHECKPOINT 06 — Production Deployment & Live Verification**:
   - Updated `downloads.json` and `Download.tsx`.
+  - Built web distribution with Vite (`npm run build`).
   - Deployed to Firebase Hosting (`https://knowthemice.web.app`).
-  - Live HTTP 200 verified on all binary and manifest endpoints.
+  - Verified live via `curl.exe -I` on all endpoints (`downloads.json`, `.exe`, `.msi`, `.apk`).
 
 ---
 
 ## Last Verified State
-1. Windows EXE & WiX MSI: Built and verified with 0 errors.
-2. Android Release APK: Minified with R8, signed, and assembled with 0 errors.
-3. Live Endpoints:
-   - `https://knowthemice.web.app/downloads.json` (200 OK)
-   - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` (200 OK)
-   - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` (200 OK)
-   - `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` (200 OK)
+- `https://knowthemice.web.app/downloads.json` -> 200 OK (2,880 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,496,744 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (233,472 bytes)
+- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,744,778 bytes)
 
 ---
 
 ## Last Updated
-2026-09-24 08:22 IST (v1.2.0)
+2026-09-24 13:02 IST (v1.2.0)
