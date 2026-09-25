@@ -1,6 +1,6 @@
 # Development Status & Verification Matrix
 
-Generated: 2026-09-25 13:47 IST
+Generated: 2026-09-25 13:58 IST
 Release Version: v1.2.0 (Build 120 / APK VersionCode 3)
 Master Logo Reference: `media_1790310804993.jpg` (SHA-256: `85e9285abf609843b5721df462d2c4d32c1d61cc70afc72887fba0fe067f46b6`)
 
@@ -8,10 +8,10 @@ Master Logo Reference: `media_1790310804993.jpg` (SHA-256: `85e9285abf609843b572
 
 ## Verification Matrix
 
-### 1. LOGO OPTICAL CENTERING & UPWARD ADJUSTMENT
+### 1. LOGO CENTERING ACROSS ALL PLATFORMS
 PASS
-- **Optical Elevation**: Adjusted the vertical offset across all brand pipeline generators by -4.5% (`y_shift_pct = -0.045`).
-- **Eliminated Downward Sagging**: Counteracts the heavy visual weight of the top KM monogram vs bottom subtitle text so the emblem appears upright and centered in circular/squircle containers (Samsung One UI, Google Pixel, Windows desktop/tray, website favicons, splash screen).
+- **Vertical & Horizontal Centering**: Centered vertically and horizontally across all brand pipeline generators with `y_shift_pct = 0.0` and balanced black margin.
+- **Consistent Emblem Placement**: Appears clean and centered in circular/squircle containers (Samsung One UI, Google Pixel, Windows desktop/tray, website favicons, splash screen).
 - **Proportions Preserved**: Exact aspect ratio, geometric dimensions, 15% corner radius for Windows, and AMOLED `#000000` background preserved without stretching or artificial cropping.
 
 ### 2. SEAMLESS CONNECTION & AUTO-RECONNECT
@@ -38,18 +38,18 @@ PASS
 ### 4. ANDROID RELEASE APK
 PASS
 - **Production Artifact**: `android/app/build/outputs/apk/release/app-release.apk`
-- **Binary Size**: 2,749,270 bytes (2.62 MB)
-- **SHA-256**: `8B7E114E409795B57A2E8AD43937466A47CC83756608D7F96D402FCDD28EBBF2`
+- **Binary Size**: 2,749,438 bytes (2.62 MB)
+- **SHA-256**: `88E78D26B3E13766D035D47148131EFFBC83E2DD24500D634548B4F24EC16710`
 - **Compiler / Shrinker**: R8 code and resource shrinking enabled, zero warnings, Proguard optimized.
 
 ### 5. WINDOWS RELEASE PACKAGES
 PASS
 - **Setup Installer EXE**: `windows/publish_setup/KnowTheMice-Setup-x64.exe`
-  - Size: 1,097,384 bytes (1.05 MB)
-  - SHA-256: `8D511C2D710F9E62F6E201D21F4F04C6404E1A524C200629F0CC806FF209DAD9`
+  - Size: 1,097,896 bytes (1.05 MB)
+  - SHA-256: `9DC246F47FB76A203F4A9AB1D72ECCF9417948C7DDC94A2D72C4DA4AFFEF0831`
 - **WiX MSI Installer**: `windows/publish_setup/KnowTheMice-Setup-x64.msi`
-  - Size: 188,416 bytes (184 KB)
-  - SHA-256: `CE68B043DE17BABFB6CEE71BECFAA934B25E1984E84355A95A1CD015D8C4A7A0`
+  - Size: 184,320 bytes (184 KB)
+  - SHA-256: `A0705708F69652429819EA58512FE00F7A9ED9C8E6084892EEA512A996BBDB20`
 - **Build Status**: Built cleanly with .NET 8.0 SDK and WiX Toolset, 0 errors.
 
 ### 6. WEB DISTRIBUTION & FIREBASE HOSTING
@@ -59,14 +59,15 @@ PASS
 - All live endpoints verified with `curl.exe -I` returning HTTP 200 OK:
   - `https://knowthemice.web.app/` -> 200 OK (6,215 bytes)
   - `https://knowthemice.web.app/downloads.json` -> 200 OK (2,932 bytes)
-  - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,097,384 bytes)
-  - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (188,416 bytes)
-  - `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,749,270 bytes)
-  - `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,097,384 bytes)
-  - `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (2,749,270 bytes)
-  - `https://knowthemice.web.app/logo.png` -> 200 OK (197,310 bytes)
+  - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,097,896 bytes)
+  - `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (184,320 bytes)
+  - `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,749,438 bytes)
+  - `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,097,896 bytes)
+  - `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (2,749,438 bytes)
+  - `https://knowthemice.web.app/logo.png` -> 200 OK (197,485 bytes)
 
 ---
 
 ## Overall Status
 ALL REQUIREMENTS IMPLEMENTED, TESTED, VERIFIED, AND DEPLOYED LIVE.
+

@@ -91,8 +91,8 @@ def crop_artwork(trans_img: Image.Image, y_start=0, y_end=1024):
     return trans_img.crop((min_x, min_y, max_x + 1, max_y + 1))
 
 
-def place_in_canvas(cropped_img: Image.Image, canvas_size: int, scale_factor: float, bg_color=None, y_shift_pct: float = -0.045):
-    """Places cropped image optical-centered (slightly shifted upwards) in a square canvas scaled to safe-zone."""
+def place_in_canvas(cropped_img: Image.Image, canvas_size: int, scale_factor: float, bg_color=None, y_shift_pct: float = 0.0):
+    """Places cropped image exactly centered in a square canvas scaled to safe-zone."""
     cw, ch = cropped_img.size
     max_dim = max(cw, ch)
     target_dim = int(canvas_size * scale_factor)
@@ -165,8 +165,7 @@ def create_tray_badge(trans_symbol: Image.Image, size: int = 256) -> Image.Image
     resized_sym = trans_symbol.resize((new_w, new_h), Image.Resampling.LANCZOS)
 
     pos_x = (size - new_w) // 2
-    pos_y = (size - new_h) // 2 + int(size * -0.03)
-    pos_y = max(0, min(size - new_h, pos_y))
+    pos_y = (size - new_h) // 2
     badge.paste(resized_sym, (pos_x, pos_y), resized_sym)
     return badge
 

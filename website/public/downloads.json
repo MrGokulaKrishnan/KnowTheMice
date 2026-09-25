@@ -9,7 +9,7 @@
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
     "size": "1.05 MB",
-    "sha256": "8D511C2D710F9E62F6E201D21F4F04C6404E1A524C200629F0CC806FF209DAD9",
+    "sha256": "9DC246F47FB76A203F4A9AB1D72ECCF9417948C7DDC94A2D72C4DA4AFFEF0831",
     "releaseDate": "September 25, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
@@ -26,7 +26,7 @@
       "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
       "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
       "size": "184 KB",
-      "sha256": "CE68B043DE17BABFB6CEE71BECFAA934B25E1984E84355A95A1CD015D8C4A7A0"
+      "sha256": "A0705708F69652429819EA58512FE00F7A9ED9C8E6084892EEA512A996BBDB20"
     },
     "mandatory": false
   },
@@ -38,7 +38,7 @@
     "url": "/downloads/android/KnowTheMice-Android.apk",
     "downloadUrl": "https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk",
     "size": "2.62 MB",
-    "sha256": "8B7E114E409795B57A2E8AD43937466A47CC83756608D7F96D402FCDD28EBBF2",
+    "sha256": "88E78D26B3E13766D035D47148131EFFBC83E2DD24500D634548B4F24EC16710",
     "releaseDate": "September 25, 2026",
     "platform": "Android 10.0+ (API 29+)",
     "requirements": [
