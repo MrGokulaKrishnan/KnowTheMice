@@ -52,5 +52,9 @@ local.properties
 .firebase/
 firebase-debug.log*
 
+# Python
+__pycache__/
+*.py[cod]
+
 # Logs & Diagnostics
 *.log
