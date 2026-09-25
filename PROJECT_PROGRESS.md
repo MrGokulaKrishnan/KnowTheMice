@@ -1,17 +1,17 @@
 # Know The Mice — Project Progress & State Resume
 
 ## Current Phase
-PHASE 12 — Android Adaptive Icon Safe-Zone Calibration (Samsung & Pixel Launcher Masks) & Live Production Deployment — COMPLETED
+PHASE 13 — Authoritative Logo Centering, Balanced Black Padding Across Platforms & Production Distribution — COMPLETED
 
 ## Current Task
 Executed all instructions from the latest prompt:
-1. Resolved Android APK icon clipping / zoom-in under Samsung One UI (squircle mask) and Google Pixel Launcher (circular mask).
-2. Recalibrated adaptive icon foreground asset scale to 0.42, keeping the entire rectangular logo comfortably within the 66dp Android keyline safe circle (0 pixels clipped under 72dp Pixel circle and Samsung squircle).
-3. Added explicit 108dp width/height constraint and `gravity="center"` in `ic_launcher_foreground.xml`.
-4. Adjusted legacy round icon scale to 0.62 (0 pixels clipped by circular mask) and square icon scale to 0.72.
-5. Recompiled Android production release APK with R8 shrinking and signing.
-6. Updated `downloads.json` and `Download.tsx` with new checksum and size.
-7. Deployed to Firebase Hosting and verified live with `curl.exe -I`.
+1. Centered master logo with ~20% black margin all around, matching `media_1790310804993.jpg` (SHA-256: `85e9285abf609843b5721df462d2c4d32c1d61cc70afc72887fba0fe067f46b6`), eliminating zoomed-in appearance across all platforms.
+2. Windows Assets: Applied 15% corner radius container on pure black with zero border. Because the logo is centered with ~20% black padding, the corner curvature curves cleanly through the black margin with zero crowding or clipping of the KM artwork.
+3. Android Assets: Configured adaptive icon foreground asset (scale 0.38) and legacy mipmaps (scale 0.61 square, 0.52 round) so that the logo is centered with ~20% black space inside Samsung One UI squircles and Google Pixel circles.
+4. Windows Packaging: Rebuilt single-file Setup EXE (`KnowTheMice-Setup-x64.exe`) and WiX MSI installer (`KnowTheMice-Setup-x64.msi`) with 0 warnings/errors.
+5. Android Assembly: Rebuilt release signed APK (`KnowTheMice-Android.apk`) with R8 optimization.
+6. Web Distribution: Updated `downloads.json` and `Download.tsx`, rebuilt web production bundle with Vite, and deployed to Firebase Hosting.
+7. Verified live with `curl.exe -I` on all production endpoints (HTTP 200 OK).
 8. Updated `DEVELOPMENT_STATUS.md` recording PASS for all verification criteria.
 
 ## Overall Status
@@ -22,32 +22,24 @@ COMPLETED & VERIFIED
 ## Checkpoint Status
 
 - [x] **CHECKPOINT 01 — Master Artwork Updated**:
-  - `shared/logo.jpg` updated with `media_1790256187709.jpg`.
-  - Regenerated all cross-platform assets with `branding/build-brand-assets.py`: master PNG/SVG, web favicons/PWA/OG, Android adaptive drawables/mipmaps, Windows `.ico` multi-resolution files (16px, 24px, 32px, 48px, 64px, 128px, 256px, 512px), and Linux icons.
-- [x] **CHECKPOINT 02 — Android Splash Screen & Startup Performance**:
-  - Created `SplashScreen.kt` with GPU-accelerated graphics layer, radial flame glow, smooth easing, and `isReducedMotion` support via system `ANIMATOR_DURATION_SCALE`.
-  - Updated `MainActivity.kt`: starts on `"splash"`, defers `discoveryClient.startDiscovery()` and `UpdateManager.checkForUpdates()` to background coroutines triggered after splash ends.
-  - Updated `SettingsScreen.kt`: displays master logo in the About card with build info.
-- [x] **CHECKPOINT 03 — Windows 15% Rounded Corner & Multi-res Icons**:
-  - Borderless 15% corner radius icon for Windows desktop, taskbar, ARP, system tray, and installer.
-  - Setup executable embeds 15% rounded multi-res icon.
-- [x] **CHECKPOINT 04 — Dual Windows Packaging**:
-  - Built `KnowTheMice-Setup-x64.exe` (1,442,472 bytes, SHA-256: `6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E`).
-  - Built `KnowTheMice-Setup-x64.msi` (225,280 bytes, SHA-256: `52972508B1E61698C127D1CB22BAF7D027943BDAECD8359604F0F5C58E478689`).
-- [x] **CHECKPOINT 05 — Android Icon Safe Zone Calibration**:
-  - Fixed zoom-in and corner clipping on Samsung One UI and Google Pixel launchers.
-  - Scaled foreground asset to 0.42 (108dp canvas), placing all artwork well within the 66dp keyline circle.
-  - Added explicit centering and `width="108dp"`, `height="108dp"` to `ic_launcher_foreground.xml`.
-  - Scaled legacy round icon to 0.62 with zero pixel clipping.
-- [x] **CHECKPOINT 06 — Android Release Assembly**:
-  - Built `KnowTheMice-Android.apk` (2,912,990 bytes, SHA-256: `34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A`).
-- [x] **CHECKPOINT 07 — Production Deployment & Live Verification**:
+  - `shared/logo.jpg` updated with `media_1790310804993.jpg`.
+  - Regenerated all cross-platform assets with `branding/build-brand-assets.py`: master PNG/SVG, web favicons/PWA/OG, Android adaptive drawables/mipmaps, Windows `.ico` multi-resolution files (16px to 512px), and Linux icons.
+- [x] **CHECKPOINT 02 — Logo Centering & Balanced Black Space**:
+  - Master full black: 623x611 artwork in 1024x1024 (200px margin left/right, 206px margin top/bottom).
+  - Windows: 15% rounded corners curve through black margin without crowding artwork.
+  - Android Adaptive: scaled at 0.38 inside 108dp canvas, giving ~21.5% black margin inside 72dp launcher masks.
+- [x] **CHECKPOINT 03 — Dual Windows Packaging**:
+  - Built `KnowTheMice-Setup-x64.exe` (1,097,384 bytes, SHA-256: `8372F402ECF94709F51869125736E9D4D6B03F71CCD333F8F1A97C4C0DA18826`).
+  - Built `KnowTheMice-Setup-x64.msi` (184,320 bytes, SHA-256: `0EF4F346DDB0F9F4EA44B23648751D026937D8736215DC2EBECB7E689B4164DB`).
+- [x] **CHECKPOINT 04 — Android Release Assembly**:
+  - Built `KnowTheMice-Android.apk` (2,732,874 bytes, SHA-256: `404725DA5BFAB2B77E9EE3398D82FBDDFBC4A24A1F0593C194903A61455C89E5`).
+- [x] **CHECKPOINT 05 — Production Deployment & Live Verification**:
   - Updated `downloads.json` and `Download.tsx` with exact binary sizes and checksums.
   - Built web distribution with Vite (`npm run build`).
   - Synced downloads to `website/dist/downloads/`.
   - Deployed to Firebase Hosting (`https://knowthemice.web.app`).
   - Verified live via `curl.exe -I` on all endpoints (`downloads.json`, `.exe`, `.msi`, `.apk`, `logo.png`, `latest` aliases).
-- [x] **CHECKPOINT 08 — Verification Documentation**:
+- [x] **CHECKPOINT 06 — Verification Documentation**:
   - Updated `DEVELOPMENT_STATUS.md` with all checks marked PASS.
 
 ---
@@ -55,14 +47,14 @@ COMPLETED & VERIFIED
 ## Last Verified State
 - `https://knowthemice.web.app/` -> 200 OK (6,215 bytes)
 - `https://knowthemice.web.app/downloads.json` -> 200 OK (2,880 bytes)
-- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,442,472 bytes)
-- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (225,280 bytes)
-- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,912,990 bytes)
-- `https://knowthemice.web.app/logo.png` -> 200 OK (298,319 bytes)
-- `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,442,472 bytes)
-- `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (2,912,990 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe` -> 200 OK (1,097,384 bytes)
+- `https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi` -> 200 OK (184,320 bytes)
+- `https://knowthemice.web.app/downloads/android/KnowTheMice-Android.apk` -> 200 OK (2,732,874 bytes)
+- `https://knowthemice.web.app/logo.png` -> 200 OK (197,485 bytes)
+- `https://knowthemice.web.app/downloads/windows/latest` -> 200 OK (1,097,384 bytes)
+- `https://knowthemice.web.app/downloads/android/latest` -> 200 OK (2,732,874 bytes)
 
 ---
 
 ## Last Updated
-2026-09-24 22:50 IST (v1.2.0)
+2026-09-25 10:15 IST (v1.2.0)

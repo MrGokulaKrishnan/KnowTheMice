@@ -154,7 +154,7 @@ def create_tray_badge(trans_symbol: Image.Image, size: int = 256) -> Image.Image
     bg = Image.new("RGBA", (size, size), (0, 0, 0, 255))
     badge.paste(bg, (0, 0), mask)
 
-    pad = int(size * 0.12)
+    pad = int(size * 0.18)
     inner_w = size - 2 * pad
     inner_h = size - 2 * pad
     sym_w, sym_h = trans_symbol.size
@@ -217,13 +217,13 @@ def main():
 
     # 2. Extract components
     crop_full = crop_artwork(trans_master, y_start=0, y_end=850)
-    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=685)
+    crop_symbol = crop_artwork(trans_master, y_start=0, y_end=650)
 
-    # 3. Canonical Master Assets
-    master_full_black = place_in_canvas(crop_full, 1024, 0.86, bg_color=(0, 0, 0, 255))
-    master_full_trans = place_in_canvas(crop_full, 1024, 0.86, bg_color=None)
-    master_symbol_black = place_in_canvas(crop_symbol, 1024, 0.86, bg_color=(0, 0, 0, 255))
-    master_symbol_trans = place_in_canvas(crop_symbol, 1024, 0.86, bg_color=None)
+    # 3. Canonical Master Assets (Centered with ~20% black margin around logo like uploaded media)
+    master_full_black = place_in_canvas(crop_full, 1024, 0.61, bg_color=(0, 0, 0, 255))
+    master_full_trans = place_in_canvas(crop_full, 1024, 0.61, bg_color=None)
+    master_symbol_black = place_in_canvas(crop_symbol, 1024, 0.61, bg_color=(0, 0, 0, 255))
+    master_symbol_trans = place_in_canvas(crop_symbol, 1024, 0.61, bg_color=None)
 
     master_full_black.save(os.path.join(BRANDING_MASTER, "know-the-mice-master.png"))
     master_full_trans.save(os.path.join(BRANDING_MASTER, "know-the-mice-transparent.png"))
@@ -239,7 +239,7 @@ def main():
     make_svg_symbol_wrapper(master_symbol_trans, os.path.join(ROOT, "shared", "logo_icon.svg"))
 
     # 4. Web Assets
-    # Full logo (square 1024x1024 on black)
+    # Full logo (square 1024x1024 on black with clean black margin around logo)
     master_full_black.save(os.path.join(WEBSITE_PUBLIC, "logo.png"))
     master_symbol_trans.save(os.path.join(WEBSITE_PUBLIC, "logo_monogram.png"))
 
@@ -248,10 +248,10 @@ def main():
     make_svg_symbol_wrapper(master_symbol_trans, os.path.join(BRANDING_WEB, "favicon.svg"))
 
     # Favicon PNGs
-    fav_16 = place_in_canvas(crop_symbol, 16, 0.95, bg_color=None)
-    fav_32 = place_in_canvas(crop_symbol, 32, 0.95, bg_color=None)
-    fav_48 = place_in_canvas(crop_symbol, 48, 0.95, bg_color=None)
-    fav_64 = place_in_canvas(crop_symbol, 64, 0.95, bg_color=None)
+    fav_16 = place_in_canvas(crop_symbol, 16, 0.85, bg_color=None)
+    fav_32 = place_in_canvas(crop_symbol, 32, 0.85, bg_color=None)
+    fav_48 = place_in_canvas(crop_symbol, 48, 0.85, bg_color=None)
+    fav_64 = place_in_canvas(crop_symbol, 64, 0.85, bg_color=None)
 
     fav_16.save(os.path.join(WEBSITE_PUBLIC, "favicon-16x16.png"))
     fav_32.save(os.path.join(WEBSITE_PUBLIC, "favicon-32x32.png"))
@@ -262,18 +262,18 @@ def main():
     fav_48.save(os.path.join(BRANDING_WEB, "favicon-48x48.png"))
 
     # Favicon ICO (64, 48, 32, 24, 16)
-    fav_master = place_in_canvas(crop_symbol, 256, 0.95, bg_color=None)
+    fav_master = place_in_canvas(crop_symbol, 256, 0.85, bg_color=None)
     make_ico_from_master(fav_master, os.path.join(WEBSITE_PUBLIC, "favicon.ico"), [64, 48, 32, 24, 16])
     make_ico_from_master(fav_master, os.path.join(BRANDING_WEB, "favicon.ico"), [64, 48, 32, 24, 16])
 
-    # Apple Touch Icon (180x180, pure black background, logo centered)
-    apple_icon = place_in_canvas(crop_full, 180, 0.80, bg_color=(0, 0, 0, 255))
+    # Apple Touch Icon (180x180, pure black background, logo centered with black space)
+    apple_icon = place_in_canvas(crop_full, 180, 0.61, bg_color=(0, 0, 0, 255))
     apple_icon.save(os.path.join(WEBSITE_PUBLIC, "apple-touch-icon.png"))
     apple_icon.save(os.path.join(BRANDING_WEB, "apple-touch-icon.png"))
 
-    # PWA Icons (192, 512, on black background)
-    pwa_192 = place_in_canvas(crop_full, 192, 0.80, bg_color=(0, 0, 0, 255))
-    pwa_512 = place_in_canvas(crop_full, 512, 0.80, bg_color=(0, 0, 0, 255))
+    # PWA Icons (192, 512, on black background with black space)
+    pwa_192 = place_in_canvas(crop_full, 192, 0.61, bg_color=(0, 0, 0, 255))
+    pwa_512 = place_in_canvas(crop_full, 512, 0.61, bg_color=(0, 0, 0, 255))
     pwa_192.save(os.path.join(WEBSITE_PUBLIC, "icon-192.png"))
     pwa_512.save(os.path.join(WEBSITE_PUBLIC, "icon-512.png"))
     pwa_192.save(os.path.join(BRANDING_WEB, "icon-192.png"))
@@ -281,20 +281,19 @@ def main():
 
     # OpenGraph / Twitter Image (1200x630, pure black background)
     og_img = Image.new("RGBA", (1200, 630), (0, 0, 0, 255))
-    logo_480 = place_in_canvas(crop_full, 480, 0.95, bg_color=None)
+    logo_480 = place_in_canvas(crop_full, 480, 0.61, bg_color=None)
     og_img.paste(logo_480, ((1200 - 480) // 2, (630 - 480) // 2), logo_480)
     og_img.save(os.path.join(WEBSITE_PUBLIC, "og-image.png"))
     og_img.save(os.path.join(BRANDING_WEB, "og-image.png"))
 
     # 5. Android Adaptive Icon & Mipmaps
-    # 5. Android Adaptive Icon & Mipmaps
     # CRITICAL: Android Adaptive Icon Canvas is 108dp x 108dp.
     # Google Pixel Launcher applies a circular mask with diameter 72dp.
     # Samsung One UI applies a squircle mask with size 72dp.
     # Official Android Keyline safe circle is diameter 66dp (61.1% of canvas).
-    # Since the rectangular logo bounding box has corners, scale=0.42 guarantees that
-    # the entire logo (KM monogram + text) fits 100% inside both the 66dp keyline circle
-    # and the 72dp Pixel/Samsung masks without clipping or appearing zoomed in!
+    # Since the rectangular logo bounding box has corners, scale=0.38 guarantees that
+    # the entire logo (KM monogram + text) is centered with ~20% black margin inside
+    # both the 66dp keyline circle and the 72dp Pixel/Samsung masks without clipping or appearing zoomed in!
     android_fg_scales = {
         "mdpi": 108,
         "hdpi": 162,
@@ -303,12 +302,12 @@ def main():
         "xxxhdpi": 432
     }
     for density, size in android_fg_scales.items():
-        fg_asset = place_in_canvas(crop_full, size, 0.42, bg_color=None)
+        fg_asset = place_in_canvas(crop_full, size, 0.38, bg_color=None)
         fg_path = os.path.join(ANDROID_RES, f"drawable-{density}", "ic_launcher_foreground_asset.png")
         fg_asset.save(fg_path)
 
     # Base drawable foreground (108x108 for mdpi fallback to prevent overscaling)
-    fg_base = place_in_canvas(crop_full, 108, 0.42, bg_color=None)
+    fg_base = place_in_canvas(crop_full, 108, 0.38, bg_color=None)
     fg_base.save(os.path.join(ANDROID_RES, "drawable", "ic_launcher_foreground_asset.png"))
     fg_base.save(os.path.join(BRANDING_ANDROID, "ic_launcher_foreground.png"))
 
@@ -316,7 +315,7 @@ def main():
     master_symbol_trans.save(os.path.join(ANDROID_RES, "drawable", "logo_monogram.png"))
     master_full_black.save(os.path.join(ANDROID_RES, "drawable", "logo_master.png"))
 
-    # Legacy Mipmaps (Android: exact artwork as uploaded in media, no artificial corner cutouts)
+    # Legacy Mipmaps (Android: centered with black space around logo)
     mipmap_sizes = {
         "mdpi": 48,
         "hdpi": 72,
@@ -325,18 +324,18 @@ def main():
         "xxxhdpi": 192
     }
     for density, size in mipmap_sizes.items():
-        legacy_square = place_in_canvas(crop_full, size, 0.72, bg_color=(0, 0, 0, 255))
-        legacy_round = make_round_icon(place_in_canvas(crop_full, size, 0.62, bg_color=(0, 0, 0, 255)))
+        legacy_square = place_in_canvas(crop_full, size, 0.61, bg_color=(0, 0, 0, 255))
+        legacy_round = make_round_icon(place_in_canvas(crop_full, size, 0.52, bg_color=(0, 0, 0, 255)))
 
         legacy_square.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher.png"))
         legacy_round.save(os.path.join(ANDROID_RES, f"mipmap-{density}", "ic_launcher_round.png"))
 
     # 512x512 Master APK icon (clean proportions, safe padding)
-    apk_512 = place_in_canvas(crop_full, 512, 0.75, bg_color=(0, 0, 0, 255))
+    apk_512 = place_in_canvas(crop_full, 512, 0.61, bg_color=(0, 0, 0, 255))
     apk_512.save(os.path.join(BRANDING_ANDROID, "ic_launcher.png"))
     apk_512.save(os.path.join(ROOT, "shared", "apk_icon.png"))
 
-    # 6. Windows Assets (WITH 15% RADIUS IN CORNER ONLY IN WINDOWS - AMOLED black, NO border)
+    # 6. Windows Assets (WITH 15% RADIUS IN CORNER ONLY IN WINDOWS - AMOLED black, NO border, centered with black space)
     win_sizes = [512, 256, 128, 64, 48, 40, 32, 24, 20, 16]
     win_master_15 = make_rounded_icon(master_full_black, 0.15)
     make_ico_from_master(win_master_15, os.path.join(WINDOWS_HOST, "icon.ico"), win_sizes)
@@ -360,7 +359,7 @@ def main():
     make_svg_wrapper(master_full_black, os.path.join(BRANDING_LINUX, "knowthemice.svg"))
     linux_sizes = [16, 24, 32, 48, 64, 128, 256, 512]
     for s in linux_sizes:
-        icon_linux = place_in_canvas(crop_full, s, 0.86, bg_color=(0, 0, 0, 255))
+        icon_linux = place_in_canvas(crop_full, s, 0.61, bg_color=(0, 0, 0, 255))
         icon_linux.save(os.path.join(BRANDING_LINUX, f"knowthemice-{s}.png"))
     master_full_black.save(os.path.join(BRANDING_LINUX, "knowthemice.png"))
 

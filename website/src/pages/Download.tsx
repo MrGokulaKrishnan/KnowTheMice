@@ -30,9 +30,9 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Windows",
     filename: "KnowTheMice-Setup-x64.exe",
     url: "/downloads/windows/KnowTheMice-Setup-x64.exe",
-    size: "1.38 MB",
-    sha256: "6BB338D568A5713C661FC9861001A7BD944F8AC03D79E0B656CF740E52207E3E",
-    releaseDate: "September 24, 2026",
+    size: "1.05 MB",
+    sha256: "8372F402ECF94709F51869125736E9D4D6B03F71CCD333F8F1A97C4C0DA18826",
+    releaseDate: "September 25, 2026",
     platform: "Windows 10 / 11 (64-bit)",
     requirements: [
       "Windows 10 (Build 19041+) or Windows 11",
@@ -47,9 +47,9 @@ const DEFAULT_CONFIG: DownloadsConfig = {
     name: "Know The Mice for Android",
     filename: "KnowTheMice-Android.apk",
     url: "/downloads/android/KnowTheMice-Android.apk",
-    size: "2.78 MB",
-    sha256: "34145961CF210F14E704CA2BB4215647A94CFCE900F95CDBD7754C43FB9CFF5A",
-    releaseDate: "September 24, 2026",
+    size: "2.61 MB",
+    sha256: "404725DA5BFAB2B77E9EE3398D82FBDDFBC4A24A1F0593C194903A61455C89E5",
+    releaseDate: "September 25, 2026",
     platform: "Android 10.0+ (API 29+)",
     requirements: [
       "Android 10 or newer (API 29+)",
@@ -319,7 +319,7 @@ export const DownloadPage: React.FC = () => {
                     Direct executable: <a href={config.windows.url} download={config.windows.filename} className="text-orange-400/90 hover:text-orange-300 underline font-mono">{config.windows.filename}</a> ({config.windows.size})
                   </span>
                   <span className="text-[11px] text-zinc-500 block">
-                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (220 KB)
+                    Enterprise MSI package: <a href="/downloads/windows/KnowTheMice-Setup-x64.msi" download="KnowTheMice-Setup-x64.msi" className="text-orange-400/90 hover:text-orange-300 underline font-mono">KnowTheMice-Setup-x64.msi</a> (180 KB)
                   </span>
                 </div>
               </div>
