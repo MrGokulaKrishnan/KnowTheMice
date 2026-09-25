@@ -1,14 +1,21 @@
 package com.knowthemice.app.model
 
 enum class ConnectionState {
-    DISCOVERING,
-    PAIRING,
-    CONNECTING,
-    CONNECTED,
-    RECONNECTING,
     DISCONNECTED,
+    DISCOVERING,
+    CONNECTING,
+    AUTHENTICATING,
+    CONNECTED,
+    BACKGROUND_CONNECTED,
+    RECONNECTING,
+    PAIRING,
     BLOCKED,
     ERROR
+}
+
+enum class ControlMode {
+    MOUSE,
+    KEYBOARD
 }
 
 data class DiscoveredHost(

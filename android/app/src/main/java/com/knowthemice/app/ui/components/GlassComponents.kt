@@ -112,3 +112,52 @@ fun StatusBadge(
         )
     }
 }
+
+@Composable
+fun StatusBadge(
+    state: com.knowthemice.app.model.ConnectionState,
+    modifier: Modifier = Modifier
+) {
+    val (dotColor, textColor, bgAlphaColor, borderAlphaColor, text) = when (state) {
+        com.knowthemice.app.model.ConnectionState.CONNECTED,
+        com.knowthemice.app.model.ConnectionState.BACKGROUND_CONNECTED ->
+            Tuple5(StatusSuccess, StatusSuccess, Color(0x2022C55E), Color(0x4022C55E), "● Connected")
+        com.knowthemice.app.model.ConnectionState.RECONNECTING ->
+            Tuple5(Color(0xFFFF9800), Color(0xFFFF9800), Color(0x20FF9800), Color(0x40FF9800), "↻ Reconnecting...")
+        com.knowthemice.app.model.ConnectionState.CONNECTING,
+        com.knowthemice.app.model.ConnectionState.AUTHENTICATING ->
+            Tuple5(Color(0xFFFF9800), Color(0xFFFF9800), Color(0x20FF9800), Color(0x40FF9800), "↻ Connecting...")
+        com.knowthemice.app.model.ConnectionState.DISCOVERING ->
+            Tuple5(Color(0xFF3B82F6), Color(0xFF3B82F6), Color(0x203B82F6), Color(0x403B82F6), "Scanning...")
+        com.knowthemice.app.model.ConnectionState.PAIRING ->
+            Tuple5(Color(0xFFFF9800), Color(0xFFFF9800), Color(0x20FF9800), Color(0x40FF9800), "Pairing...")
+        else ->
+            Tuple5(Color(0x80FFFFFF), Color(0x80FFFFFF), Color(0x10FFFFFF), Color(0x20FFFFFF), "○ Disconnected")
+    }
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+            .clip(RoundedCornerShape(20.dp))
+            .background(bgAlphaColor)
+            .border(1.dp, borderAlphaColor, RoundedCornerShape(20.dp))
+            .padding(horizontal = 12.dp, vertical = 6.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(7.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(dotColor)
+        )
+        Spacer(modifier = Modifier.width(6.dp))
+        Text(
+            text = text,
+            color = textColor,
+            fontSize = 11.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+private data class Tuple5<A, B, C, D, E>(val a: A, val b: B, val c: C, val d: D, val e: E)
+

@@ -33,8 +33,18 @@ class ControlClient {
     private var pendingPinCallback: ((Boolean, String) -> Unit)? = null
     private val clientId = "android-" + (android.os.Build.MODEL ?: "device").replace(" ", "_")
 
+    var onConnectionDropped: (() -> Unit)? = null
+    private var isManualDisconnect = false
+    @Volatile private var lastPongTimestamp: Long = 0L
+
+    fun isSocketAlive(): Boolean {
+        val s = socket ?: return false
+        return s.isConnected && !s.isClosed
+    }
+
     fun connect(context: Context, host: DiscoveredHost, onPairingNeeded: () -> Unit, onConnected: () -> Unit) {
-        disconnect()
+        disconnect(isManual = false)
+        isManualDisconnect = false
         _currentHost.value = host
         _connectionState.value = ConnectionState.CONNECTING
         scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -54,6 +64,7 @@ class ControlClient {
 
                 if (!savedToken.isNullOrEmpty()) {
                     // Fast path: Authenticate with saved token
+                    _connectionState.value = ConnectionState.AUTHENTICATING
                     val authMsg = AuthMessage(
                         clientId = clientId,
                         authToken = savedToken
@@ -72,6 +83,9 @@ class ControlClient {
                 listenLoop(context, onPairingNeeded, onConnected)
             } catch (ex: Exception) {
                 _connectionState.value = ConnectionState.ERROR
+                if (!isManualDisconnect) {
+                    onConnectionDropped?.invoke()
+                }
             }
         }
     }
@@ -174,6 +188,7 @@ class ControlClient {
                         }
                     }
                     "PONG" -> {
+                        lastPongTimestamp = System.currentTimeMillis()
                         val rtt = System.currentTimeMillis() - resp.timestamp
                         _latencyMs.value = Math.max(2L, rtt)
                     }
@@ -183,12 +198,23 @@ class ControlClient {
             }
         }
         _connectionState.value = ConnectionState.DISCONNECTED
+        if (!isManualDisconnect) {
+            onConnectionDropped?.invoke()
+        }
     }
 
     private fun startHeartbeat() {
+        lastPongTimestamp = System.currentTimeMillis()
         scope?.launch {
             while (isActive && socket?.isConnected == true) {
                 delay(2000)
+                if (lastPongTimestamp > 0L && (System.currentTimeMillis() - lastPongTimestamp > 8000L)) {
+                    if (!isManualDisconnect) {
+                        disconnect(isManual = false)
+                        onConnectionDropped?.invoke()
+                    }
+                    break
+                }
                 try {
                     sendJsonMessage(BaseMessage(type = "PING", timestamp = System.currentTimeMillis()))
                 } catch (_: Exception) {}
@@ -287,7 +313,18 @@ class ControlClient {
         }
     }
 
-    fun disconnect() {
+    fun releaseAllKeys() {
+        sendJsonMessage(mapOf("type" to "RELEASE_KEYS"))
+        sendKeyUp(0x11, "Control")
+        sendKeyUp(0x12, "Alt")
+        sendKeyUp(0x10, "Shift")
+        sendKeyUp(0x5B, "Meta")
+    }
+
+    fun disconnect(isManual: Boolean = true) {
+        if (isManual) {
+            isManualDisconnect = true
+        }
         scope?.cancel()
         scope = null
         try {

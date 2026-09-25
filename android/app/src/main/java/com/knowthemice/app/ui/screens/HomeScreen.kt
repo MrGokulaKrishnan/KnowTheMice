@@ -103,10 +103,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.width(8.dp))
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                StatusBadge(
-                    isConnected = connectionState == ConnectionState.CONNECTED,
-                    label = if (connectionState == ConnectionState.CONNECTED) "Connected" else "Scanning"
-                )
+                StatusBadge(state = connectionState)
                 Spacer(modifier = Modifier.width(6.dp))
                 IconButton(
                     onClick = { onNavigate("settings") },

@@ -14,7 +14,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.knowthemice.app.model.ConnectionState
+import com.knowthemice.app.model.ControlMode
 import com.knowthemice.app.model.DiscoveredHost
+import com.knowthemice.app.network.ConnectionManager
 import com.knowthemice.app.network.ControlClient
 import com.knowthemice.app.network.DiscoveryClient
 import com.knowthemice.app.sensor.AirMouseEngine
@@ -29,7 +31,7 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private lateinit var discoveryClient: DiscoveryClient
-    private val controlClient = ControlClient()
+    private val controlClient get() = ConnectionManager.controlClient
     private var airMouseEngine: AirMouseEngine? = null
     private var vibrator: Vibrator? = null
     private var backgroundServicesStarted = false
@@ -37,6 +39,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        ConnectionManager.initialize(this)
         discoveryClient = DiscoveryClient(this)
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator
 
@@ -78,9 +81,9 @@ class MainActivity : ComponentActivity() {
         var hapticsEnabled by remember { mutableStateOf(true) }
         var isAirMouseActive by remember { mutableStateOf(false) }
 
-        val connectionState by controlClient.connectionState.collectAsState()
-        val currentHost by controlClient.currentHost.collectAsState()
-        val latencyMs by controlClient.latencyMs.collectAsState()
+        val connectionState by ConnectionManager.connectionState.collectAsState()
+        val currentHost by ConnectionManager.currentHost.collectAsState()
+        val latencyMs by ConnectionManager.latencyMs.collectAsState()
         val hostsMap by discoveryClient.discoveredHosts.collectAsState()
         val hostList = hostsMap.values.toList()
         val updateState by UpdateManager.updateState.collectAsState()
@@ -132,8 +135,7 @@ class MainActivity : ComponentActivity() {
                         }
                     },
                     onConnectHost = { host ->
-                        controlClient.connect(
-                            context = this@MainActivity,
+                        ConnectionManager.connect(
                             host = host,
                             onPairingNeeded = { showPairingDialog = true },
                             onConnected = {
@@ -143,7 +145,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     onDisconnect = {
-                        controlClient.disconnect()
+                        ConnectionManager.disconnect()
                     },
                     onManualConnect = { ip, port ->
                         val manualHost = DiscoveredHost(
@@ -152,8 +154,7 @@ class MainActivity : ComponentActivity() {
                             ip = ip,
                             port = port
                         )
-                        controlClient.connect(
-                            context = this@MainActivity,
+                        ConnectionManager.connect(
                             host = manualHost,
                             onPairingNeeded = { showPairingDialog = true },
                             onConnected = {
@@ -166,10 +167,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            "remote" -> {
-                RemotePadScreen(
+            "remote", "keyboard" -> {
+                RemoteControlScreen(
                     currentHost = currentHost,
                     latencyMs = latencyMs,
+                    initialMode = if (currentScreen == "keyboard") ControlMode.KEYBOARD else ControlMode.MOUSE,
                     isAirMouseActive = isAirMouseActive,
                     onMouseMove = { dx, dy ->
                         controlClient.sendMouseMove(dx * sensitivity, dy * sensitivity)
@@ -190,17 +192,6 @@ class MainActivity : ComponentActivity() {
                             airMouseEngine?.stop()
                         }
                     },
-                    onOpenPower = { showPowerDialog = true },
-                    onDisconnect = {
-                        controlClient.disconnect()
-                        currentScreen = "home"
-                    },
-                    onNavigate = { screen -> currentScreen = screen }
-                )
-            }
-
-            "keyboard" -> {
-                KeyboardScreen(
                     onSendKey = { key, code, action ->
                         triggerHaptic()
                         if (action == "DOWN") {
@@ -292,9 +283,17 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     },
+                    onReleaseAllKeys = {
+                        controlClient.releaseAllKeys()
+                    },
                     hapticsEnabled = hapticsEnabled,
                     onToggleHaptics = { hapticsEnabled = !hapticsEnabled },
-                    onBack = { currentScreen = "remote" }
+                    onOpenPower = { showPowerDialog = true },
+                    onDisconnect = {
+                        ConnectionManager.disconnect()
+                        currentScreen = "home"
+                    },
+                    onNavigate = { screen -> currentScreen = screen }
                 )
             }
 
@@ -336,7 +335,7 @@ class MainActivity : ComponentActivity() {
             PairingDialog(
                 hostName = currentHost?.name ?: "PC",
                 onSubmitPin = { pin ->
-                    controlClient.submitPairingPin(pin) { success, msg ->
+                    ConnectionManager.submitPairingPin(pin) { success, msg ->
                         if (success) {
                             showPairingDialog = false
                             currentScreen = "remote"
@@ -363,7 +362,7 @@ class MainActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         discoveryClient.stopDiscovery()
-        controlClient.disconnect()
         airMouseEngine?.stop()
+        // Connection persistence is managed by ConnectionManager and ConnectionService
     }
 }

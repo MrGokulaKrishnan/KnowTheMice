@@ -177,6 +177,17 @@ public class NetworkServer : IDisposable
                         session.ClientId = pairReq.ClientId;
                         session.ClientName = pairReq.ClientName;
 
+                        // Clean up any stale sessions for this ClientId to avoid zombie connections
+                        lock (_sessionLock)
+                        {
+                            var staleSessions = _activeSessions.Where(s => s != session && s.ClientId == pairReq.ClientId).ToList();
+                            foreach (var stale in staleSessions)
+                            {
+                                try { stale.Client.Close(); } catch { }
+                                _activeSessions.Remove(stale);
+                            }
+                        }
+
                         if (AllowDirectConnectOnLan)
                         {
                             string authToken = Guid.NewGuid().ToString("N");
@@ -247,6 +258,18 @@ public class NetworkServer : IDisposable
                         {
                             session.ClientId = auth.ClientId;
                             session.IsAuthenticated = true;
+
+                            // Clean up any stale sessions for this ClientId to avoid zombie connections
+                            lock (_sessionLock)
+                            {
+                                var staleSessions = _activeSessions.Where(s => s != session && s.ClientId == auth.ClientId).ToList();
+                                foreach (var stale in staleSessions)
+                                {
+                                    try { stale.Client.Close(); } catch { }
+                                    _activeSessions.Remove(stale);
+                                }
+                            }
+
                             OnClientConnected?.Invoke(auth.ClientId, "Trusted Mobile Device");
                             await SendJsonAsync(session.Stream, new BaseMessage { Type = "AUTH_SUCCESS" });
                         }
@@ -256,6 +279,10 @@ public class NetworkServer : IDisposable
                             session.Client.Close();
                         }
                     }
+                    break;
+
+                case "RELEASE_KEYS":
+                    _inputInjector.ReleaseAllKeys();
                     break;
 
                 case "MOUSE_CLICK":
