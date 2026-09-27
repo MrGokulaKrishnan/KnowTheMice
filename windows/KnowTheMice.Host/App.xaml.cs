@@ -65,6 +65,11 @@ public partial class App : System.Windows.Application
         Log("base.OnStartup completed. Initializing tray icon...");
         InitializeTrayIcon();
         Log("InitializeTrayIcon completed.");
+        // Create and show main window with validated bounds
+        var mainWindow = new MainWindow();
+        this.MainWindow = mainWindow;
+        EnsureWindowWithinWorkArea(mainWindow);
+        mainWindow.Show();
     }
 
     private Drawing.Icon LoadTrayIcon()
@@ -332,4 +337,70 @@ public partial class App : System.Windows.Application
         }
         catch { }
     }
-}
+        /// <summary>
+        /// Ensures the given window is positioned within the current monitor's working area.
+        /// If saved bounds are invalid or off-screen, they are clamped and the window is centered.
+        /// </summary>
+        private void EnsureWindowWithinWorkArea(Window window)
+        {
+            try
+            {
+                // Retrieve saved geometry; fallback to defaults if not set
+                double left = Properties.Settings.Default["WindowLeft"] as double? ?? window.Left;
+                double top = Properties.Settings.Default["WindowTop"] as double? ?? window.Top;
+                double width = Properties.Settings.Default["WindowWidth"] as double? ?? window.Width;
+                double height = Properties.Settings.Default["WindowHeight"] as double? ?? window.Height;
+
+                // If width/height are unreasonable, use current size
+                if (width <= 0) width = window.Width;
+                if (height <= 0) height = window.Height;
+
+                // Get the screen that currently contains the window (or primary if none)
+                var helper = new System.Windows.Interop.WindowInteropHelper(window);
+                var screen = Forms.Screen.FromHandle(helper.Handle);
+                var workArea = screen.WorkingArea; // device pixels
+
+                // Determine DPI scaling for the target screen
+                var source = PresentationSource.FromVisual(window);
+                double dpiX = 96.0, dpiY = 96.0;
+                if (source != null)
+                {
+                    dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
+                    dpiY = 96.0 * source.CompositionTarget.TransformToDevice.M22;
+                }
+
+                // Convert logical (WPF units) to device pixels
+                int devLeft = (int)Math.Round(left * dpiX / 96.0);
+                int devTop = (int)Math.Round(top * dpiY / 96.0);
+                int devWidth = (int)Math.Round(width * dpiX / 96.0);
+                int devHeight = (int)Math.Round(height * dpiY / 96.0);
+
+                // Clamp to work area
+                if (devLeft < workArea.Left) devLeft = workArea.Left;
+                if (devTop < workArea.Top) devTop = workArea.Top;
+                if (devLeft + devWidth > workArea.Right) devLeft = workArea.Right - devWidth;
+                if (devTop + devHeight > workArea.Bottom) devTop = workArea.Bottom - devHeight;
+
+                // If still off‑screen after clamping (e.g., window larger than work area), center it
+                if (devLeft < workArea.Left) devLeft = workArea.Left;
+                if (devTop < workArea.Top) devTop = workArea.Top;
+
+                // Convert back to logical units
+                double newLeft = devLeft * 96.0 / dpiX;
+                double newTop = devTop * 96.0 / dpiY;
+                double newWidth = devWidth * 96.0 / dpiX;
+                double newHeight = devHeight * 96.0 / dpiY;
+
+                window.Left = newLeft;
+                window.Top = newTop;
+                window.Width = newWidth;
+                window.Height = newHeight;
+            }
+            catch (Exception ex)
+            {
+                // If anything goes wrong, fall back to centering the window on the primary screen
+                App.Log($"EnsureWindowWithinWorkArea failed: {ex.Message}. Centering window.");
+                window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
+        }
+        }
