@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Know The Mice — Host Dashboard" 
         Icon="icon.ico"
-        Height="700" Width="980"
-        MinHeight="620" MinWidth="880"
+        Height="720" Width="1020"
+        MinHeight="640" MinWidth="900"
         WindowStartupLocation="Manual"
         WindowStyle="None"
         ResizeMode="CanResize"
@@ -22,17 +22,19 @@
     </WindowChrome.WindowChrome>
 
     <Window.Resources>
+        <!-- Liquid Glass Border Style -->
         <Style x:Key="GlassBorder" TargetType="Border">
             <Setter Property="Background" Value="{StaticResource GlassPanelGradient}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource GlassBorder}"/>
+            <Setter Property="BorderBrush" Value="#22FFA550"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="14"/>
         </Style>
 
+        <!-- Primary Action Button (Brand Gradient with subtle gloss) -->
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource BrandGradient}"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Padding" Value="18,9"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -40,32 +42,41 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="9" Padding="{TemplateBinding Padding}">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.92"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Opacity" Value="0.80"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <!-- Sidebar Navigation Button Style -->
         <Style x:Key="NavButton" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource TextSecondary}"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontWeight" Value="Medium"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Padding" Value="14,10"/>
+            <Setter Property="Padding" Value="12,9"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}" Margin="0,2">
+                        <Border x:Name="bd" Background="{TemplateBinding Background}" CornerRadius="9" Padding="{TemplateBinding Padding}" Margin="0,2">
                             <ContentPresenter VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#15FFFFFF"/>
+                                <Setter TargetName="bd" Property="Background" Value="#10FFFFFF"/>
                                 <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
@@ -74,19 +85,22 @@
             </Setter>
         </Style>
 
+        <!-- Active Navigation Button Style (Orange gradient pill indicator) -->
         <Style x:Key="ActiveNavButton" TargetType="Button" BasedOn="{StaticResource NavButton}">
-            <Setter Property="Background" Value="#25FF8A00"/>
+            <Setter Property="Background" Value="#22FF5A00"/>
             <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
+        <!-- Quick Action Glass Card Button -->
         <Style x:Key="QuickActionButton" TargetType="Button">
-            <Setter Property="Background" Value="#12FFFFFF"/>
-            <Setter Property="BorderBrush" Value="#20FFFFFF"/>
+            <Setter Property="Background" Value="#09FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#18FFFFFF"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#E4E4E7"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="11"/>
-            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Padding" Value="14,10"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -96,8 +110,13 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="bd" Property="Background" Value="#25FF8A00"/>
-                                <Setter TargetName="bd" Property="BorderBrush" Value="{StaticResource BrandHighlight}"/>
+                                <Setter TargetName="bd" Property="Background" Value="#1AFF8A00"/>
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#40FFA550"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="bd" Property="Background" Value="#25FF5A00"/>
+                                <Setter Property="Foreground" Value="White"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -106,6 +125,7 @@
         </Style>
     </Window.Resources>
 
+    <!-- Root Shell Border: Prevents multi-monitor and taskbar overlap clipping when maximized -->
     <Border x:Name="RootBorder" Background="#040404" BorderBrush="#222222" BorderThickness="1" SnapsToDevicePixels="True">
         <Grid>
             <Grid.RowDefinitions>
@@ -113,7 +133,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <!-- Row 0: Custom Title Bar -->
+            <!-- Row 0: Custom WindowChrome Title Bar -->
             <Border Grid.Row="0" Background="#070707" BorderBrush="#141414" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseDown">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -122,7 +142,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- Column 0: App Icon, Application Name, Separator, Tagline -->
+                    <!-- Column 0: App Branding & Status -->
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0"
                                 WindowChrome.IsHitTestVisibleInChrome="True">
                         <Border Width="22" Height="22" Background="#000000" CornerRadius="4" Margin="0,0,10,0" ClipToBounds="True">
@@ -136,7 +156,7 @@
                     <!-- Column 1: Transparent Drag Zone (passed through to WindowChrome) -->
                     <Grid Grid.Column="1" Background="Transparent" />
 
-                    <!-- Column 2: Window Control Buttons -->
+                    <!-- Column 2: Minimal Window Control Buttons -->
                     <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,6,0"
                                 WindowChrome.IsHitTestVisibleInChrome="True">
                         <Button x:Name="BtnMinimize" Click="BtnMinimize_Click" Style="{StaticResource TitleBarButton}" ToolTip="Minimize">
@@ -152,375 +172,447 @@
                 </Grid>
             </Border>
 
-            <!-- Row 1: App Main Content -->
+            <!-- Row 1: App Main Shell (Sidebar + Content Viewport) -->
             <Grid Grid.Row="1">
-        <Grid.ColumnDefinitions>
-            <!-- Sidebar Navigation Column -->
-            <ColumnDefinition Width="220" MinWidth="180" MaxWidth="260"/>
-            <!-- Main Content Area Column -->
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <!-- Sidebar Navigation Column -->
+                    <ColumnDefinition Width="220" MinWidth="190" MaxWidth="260"/>
+                    <!-- Main Content Viewport Column -->
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- Left Sidebar Navigation -->
-        <Border Grid.Column="0" Background="#060606" BorderBrush="#15FFFFFF" BorderThickness="0,0,1,0" Padding="16,20">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
-                <!-- Brand Header -->
-                <StackPanel Grid.Row="0" Margin="0,0,0,24">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Border Width="38" Height="38" Background="#000000" BorderThickness="0" CornerRadius="6" Margin="0,0,12,0" ClipToBounds="True">
-                            <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        </Border>
-                        <StackPanel VerticalAlignment="Center">
-                            <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="15" Foreground="White"/>
-                            <TextBlock Text="Host Service · v1.2.0" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
-                        </StackPanel>
-                    </StackPanel>
-                </StackPanel>
-
-                <!-- Sidebar Nav Items -->
-                <StackPanel Grid.Row="1">
-                    <Button x:Name="NavDashboard" Style="{StaticResource ActiveNavButton}" Click="Nav_Click" Tag="Dashboard">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Devices">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Devices" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavRemote" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Remote">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Remote &amp; Input" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavKeyboard" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Keyboard">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Keyboard Monitor" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavMedia" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Media">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Media Remote" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavShortcuts" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Shortcuts">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M7 2v11h3v9l7-12h-4l4-8z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Shortcuts" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                    <Button x:Name="NavSettings" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Settings">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path Data="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="15" Height="15" Stretch="Uniform" Margin="0,0,12,0"/>
-                            <TextBlock Text="Settings" VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-
-                <!-- Host Quick Status Pill in Sidebar -->
-                <Border Grid.Row="2" Background="#0C0C0C" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="10" Padding="12,10">
-                    <StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                            <Ellipse x:Name="HostStatusDot" Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="TxtHostStatusSidebar" Text="HOST ONLINE" FontWeight="Bold" FontSize="11" Foreground="#22C55E"/>
-                        </StackPanel>
-                        <TextBlock x:Name="TxtClientCountSidebar" Text="0 Devices Connected" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
-                    </StackPanel>
-                </Border>
-            </Grid>
-        </Border>
-
-        <!-- Right Main Content Area -->
-        <Grid Grid.Column="1" Margin="24,20,24,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <!-- Top Notification / OTA Banner -->
-            <StackPanel Grid.Row="0" Margin="0,0,0,16">
-                <Border x:Name="UpdateBanner" Margin="0,0,0,12" Background="#30FF5E00" BorderBrush="#FF5E00" BorderThickness="1.5" CornerRadius="12" Padding="16,10" Visibility="Collapsed">
+                <!-- Left Sidebar Navigation -->
+                <Border Grid.Column="0" Background="#060606" BorderBrush="#14FFFFFF" BorderThickness="0,0,1,0" Padding="16,20">
                     <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Path x:Name="PathUpdateIcon" Data="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z" Fill="{StaticResource BrandHighlight}" Width="18" Height="18" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                            <StackPanel>
-                                <TextBlock x:Name="TxtUpdateTitle" Text="New Update Available!" FontWeight="Bold" FontSize="13" Foreground="White"/>
-                                <TextBlock x:Name="TxtUpdateDesc" Text="Faster input engine, modern UI/UX, and performance enhancements." FontSize="11" Foreground="{StaticResource TextSecondary}"/>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Brand Header -->
+                        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Border Width="38" Height="38" Background="#000000" CornerRadius="6" Margin="0,0,12,0" ClipToBounds="True">
+                                    <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </Border>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="14" Foreground="White"/>
+                                    <TextBlock Text="Host Service · v1.2.0" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
+                                </StackPanel>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                            <ProgressBar x:Name="PrgUpdate" Width="100" Height="10" Margin="0,0,12,0" Visibility="Collapsed"/>
-                            <Button x:Name="BtnUpdateAction" Content="DOWNLOAD UPDATE" Style="{StaticResource PrimaryButton}" Click="BtnUpdateAction_Click" Padding="14,6" FontSize="11"/>
+
+                        <!-- Minimalist Sidebar Navigation Items -->
+                        <StackPanel Grid.Row="1">
+                            <Button x:Name="NavDashboard" Style="{StaticResource ActiveNavButton}" Click="Nav_Click" Tag="Dashboard">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconDashboard}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Dashboard" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavDevices" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Devices">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconDevices}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Devices" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavRemote" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Remote">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconRemote}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Remote &amp; Input" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavKeyboard" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Keyboard">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconKeyboard}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Keyboard Monitor" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavMedia" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Media">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconMedia}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Media Remote" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavShortcuts" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Shortcuts">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconShortcuts}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Shortcuts" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="NavSettings" Style="{StaticResource NavButton}" Click="Nav_Click" Tag="Settings">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconSettings}" Margin="0,0,12,0"/>
+                                    <TextBlock Text="Settings &amp; Updates" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Button>
                         </StackPanel>
+
+                        <!-- Host Quick Status Pill in Sidebar -->
+                        <Border Grid.Row="2" Background="#0A0A0A" BorderBrush="#18FFFFFF" BorderThickness="1" CornerRadius="10" Padding="12,10">
+                            <StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <Ellipse x:Name="HostStatusDot" Width="8" Height="8" Fill="#22C55E" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="TxtHostStatusSidebar" Text="HOST ONLINE" FontWeight="Bold" FontSize="11" Foreground="#22C55E"/>
+                                </StackPanel>
+                                <TextBlock x:Name="TxtClientCountSidebar" Text="0 Devices Connected" FontSize="10" Foreground="{StaticResource TextSecondary}"/>
+                            </StackPanel>
+                        </Border>
                     </Grid>
                 </Border>
-            </StackPanel>
 
-            <!-- Tab Content Viewport -->
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <Grid>
-                    <!-- 1. DASHBOARD VIEW -->
-                    <StackPanel x:Name="ViewDashboard" Visibility="Visible">
-                        <!-- Hero Connection Status Card -->
-                        <Border Style="{StaticResource GlassBorder}" Padding="24" Margin="0,0,0,16">
+                <!-- Right Main Content Area -->
+                <Grid Grid.Column="1" Margin="24,20,24,20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Top Notification / In-Place Update Banner -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                        <Border x:Name="UpdateBanner" Margin="0,0,0,12" Background="#25FF5A00" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1" CornerRadius="12" Padding="16,12" Visibility="Collapsed">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-
-                                <StackPanel VerticalAlignment="Center">
-                                    <TextBlock Text="CONNECTION STATUS" FontWeight="Bold" FontSize="11" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,6"/>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,12">
-                                        <Ellipse x:Name="DotConnection" Width="12" Height="12" Fill="#22C55E" Margin="0,0,10,0"/>
-                                        <TextBlock x:Name="TxtConnectionHeader" Text="HOST READY FOR CONNECTIONS" FontWeight="Bold" FontSize="20" Foreground="White"/>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                    <Path x:Name="PathUpdateIcon" Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconUpdate}" Stroke="{StaticResource BrandHighlight}" Width="20" Height="20" Margin="0,0,14,0" VerticalAlignment="Center"/>
+                                    <StackPanel>
+                                        <TextBlock x:Name="TxtUpdateTitle" Text="New Update Available!" FontWeight="Bold" FontSize="13" Foreground="White"/>
+                                        <TextBlock x:Name="TxtUpdateDesc" Text="Faster input engine, modern UI/UX, and performance enhancements." FontSize="11" Foreground="{StaticResource TextSecondary}"/>
                                     </StackPanel>
-
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Connected Device:" Foreground="{StaticResource TextSecondary}" FontSize="13"/>
-                                        <TextBlock Grid.Column="1" x:Name="TxtConnectedDevice" Text="None (Waiting for phone)" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
-                                    </Grid>
-
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Network Latency:" Foreground="{StaticResource TextSecondary}" FontSize="13"/>
-                                        <TextBlock Grid.Column="1" x:Name="TxtLatency" Text="-- ms" Foreground="{StaticResource BrandHighlight}" FontWeight="SemiBold" FontSize="13"/>
-                                    </Grid>
-
-                                    <Grid Margin="0,0,0,4">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Grid.Column="0" Text="Connection Type:" Foreground="{StaticResource TextSecondary}" FontSize="13"/>
-                                        <TextBlock Grid.Column="1" Text="Wi-Fi (Zero-Cloud Local LAN)" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
-                                    </Grid>
                                 </StackPanel>
-
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                    <Border Background="#10FFFFFF" BorderBrush="#20FFFFFF" BorderThickness="1" CornerRadius="12" Padding="16,12" HorizontalAlignment="Right">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="PORT" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
-                                            <TextBlock Text="52841" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrandHighlight}" HorizontalAlignment="Center"/>
-                                            <TextBlock Text="TCP Encrypted" FontSize="10" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Border>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                    <ProgressBar x:Name="PrgUpdate" Width="100" Height="8" Margin="0,0,12,0" Visibility="Collapsed"/>
+                                    <Button x:Name="BtnUpdateAction" Content="DOWNLOAD UPDATE" Style="{StaticResource PrimaryButton}" Click="BtnUpdateAction_Click" Padding="14,7" FontSize="11"/>
                                 </StackPanel>
                             </Grid>
                         </Border>
+                    </StackPanel>
 
-                        <!-- Quick Actions Section -->
-                        <TextBlock Text="QUICK ACTIONS" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,10"/>
-                        <Grid Margin="0,0,0,18">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Button Grid.Column="0" Style="{StaticResource QuickActionButton}" Margin="0,0,6,0" Click="QuickAction_Click" Tag="Remote">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Path Data="M13 1.07V9h7c0-4.08-3.05-7.44-7-7.93zM4 15c0 4.42 3.58 8 8 8s8-3.58 8-8v-4H4v4zm7-13.93C7.05 1.56 4 4.92 4 9h7V1.07z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
-                                    <TextBlock Text="REMOTE" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="1" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Keyboard">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Path Data="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
-                                    <TextBlock Text="KEYBOARD" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="2" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Media">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Path Data="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
-                                    <TextBlock Text="MEDIA" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                            <Button Grid.Column="3" Style="{StaticResource QuickActionButton}" Margin="6,0,0,0" Click="QuickAction_Click" Tag="Shortcuts">
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <Path Data="M7 2v11h3v9l7-12h-4l4-8z" Fill="White" Width="13" Height="13" Stretch="Uniform" Margin="0,0,8,0"/>
-                                    <TextBlock Text="SHORTCUTS" VerticalAlignment="Center"/>
-                                </StackPanel>
-                            </Button>
-                        </Grid>
-
-                        <!-- Two Column Dashboard Cards -->
+                    <!-- Tab Content Viewport -->
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                            <!-- 1. DASHBOARD VIEW -->
+                            <StackPanel x:Name="ViewDashboard" Visibility="Visible">
+                                <!-- Hero Connection Status Card with Liquid Glass -->
+                                <Border Style="{StaticResource GlassBorder}" Padding="22" Margin="0,0,0,16">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                            <!-- Pairing Card -->
-                            <Border Grid.Column="0" Style="{StaticResource GlassBorder}" Padding="18" Margin="0,0,8,0">
-                                <StackPanel>
-                                    <TextBlock Text="DEVICE PAIRING" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
-                                    <TextBlock Text="Generate a temporary 6-digit PIN code to pair an Android device that requires strict verification." 
-                                               Foreground="{StaticResource TextSecondary}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                        <StackPanel VerticalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconConnection}" Stroke="{StaticResource BrandHighlight}" Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="CONNECTION STATUS" FontWeight="Bold" FontSize="11" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                            </StackPanel>
 
-                                    <Border x:Name="PinDisplayBox" Background="#0A0A0A" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1.5" CornerRadius="10" Padding="12" Margin="0,0,0,12" Visibility="Collapsed">
-                                        <StackPanel HorizontalAlignment="Center">
-                                            <TextBlock Text="PAIRING CODE (EXPIRES IN 60s)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center" Margin="0,0,0,2"/>
-                                            <TextBlock x:Name="TxtPinCode" Text="8 4 9 2 0 1" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BrandHighlight}" HorizontalAlignment="Center"/>
+                                            <!-- Dynamic Connection Header -->
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,0,12">
+                                                <Ellipse x:Name="DotConnection" Width="10" Height="10" Fill="#22C55E" Margin="0,0,10,0"/>
+                                                <TextBlock x:Name="TxtConnectionHeader" Text="HOST READY FOR CONNECTIONS" FontWeight="Bold" FontSize="18" Foreground="White"/>
+                                            </StackPanel>
+
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="Connected Device:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtConnectedDevice" Text="None (Waiting for phone)" Foreground="White" FontWeight="SemiBold" FontSize="12"/>
+                                            </Grid>
+
+                                            <Grid Margin="0,0,0,6">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="Network Latency:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock Grid.Column="1" x:Name="TxtLatency" Text="-- ms" Foreground="{StaticResource BrandHighlight}" FontWeight="SemiBold" FontSize="12"/>
+                                            </Grid>
+
+                                            <Grid Margin="0,0,0,4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="140"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="Connection Type:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock Grid.Column="1" Text="Wi-Fi (Zero-Cloud Local LAN)" Foreground="White" FontWeight="SemiBold" FontSize="12"/>
+                                            </Grid>
+                                        </StackPanel>
+
+                                        <!-- Port Badge -->
+                                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                            <Border Background="#0CFFFFFF" BorderBrush="#18FFFFFF" BorderThickness="1" CornerRadius="12" Padding="18,14" HorizontalAlignment="Right">
+                                                <StackPanel HorizontalAlignment="Center">
+                                                    <TextBlock Text="PORT" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+                                                    <TextBlock Text="52841" FontSize="20" FontWeight="Bold" Foreground="{StaticResource BrandHighlight}" HorizontalAlignment="Center" Margin="0,2"/>
+                                                    <TextBlock Text="TCP Encrypted" FontSize="10" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Quick Actions Section -->
+                                <StackPanel Margin="0,0,0,16">
+                                    <TextBlock Text="QUICK ACTIONS" FontWeight="Bold" FontSize="11" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,10"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Button Grid.Column="0" Style="{StaticResource QuickActionButton}" Margin="0,0,6,0" Click="QuickAction_Click" Tag="Remote">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconRemote}" Width="14" Height="14" Margin="0,0,8,0"/>
+                                                <TextBlock Text="REMOTE" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="1" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Keyboard">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconKeyboard}" Width="14" Height="14" Margin="0,0,8,0"/>
+                                                <TextBlock Text="KEYBOARD" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="2" Style="{StaticResource QuickActionButton}" Margin="3,0,3,0" Click="QuickAction_Click" Tag="Media">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconMedia}" Width="14" Height="14" Margin="0,0,8,0"/>
+                                                <TextBlock Text="MEDIA" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Grid.Column="3" Style="{StaticResource QuickActionButton}" Margin="6,0,0,0" Click="QuickAction_Click" Tag="Shortcuts">
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconShortcuts}" Width="14" Height="14" Margin="0,0,8,0"/>
+                                                <TextBlock Text="SHORTCUTS" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Two Column Liquid Glass Dashboard Cards -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Pairing Card -->
+                                    <Border Grid.Column="0" Style="{StaticResource GlassBorder}" Padding="18" Margin="0,0,8,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconPairing}" Stroke="{StaticResource BrandHighlight}" Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="DEVICE PAIRING" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <TextBlock Text="Generate a temporary 6-digit PIN code to pair an Android device that requires strict verification." 
+                                                       Foreground="{StaticResource TextSecondary}" FontSize="12" TextWrapping="Wrap" Margin="0,0,0,14"/>
+
+                                            <Border x:Name="PinDisplayBox" Background="#0A0A0A" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,0,14" Visibility="Collapsed">
+                                                <StackPanel HorizontalAlignment="Center">
+                                                    <TextBlock Text="PAIRING CODE (EXPIRES IN 60s)" FontSize="10" FontWeight="Bold" Foreground="{StaticResource TextSecondary}" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                                                    <TextBlock x:Name="TxtPinCode" Text="8 4 9 2 0 1" FontSize="26" FontWeight="Bold" Foreground="{StaticResource BrandHighlight}" HorizontalAlignment="Center"/>
+                                                </StackPanel>
+                                            </Border>
+
+                                            <Button x:Name="BtnPair" Content="GENERATE PAIRING PIN" Style="{StaticResource PrimaryButton}" Click="BtnPair_Click"/>
                                         </StackPanel>
                                     </Border>
 
-                                    <Button x:Name="BtnPair" Content="GENERATE PAIRING PIN" Style="{StaticResource PrimaryButton}" Click="BtnPair_Click"/>
-                                </StackPanel>
-                            </Border>
+                                    <!-- Host Network Details Card -->
+                                    <Border Grid.Column="1" Style="{StaticResource GlassBorder}" Padding="18" Margin="8,0,0,0">
+                                        <StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                                <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconNetwork}" Stroke="{StaticResource BrandHighlight}" Width="14" Height="14" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                <TextBlock Text="HOST NETWORK DETAILS" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                            <Grid Margin="0,0,0,8">
+                                                <TextBlock Text="Computer Name:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock x:Name="TxtPcName" Text="DESKTOP-PC" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                            <Grid Margin="0,0,0,8">
+                                                <TextBlock Text="Local IP Address:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock x:Name="TxtIpAddress" Text="192.168.1.150" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                            <Grid Margin="0,0,0,8">
+                                                <TextBlock Text="Discovery Beacon:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock Text="52840 (UDP Broadcast)" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                            <Grid Margin="0,0,0,4">
+                                                <TextBlock Text="Encryption:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                                <TextBlock Text="AES-256-GCM / X25519" Foreground="{StaticResource BrandHighlight}" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </StackPanel>
 
-                            <!-- Host Network Details Card -->
-                            <Border Grid.Column="1" Style="{StaticResource GlassBorder}" Padding="18" Margin="8,0,0,0">
-                                <StackPanel>
-                                    <TextBlock Text="HOST NETWORK DETAILS" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,10"/>
-                                    <Grid Margin="0,0,0,6">
-                                        <TextBlock Text="Computer Name:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
-                                        <TextBlock x:Name="TxtPcName" Text="DESKTOP-PC" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <Grid Margin="0,0,0,6">
-                                        <TextBlock Text="Local IP Address:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
-                                        <TextBlock x:Name="TxtIpAddress" Text="192.168.1.150" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <Grid Margin="0,0,0,6">
-                                        <TextBlock Text="Discovery Beacon:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
-                                        <TextBlock Text="52840 (UDP Broadcast)" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                    <Grid Margin="0,0,0,6">
-                                        <TextBlock Text="Encryption:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
-                                        <TextBlock Text="AES-256-GCM" Foreground="{StaticResource BrandHighlight}" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
-                                    </Grid>
-                                </StackPanel>
-                            </Border>
+                            <!-- 2. DEVICES VIEW -->
+                            <StackPanel x:Name="ViewDevices" Visibility="Collapsed">
+                                <Border Style="{StaticResource GlassBorder}" Padding="20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconDevices}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="TRUSTED PAIRED DEVICES" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock Text="Devices in this list can reconnect instantly without entering a pairing PIN." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,14"/>
+
+                                        <ListBox x:Name="ListTrustedDevices" Height="220" Background="#080808" BorderBrush="#18FFFFFF" BorderThickness="1" Foreground="White" Margin="0,0,0,14">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding FriendlyName}" Padding="8,6" FontSize="13"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button x:Name="BtnRevoke" Content="REVOKE SELECTED DEVICE" Background="#18EF4444" Foreground="#EF4444" FontWeight="Bold" FontSize="11" Padding="14,8" BorderThickness="1" BorderBrush="#40EF4444" Click="BtnRevoke_Click" Margin="0,0,12,0"/>
+                                            <CheckBox x:Name="ChkDirectConnect" Content="Direct Connect on Local LAN (No PIN required)" Foreground="White" IsChecked="True" Checked="ChkDirectConnect_Checked" Unchecked="ChkDirectConnect_Unchecked" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 3. REMOTE & INPUT VIEW -->
+                            <StackPanel x:Name="ViewRemote" Visibility="Collapsed">
+                                <Border Style="{StaticResource GlassBorder}" Padding="20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconMouse}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="MOUSE &amp; TRACKPAD SETTINGS" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <Grid Margin="0,0,0,6">
+                                            <TextBlock Text="Mouse Sensitivity" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
+                                            <TextBlock x:Name="TxtSensitivityVal" Text="1.0x" Foreground="{StaticResource BrandHighlight}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Slider x:Name="SliderSensitivity" Minimum="0.2" Maximum="3.0" Value="1.0" ValueChanged="SliderSensitivity_ValueChanged" Margin="0,0,0,18"/>
+
+                                        <CheckBox x:Name="ChkNaturalScroll" Content="Natural Two-Finger Scrolling (Invert scroll direction)" Foreground="White" IsChecked="True" Checked="ChkNaturalScroll_Checked" Unchecked="ChkNaturalScroll_Unchecked" Margin="0,0,0,12"/>
+                                        <CheckBox x:Name="ChkPauseControl" Content="Pause Remote Control (Ignore mobile input)" Foreground="White" Checked="ChkPauseControl_Checked" Unchecked="ChkPauseControl_Unchecked" Margin="0,0,0,12"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 4. KEYBOARD MONITOR VIEW -->
+                            <StackPanel x:Name="ViewKeyboard" Visibility="Collapsed">
+                                <Border Style="{StaticResource GlassBorder}" Padding="20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconKeyboard}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="KEYBOARD INJECTION ENGINE" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock Text="Monitors virtual keystrokes received from mobile. All held modifiers are automatically cleared on disconnect." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,16"/>
+
+                                        <Grid Margin="0,0,0,14">
+                                            <TextBlock Text="Engine Status:" Foreground="{StaticResource TextSecondary}" FontSize="13"/>
+                                            <TextBlock Text="● Active (Win32 SendInput)" Foreground="#22C55E" FontWeight="Bold" FontSize="13" HorizontalAlignment="Right"/>
+                                        </Grid>
+
+                                        <Button Content="EMERGENCY RELEASE ALL PRESSED KEYS" Background="#15FF8A00" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1" Foreground="{StaticResource BrandHighlight}" FontWeight="Bold" Padding="14,10" Click="BtnReleaseKeys_Click" HorizontalAlignment="Left"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 5. MEDIA & SHORTCUTS VIEW -->
+                            <StackPanel x:Name="ViewMedia" Visibility="Collapsed">
+                                <Border Style="{StaticResource GlassBorder}" Padding="20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconMedia}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="UNIVERSAL MEDIA &amp; SYSTEM SHORTCUTS" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <TextBlock Text="Know The Mice supports standard Windows Media keys and presentation controls." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,14"/>
+                                        <TextBlock Text="• Volume Up / Down / Mute&#x0a;• Play / Pause / Next / Prev&#x0a;• PowerPoint Next Slide / Prev Slide / Black Screen&#x0a;• Windows Workspace Switching" Foreground="{StaticResource TextSecondary}" FontSize="12" LineHeight="22"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- 6. SETTINGS VIEW -->
+                            <StackPanel x:Name="ViewSettings" Visibility="Collapsed">
+                                <!-- Card 1: System Behavior -->
+                                <Border Style="{StaticResource GlassBorder}" Padding="20" Margin="0,0,0,16">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconSettings}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="APPLICATION BEHAVIOR" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <CheckBox x:Name="ChkMinimizeToTray" Content="Minimize to system tray when closing window (X)" Foreground="White" IsChecked="True" Margin="0,0,0,12"/>
+                                        <CheckBox x:Name="ChkNotifications" Content="Show Windows notifications on device connect / disconnect" Foreground="White" IsChecked="True" Checked="ChkNotifications_Checked" Unchecked="ChkNotifications_Unchecked" Margin="0,0,0,12"/>
+                                        <CheckBox x:Name="ChkStartWithWindows" Content="Start Minimized with Windows on PC boot" Foreground="White" Margin="0,0,0,4"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card 2: Software Updates & In-Place Upgrades -->
+                                <Border Style="{StaticResource GlassBorder}" Padding="20" Margin="0,0,0,16">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconUpdate}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="SOFTWARE UPDATES &amp; IN-PLACE UPGRADES" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+
+                                        <Grid Margin="0,0,0,10">
+                                            <TextBlock Text="Current Version:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="v1.2.0 (Stable)" Foreground="White" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,10">
+                                            <TextBlock Text="Update Channel:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="Official Production (Zero-Downtime In-Place)" Foreground="{StaticResource BrandHighlight}" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,14">
+                                            <TextBlock Text="User Data Preservation:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="Paired Devices &amp; Security Keys Saved" Foreground="#22C55E" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <Button x:Name="BtnCheckUpdates" Content="CHECK FOR UPDATES" Style="{StaticResource PrimaryButton}" Click="BtnCheckUpdates_Click" Margin="0,0,14,0"/>
+                                            <TextBlock Text="✓ Automatic update check on boot" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" FontSize="12"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Card 3: About & Publisher Info -->
+                                <Border Style="{StaticResource GlassBorder}" Padding="20">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                            <Path Style="{StaticResource MinimalVectorIcon}" Data="{StaticResource IconAbout}" Stroke="{StaticResource BrandHighlight}" Width="16" Height="16" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                                            <TextBlock Text="ABOUT &amp; PUBLISHER INFO" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                        <Grid Margin="0,0,0,6">
+                                            <TextBlock Text="Product:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="Know The Mice — Wireless PC Remote" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,6">
+                                            <TextBlock Text="Publisher:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="KnowTheTech" Foreground="{StaticResource BrandHighlight}" FontWeight="Bold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                        <Grid Margin="0,0,0,6">
+                                            <TextBlock Text="Architecture:" Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                                            <TextBlock Text="Zero Cloud · Local-first X25519 / AES-256-GCM" Foreground="White" FontWeight="SemiBold" FontSize="12" HorizontalAlignment="Right"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
                         </Grid>
-                    </StackPanel>
+                    </ScrollViewer>
 
-                    <!-- 2. DEVICES VIEW -->
-                    <StackPanel x:Name="ViewDevices" Visibility="Collapsed">
-                        <Border Style="{StaticResource GlassBorder}" Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="TRUSTED PAIRED DEVICES" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
-                                <TextBlock Text="Devices in this list can reconnect instantly without entering a pairing PIN." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,14"/>
-
-                                <ListBox x:Name="ListTrustedDevices" Height="220" Background="#080808" BorderBrush="#20FFFFFF" BorderThickness="1" Foreground="White" Margin="0,0,0,14">
-                                    <ListBox.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding FriendlyName}" Padding="8,6" FontSize="13"/>
-                                        </DataTemplate>
-                                    </ListBox.ItemTemplate>
-                                </ListBox>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="BtnRevoke" Content="REVOKE SELECTED DEVICE" Background="#20EF4444" Foreground="#EF4444" FontWeight="Bold" FontSize="11" Padding="14,8" BorderThickness="1" BorderBrush="#40EF4444" Click="BtnRevoke_Click" Margin="0,0,12,0"/>
-                                    <CheckBox x:Name="ChkDirectConnect" Content="Direct Connect on Local LAN (No PIN required)" Foreground="White" IsChecked="True" Checked="ChkDirectConnect_Checked" Unchecked="ChkDirectConnect_Unchecked" VerticalAlignment="Center"/>
-                                </StackPanel>
+                    <!-- Bottom Status Footer Bar -->
+                    <Border Grid.Row="2" Margin="0,16,0,0" Padding="4,0">
+                        <Grid>
+                            <TextBlock x:Name="TxtStatusLog" Text="● Ready for connections on 0.0.0.0:52841" FontSize="11" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Zero Cloud · Local E2EE · KnowTheTech · v1.2.0" FontSize="11" Foreground="#70FFFFFF" VerticalAlignment="Center"/>
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- 3. REMOTE & INPUT VIEW -->
-                    <StackPanel x:Name="ViewRemote" Visibility="Collapsed">
-                        <Border Style="{StaticResource GlassBorder}" Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="MOUSE &amp; TRACKPAD SETTINGS" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,14"/>
-
-                                <Grid Margin="0,0,0,6">
-                                    <TextBlock Text="Mouse Sensitivity" Foreground="White" FontWeight="SemiBold" FontSize="13"/>
-                                    <TextBlock x:Name="TxtSensitivityVal" Text="1.0x" Foreground="{StaticResource BrandHighlight}" FontWeight="Bold" FontSize="13" HorizontalAlignment="Right"/>
-                                </Grid>
-                                <Slider x:Name="SliderSensitivity" Minimum="0.2" Maximum="3.0" Value="1.0" ValueChanged="SliderSensitivity_ValueChanged" Margin="0,0,0,18"/>
-
-                                <CheckBox x:Name="ChkNaturalScroll" Content="Natural Two-Finger Scrolling (Invert scroll direction)" Foreground="White" IsChecked="True" Checked="ChkNaturalScroll_Checked" Unchecked="ChkNaturalScroll_Unchecked" Margin="0,0,0,12"/>
-                                <CheckBox x:Name="ChkPauseControl" Content="Pause Remote Control (Ignore mobile input)" Foreground="White" Checked="ChkPauseControl_Checked" Unchecked="ChkPauseControl_Unchecked" Margin="0,0,0,12"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- 4. KEYBOARD MONITOR VIEW -->
-                    <StackPanel x:Name="ViewKeyboard" Visibility="Collapsed">
-                        <Border Style="{StaticResource GlassBorder}" Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="KEYBOARD INJECTION ENGINE" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
-                                <TextBlock Text="Monitors virtual keystrokes received from mobile. All held modifiers are automatically cleared on disconnect." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,16"/>
-
-                                <Grid Margin="0,0,0,12">
-                                    <TextBlock Text="Engine Status:" Foreground="{StaticResource TextSecondary}" FontSize="13"/>
-                                    <TextBlock Text="● Active (Win32 SendInput)" Foreground="#22C55E" FontWeight="Bold" FontSize="13" HorizontalAlignment="Right"/>
-                                </Grid>
-
-                                <Button Content="EMERGENCY RELEASE ALL PRESSED KEYS" Background="#20FF8A00" BorderBrush="{StaticResource BrandHighlight}" BorderThickness="1" Foreground="{StaticResource BrandHighlight}" FontWeight="Bold" Padding="14,10" Click="BtnReleaseKeys_Click" HorizontalAlignment="Left"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- 5. MEDIA & SHORTCUTS VIEW -->
-                    <StackPanel x:Name="ViewMedia" Visibility="Collapsed">
-                        <Border Style="{StaticResource GlassBorder}" Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="UNIVERSAL MEDIA &amp; SYSTEM SHORTCUTS" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
-                                <TextBlock Text="Know The Mice supports standard Windows Media keys and presentation controls." Foreground="{StaticResource TextSecondary}" FontSize="12" Margin="0,0,0,14"/>
-                                <TextBlock Text="• Volume Up / Down / Mute&#x0a;• Play / Pause / Next / Prev&#x0a;• PowerPoint Next Slide / Prev Slide / Black Screen&#x0a;• Windows Workspace Switching" Foreground="{StaticResource TextSecondary}" FontSize="12" LineHeight="20"/>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
-
-                    <!-- 6. SETTINGS VIEW -->
-                    <StackPanel x:Name="ViewSettings" Visibility="Collapsed">
-                        <Border Style="{StaticResource GlassBorder}" Padding="20">
-                            <StackPanel>
-                                <TextBlock Text="HOST APPLICATION SETTINGS" FontWeight="Bold" FontSize="13" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,14"/>
-
-                                <CheckBox x:Name="ChkMinimizeToTray" Content="Minimize to system tray when closing window (X)" Foreground="White" IsChecked="True" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="ChkNotifications" Content="Show Windows notifications on device connect / disconnect" Foreground="White" IsChecked="True" Checked="ChkNotifications_Checked" Unchecked="ChkNotifications_Unchecked" Margin="0,0,0,10"/>
-                                <CheckBox x:Name="ChkStartWithWindows" Content="Start Minimized with Windows on PC boot" Foreground="White" Margin="0,0,0,16"/>
-
-                                <Separator Background="#20FFFFFF" Margin="0,0,0,16"/>
-
-                                <TextBlock Text="SOFTWARE UPDATES" FontWeight="Bold" FontSize="12" Foreground="{StaticResource BrandHighlight}" Margin="0,0,0,8"/>
-                                <StackPanel Orientation="Horizontal">
-                                    <Button x:Name="BtnCheckUpdates" Content="CHECK FOR UPDATES" Style="{StaticResource PrimaryButton}" Click="BtnCheckUpdates_Click" Margin="0,0,14,0"/>
-                                    <TextBlock Text="Current Version: v1.2.0" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center" FontSize="12"/>
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-                    </StackPanel>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </ScrollViewer>
-
-            <!-- Bottom Status Footer Bar -->
-            <Border Grid.Row="2" Margin="0,16,0,0" Padding="4,0">
-                <Grid>
-                    <TextBlock x:Name="TxtStatusLog" Text="● Ready for connections on 0.0.0.0:52841" FontSize="11" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="Zero Cloud · Local E2EE · Know The Mice v1.2.0" FontSize="11" Foreground="#70FFFFFF" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
-    </Grid>
+            </Grid>
         </Grid>
     </Border>
 </Window>

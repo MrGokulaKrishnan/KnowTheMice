@@ -5,14 +5,18 @@
     <Application.Resources>
         <!-- Liquid Glass System Theme Brushes -->
         <SolidColorBrush x:Key="AmoledBackground" Color="#000000"/>
-        <SolidColorBrush x:Key="SurfaceBackground" Color="#0A0A0A"/>
+        <SolidColorBrush x:Key="SurfaceBackground" Color="#080808"/>
+        <SolidColorBrush x:Key="CardBackground" Color="#0C0C0C"/>
         <SolidColorBrush x:Key="BrandOrange" Color="#FF5A00"/>
         <SolidColorBrush x:Key="BrandHighlight" Color="#FF8A00"/>
         <SolidColorBrush x:Key="BrandDeep" Color="#D93600"/>
         <SolidColorBrush x:Key="TextPrimary" Color="#FFFFFF"/>
         <SolidColorBrush x:Key="TextSecondary" Color="#A1A1AA"/>
-        <SolidColorBrush x:Key="GlassBorder" Color="#47FFA550"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#71717A"/>
+        <SolidColorBrush x:Key="GlassBorder" Color="#30FFA550"/>
+        <SolidColorBrush x:Key="SubtleBorder" Color="#18FFFFFF"/>
 
+        <!-- Unified Brand Gradient -->
         <LinearGradientBrush x:Key="BrandGradient" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#FF8A00" Offset="0"/>
             <GradientStop Color="#FF5A00" Offset="0.5"/>
@@ -64,9 +68,73 @@
         </LinearGradientBrush>
 
         <LinearGradientBrush x:Key="GlassPanelGradient" StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#24FF8A00" Offset="0"/>
-            <GradientStop Color="#0AFFFFFF" Offset="1"/>
+            <GradientStop Color="#18FF8A00" Offset="0"/>
+            <GradientStop Color="#07FFFFFF" Offset="0.6"/>
+            <GradientStop Color="#03000000" Offset="1"/>
         </LinearGradientBrush>
+
+        <!-- ============================================== -->
+        <!-- UNIFIED MINIMAL VECTOR ICON SYSTEM (24x24) -->
+        <!-- ============================================== -->
+        <StreamGeometry x:Key="IconDashboard">M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h6v6h-6v-6z</StreamGeometry>
+        <StreamGeometry x:Key="IconDevices">M5 3h6a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm2 14h2M15 7h4a2 2 0 012 2v8a2 2 0 01-2 2h-4</StreamGeometry>
+        <StreamGeometry x:Key="IconRemote">M12 3a6 6 0 00-6 6v6a6 6 0 0012 0V9a6 6 0 00-6-6zm0 4v4</StreamGeometry>
+        <StreamGeometry x:Key="IconMouse">M12 3a6 6 0 00-6 6v6a6 6 0 0012 0V9a6 6 0 00-6-6zm0 4v4</StreamGeometry>
+        <StreamGeometry x:Key="IconKeyboard">M3 6a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V6zm4 4h.01M10 10h.01M14 10h.01M17 10h.01M7 14h10</StreamGeometry>
+        <StreamGeometry x:Key="IconMedia">M5 4a1 1 0 00-1 1v14a1 1 0 001.5.86l14-7a1 1 0 000-1.72l-14-7A1 1 0 005 4z</StreamGeometry>
+        <StreamGeometry x:Key="IconShortcuts">M13 2L4 13h6l-1 9 9-11h-6l1-9z</StreamGeometry>
+        <StreamGeometry x:Key="IconSettings">M12 8a4 4 0 100 8 4 4 0 000-8zm-8 4a8 8 0 01.12-1.38l-1.6-1.24 1.4-2.42 1.94.54A7.95 7.95 0 017 6.4L7.18 4.4h2.8l.18 2c.42.15.82.35 1.18.6l1.94-.54 1.4 2.42-1.6 1.24c.08.45.12.91.12 1.38s-.04.93-.12 1.38l1.6 1.24-1.4 2.42-1.94-.54a7.95 7.95 0 01-1.18.6l-.18 2H9.98l-.18-2a7.95 7.95 0 01-1.18-.6l-1.94.54-1.4-2.42 1.6-1.24A8.04 8.04 0 014 12z</StreamGeometry>
+        <StreamGeometry x:Key="IconConnection">M2 8.5a16 16 0 0120 0M5 12.5a11 11 0 0114 0M8.5 16.5a6 6 0 017 0M12 20h.01</StreamGeometry>
+        <StreamGeometry x:Key="IconNetwork">M4 6a2 2 0 012-2h12a2 2 0 012 2v8a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm8 10v4m-4 0h8</StreamGeometry>
+        <StreamGeometry x:Key="IconSecurity">M12 2L4 5v6c0 5.25 3.4 10.18 8 11.45 4.6-1.27 8-6.2 8-11.45V5l-8-3zm0 7a2 2 0 100 4 2 2 0 000-4z</StreamGeometry>
+        <StreamGeometry x:Key="IconPairing">M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71</StreamGeometry>
+        <StreamGeometry x:Key="IconPower">M12 2v10M18.36 5.64A9 9 0 115.64 5.64</StreamGeometry>
+        <StreamGeometry x:Key="IconClipboard">M9 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2h-2M9 3a2 2 0 012-2h2a2 2 0 012 2v1H9V3z</StreamGeometry>
+        <StreamGeometry x:Key="IconNotifications">M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9zm-4.27 13a2 2 0 01-3.46 0</StreamGeometry>
+        <StreamGeometry x:Key="IconUpdate">M4 4v5h5M20 20v-5h-5M20 9A9 9 0 006 5.69L4 9m16 6l-2 3.31A9 9 0 014 15</StreamGeometry>
+        <StreamGeometry x:Key="IconAbout">M12 22a10 10 0 100-20 10 10 0 000 20zm0-14h.01M12 11v5</StreamGeometry>
+        <StreamGeometry x:Key="IconHelp">M12 22a10 10 0 100-20 10 10 0 000 20zm0-6h.01M12 13a2 2 0 10-2-2</StreamGeometry>
+        <StreamGeometry x:Key="IconBack">M19 12H5m7-7l-7 7 7 7</StreamGeometry>
+        <StreamGeometry x:Key="IconForward">M5 12h14m-7-7l7 7-7 7</StreamGeometry>
+        <StreamGeometry x:Key="IconRefresh">M4 4v5h5M20 20v-5h-5M20 9A9 9 0 006 5.69L4 9m16 6l-2 3.31A9 9 0 014 15</StreamGeometry>
+        <StreamGeometry x:Key="IconSearch">M11 19a8 8 0 100-16 8 8 0 000 16zm10 2l-4.35-4.35</StreamGeometry>
+        <StreamGeometry x:Key="IconAdd">M12 5v14m-7-7h14</StreamGeometry>
+        <StreamGeometry x:Key="IconDelete">M4 7h16M10 11v6M14 11v6M5 7l1 12a2 2 0 002 2h8a2 2 0 002-2l1-12M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3</StreamGeometry>
+        <StreamGeometry x:Key="IconEdit">M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4L16.5 3.5z</StreamGeometry>
+        <StreamGeometry x:Key="IconSuccess">M12 22a10 10 0 100-20 10 10 0 000 20zm-3-10l2 2 4-4</StreamGeometry>
+        <StreamGeometry x:Key="IconWarning">M12 2L1 21h22L12 2zm0 8v5m0 3h.01</StreamGeometry>
+        <StreamGeometry x:Key="IconError">M12 22a10 10 0 100-20 10 10 0 000 20zm-3-7l6-6m0 6l-6-6</StreamGeometry>
+        <StreamGeometry x:Key="IconConnected">M12 12m-5 0a5 5 0 1010 0 5 5 0 10-10 0</StreamGeometry>
+        <StreamGeometry x:Key="IconDisconnected">M12 12m-7 0a7 7 0 1014 0 7 7 0 10-14 0</StreamGeometry>
+        <StreamGeometry x:Key="IconReconnecting">M12 4v2m0 12v2m-8-8H2m18 0h2m-2.93-5.07l-1.41 1.41m-9.32 9.32l-1.41 1.41m0-12.14l1.41 1.41m9.32 9.32l1.41 1.41</StreamGeometry>
+
+        <!-- Reusable Minimal Vector Icon Style -->
+        <Style x:Key="MinimalVectorIcon" TargetType="Path">
+            <Setter Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ContentControl}}"/>
+            <Setter Property="StrokeThickness" Value="1.4"/>
+            <Setter Property="StrokeStartLineCap" Value="Round"/>
+            <Setter Property="StrokeEndLineCap" Value="Round"/>
+            <Setter Property="StrokeLineJoin" Value="Round"/>
+            <Setter Property="Fill" Value="Transparent"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+            <Setter Property="Width" Value="16"/>
+            <Setter Property="Height" Value="16"/>
+        </Style>
+
+        <!-- Reusable Liquid Glass Cards -->
+        <Style x:Key="GlassCard" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource GlassPanelGradient}"/>
+            <Setter Property="BorderBrush" Value="#24FFA550"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="14"/>
+        </Style>
+
+        <Style x:Key="GlassCardSubtle" TargetType="Border">
+            <Setter Property="Background" Value="#090909"/>
+            <Setter Property="BorderBrush" Value="#15FFFFFF"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+        </Style>
 
         <!-- Title Bar Control Button Styles -->
         <Style x:Key="TitleBarButton" TargetType="Button">

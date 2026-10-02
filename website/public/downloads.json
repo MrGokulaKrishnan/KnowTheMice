@@ -1,6 +1,6 @@
 {
   "latestVersion": "1.2.0",
-  "releaseDate": "2026-09-25",
+  "releaseDate": "2026-10-02",
   "windows": {
     "version": "1.2.0",
     "versionCode": 120,
@@ -8,9 +8,9 @@
     "filename": "KnowTheMice-Setup-x64.exe",
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
-    "size": "1.05 MB",
-    "sha256": "9DC246F47FB76A203F4A9AB1D72ECCF9417948C7DDC94A2D72C4DA4AFFEF0831",
-    "releaseDate": "September 25, 2026",
+    "size": "1.06 MB",
+    "sha256": "5565A50C5660EF9D728FECEA0DFDDFEBA57E88AC7479DE64DC053B31C2BD79DA",
+    "releaseDate": "October 2, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
       "Windows 10 (Build 19041+) or Windows 11",
@@ -19,14 +19,14 @@
       "RAM: < 25MB footprint"
     ],
     "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
-    "changelog": "- Seamless connection auto-reconnect engine with zombie session cleanup\n- On-demand PC key release for clean modifier state\n- Borderless 15% corner radius icon for Windows desktop, taskbar, and installer\n- Background process stability & minimize-to-tray\n- Single-file setup installer and enterprise WiX MSI package",
+    "changelog": "- Windows UI/UX redesign: Liquid Glass translucent cards, AMOLED black styling, unified 24x24 vector stroke icon system\n- Seamless in-place upgrades: preserve paired devices and settings without uninstalling\n- Borderless WindowChrome custom title bar with multi-monitor snap and maximize bounds\n- Active host process graceful shutdown during upgrade to prevent file locks\n- Single-file setup installer and enterprise WiX MSI package",
     "msi": {
       "name": "Know The Mice Windows Installer (MSI)",
       "filename": "KnowTheMice-Setup-x64.msi",
       "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
       "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
       "size": "184 KB",
-      "sha256": "A0705708F69652429819EA58512FE00F7A9ED9C8E6084892EEA512A996BBDB20"
+      "sha256": "DDC587F38AC1BDA0C6124167603B6A5EFB3E0920824AE4BDF90316640516B535"
     },
     "mandatory": false
   },

@@ -7,10 +7,39 @@ namespace KnowTheMice.Setup;
 
 public partial class InstallerWindow : Window
 {
+    private bool _isUpgrade = false;
+
     public InstallerWindow()
     {
         InitializeComponent();
-        TxtInstallDir.Text = Program.GetInstallDir();
+        string defaultDir = Program.GetInstallDir();
+        TxtInstallDir.Text = defaultDir;
+        CheckUpgradeMode(defaultDir);
+    }
+
+    private void CheckUpgradeMode(string dir)
+    {
+        _isUpgrade = Program.IsExistingInstallation(dir);
+        if (_isUpgrade)
+        {
+            PnlUpgradeNotice.Visibility = Visibility.Visible;
+            TxtOptionsTitle.Text = "IN-PLACE UPGRADE PREFERENCES";
+            TxtOptionsDesc.Text = "An existing installation was found. Upgrading will preserve your settings and paired devices.";
+            BtnOptionsInstall.Content = "UPGRADE NOW  ➔";
+            TxtInstallingTitle.Text = "UPGRADING KNOW THE MICE...";
+            TxtCompletedTitle.Text = "UPGRADE COMPLETE";
+            TxtCompletedDesc.Text = "Know The Mice has been successfully upgraded. All settings and paired devices are preserved.";
+        }
+        else
+        {
+            PnlUpgradeNotice.Visibility = Visibility.Collapsed;
+            TxtOptionsTitle.Text = "INSTALLATION PREFERENCES";
+            TxtOptionsDesc.Text = "Configure where and how Know The Mice will be installed.";
+            BtnOptionsInstall.Content = "INSTALL NOW  ➔";
+            TxtInstallingTitle.Text = "INSTALLING KNOW THE MICE...";
+            TxtCompletedTitle.Text = "KNOW THE MICE IS READY";
+            TxtCompletedDesc.Text = "Setup has successfully installed Know The Mice on your computer.";
+        }
     }
 
     private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -46,6 +75,7 @@ public partial class InstallerWindow : Window
         if (dlg.ShowDialog() == Forms.DialogResult.OK)
         {
             TxtInstallDir.Text = dlg.SelectedPath;
+            CheckUpgradeMode(dlg.SelectedPath);
         }
     }
 

@@ -110,6 +110,10 @@
                         <TextBlock Text="Turn your Android device into a low-latency wireless mouse, keyboard, and remote control over local Wi-Fi." 
                                    Foreground="{StaticResource TextSecondary}" FontSize="13" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="440" Margin="0,0,0,28"/>
 
+                        <Border x:Name="PnlUpgradeNotice" Background="#15FF8A00" BorderBrush="#35FF8A00" BorderThickness="1" CornerRadius="8" Padding="14,8" Margin="0,0,0,20" Visibility="Collapsed">
+                            <TextBlock Text="⚡ Existing Installation Detected: In-Place Upgrade Ready" Foreground="#FFB066" FontSize="11" FontWeight="SemiBold" TextAlignment="Center"/>
+                        </Border>
+
                         <Button Content="GET STARTED  ➔" Style="{StaticResource PrimaryButton}" Click="BtnWelcomeNext_Click" HorizontalAlignment="Center" Width="200"/>
                     </StackPanel>
                 </Grid>
@@ -123,8 +127,8 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Grid.Row="0" Margin="0,0,0,16">
-                        <TextBlock Text="INSTALLATION PREFERENCES" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0,0,0,4"/>
-                        <TextBlock Text="Configure where and how Know The Mice will be installed." Foreground="{StaticResource TextSecondary}" FontSize="12"/>
+                        <TextBlock x:Name="TxtOptionsTitle" Text="INSTALLATION PREFERENCES" Foreground="White" FontWeight="Bold" FontSize="18" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="TxtOptionsDesc" Text="Configure where and how Know The Mice will be installed." Foreground="{StaticResource TextSecondary}" FontSize="12"/>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1">
@@ -157,7 +161,7 @@
 
                     <Grid Grid.Row="2" Margin="0,16,0,0">
                         <Button Content="BACK" Style="{StaticResource SecondaryButton}" Click="BtnOptionsBack_Click" HorizontalAlignment="Left"/>
-                        <Button Content="INSTALL NOW  ➔" Style="{StaticResource PrimaryButton}" Click="BtnOptionsInstall_Click" HorizontalAlignment="Right"/>
+                        <Button x:Name="BtnOptionsInstall" Content="INSTALL NOW  ➔" Style="{StaticResource PrimaryButton}" Click="BtnOptionsInstall_Click" HorizontalAlignment="Right"/>
                     </Grid>
                 </Grid>
 
@@ -168,7 +172,7 @@
                             <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
                         </Border>
 
-                        <TextBlock Text="INSTALLING KNOW THE MICE..." Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="TxtInstallingTitle" Text="INSTALLING KNOW THE MICE..." Foreground="White" FontWeight="Bold" FontSize="18" HorizontalAlignment="Center" Margin="0,0,0,8"/>
                         <TextBlock x:Name="TxtProgressStatus" Text="Extracting application components..." Foreground="{StaticResource TextSecondary}" FontSize="12" HorizontalAlignment="Center" Margin="0,0,0,20"/>
 
                         <!-- Custom Liquid Glass Progress Bar -->
@@ -189,8 +193,8 @@
                             <Path Data="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" Fill="#22C55E" Width="28" Height="28" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
 
-                        <TextBlock Text="KNOW THE MICE IS READY" Foreground="White" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" Margin="0,0,0,6"/>
-                        <TextBlock Text="Setup has successfully installed Know The Mice on your computer." Foreground="{StaticResource TextSecondary}" FontSize="13" HorizontalAlignment="Center" Margin="0,0,0,28"/>
+                        <TextBlock x:Name="TxtCompletedTitle" Text="KNOW THE MICE IS READY" Foreground="White" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" Margin="0,0,0,6"/>
+                        <TextBlock x:Name="TxtCompletedDesc" Text="Setup has successfully installed Know The Mice on your computer." Foreground="{StaticResource TextSecondary}" FontSize="13" HorizontalAlignment="Center" Margin="0,0,0,28"/>
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Button Content="LAUNCH KNOW THE MICE" Style="{StaticResource PrimaryButton}" Click="BtnLaunch_Click" Margin="0,0,12,0"/>

@@ -5,7 +5,7 @@
            UpgradeCode="A7D4E12C-5F4B-4E7B-9A5A-617F9A0B8A7C"
            Scope="perMachine">
     
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallInitialize" AllowSameVersionUpgrades="yes" />
     <MediaTemplate EmbedCab="yes" />
 
     <Icon Id="AppIcon.exe" SourceFile="..\KnowTheMice.Host\icon.ico" />

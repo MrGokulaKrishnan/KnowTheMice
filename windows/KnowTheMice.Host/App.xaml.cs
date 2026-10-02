@@ -207,17 +207,20 @@ public partial class App : System.Windows.Application
         var exitItem = new Forms.ToolStripMenuItem("Exit Know The Mice", null, (s, e) => ExitApplication());
         contextMenu.Items.Add(exitItem);
 
-        _trayIcon.ContextMenuStrip = contextMenu;
-
-        // Both Left-Click and Double-Click restore the dashboard
-        _trayIcon.MouseClick += (s, e) =>
+        if (_trayIcon != null)
         {
-            if (e.Button == Forms.MouseButtons.Left)
+            _trayIcon.ContextMenuStrip = contextMenu;
+
+            // Both Left-Click and Double-Click restore the dashboard
+            _trayIcon.MouseClick += (s, e) =>
             {
-                ShowMainWindow();
-            }
-        };
-        _trayIcon.DoubleClick += (s, e) => ShowMainWindow();
+                if (e.Button == Forms.MouseButtons.Left)
+                {
+                    ShowMainWindow();
+                }
+            };
+            _trayIcon.DoubleClick += (s, e) => ShowMainWindow();
+        }
 
         // Immediate user feedback after dispatcher initializes
         Task.Delay(1200).ContinueWith(_ =>

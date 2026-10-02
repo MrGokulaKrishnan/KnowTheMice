@@ -59,6 +59,20 @@ namespace KnowTheMice.Setup
             return Path.Combine(localAppData, "Programs", "KnowTheMice");
         }
 
+        public static bool IsExistingInstallation(string? customDir = null)
+        {
+            try
+            {
+                string targetDir = string.IsNullOrWhiteSpace(customDir) ? GetInstallDir() : customDir;
+                string hostExe = Path.Combine(targetDir, ExeName);
+                return File.Exists(hostExe);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         public static void PerformInstallCustom(
             string installDir,
             bool createDesktop,
@@ -67,7 +81,23 @@ namespace KnowTheMice.Setup
             bool firewall,
             Action<string, int>? progressCallback)
         {
-            progressCallback?.Invoke("Preparing installation directory...", 10);
+            progressCallback?.Invoke("Closing active host processes...", 5);
+            try
+            {
+                foreach (var p in Process.GetProcessesByName("KnowTheMice.Host"))
+                {
+                    try
+                    {
+                        p.Kill();
+                        p.WaitForExit(3000);
+                    }
+                    catch { }
+                }
+            }
+            catch { }
+            System.Threading.Thread.Sleep(500);
+
+            progressCallback?.Invoke("Preparing installation directory...", 15);
             if (!Directory.Exists(installDir))
             {
                 Directory.CreateDirectory(installDir);
@@ -93,7 +123,20 @@ namespace KnowTheMice.Setup
                             {
                                 Directory.CreateDirectory(dir);
                             }
-                            entry.ExtractToFile(destPath, true);
+
+                            // Robust extraction with retry to handle Windows file unlock delays
+                            for (int attempt = 0; attempt < 5; attempt++)
+                            {
+                                try
+                                {
+                                    entry.ExtractToFile(destPath, true);
+                                    break;
+                                }
+                                catch (IOException) when (attempt < 4)
+                                {
+                                    System.Threading.Thread.Sleep(300);
+                                }
+                            }
                             
                             int pct = 30 + (int)(35.0 * current / Math.Max(1, totalEntries));
                             progressCallback?.Invoke($"Extracting {entry.Name}...", pct);
