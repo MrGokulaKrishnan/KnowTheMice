@@ -8,8 +8,8 @@
     "filename": "KnowTheMice-Setup-x64.exe",
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
-    "size": "1.06 MB",
-    "sha256": "5565A50C5660EF9D728FECEA0DFDDFEBA57E88AC7479DE64DC053B31C2BD79DA",
+    "size": "1.10 MB",
+    "sha256": "7494AD76CBB2FBE40736762DB235D7182FB275214D7E220E0F99A08AC7E38D65",
     "releaseDate": "October 2, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
@@ -19,14 +19,14 @@
       "RAM: < 25MB footprint"
     ],
     "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
-    "changelog": "- Windows UI/UX redesign: Liquid Glass translucent cards, AMOLED black styling, unified 24x24 vector stroke icon system\n- Seamless in-place upgrades: preserve paired devices and settings without uninstalling\n- Borderless WindowChrome custom title bar with multi-monitor snap and maximize bounds\n- Active host process graceful shutdown during upgrade to prevent file locks\n- Single-file setup installer and enterprise WiX MSI package",
+    "changelog": "- Updated Windows application PNG logo with optical centering and transparent background\n- Windows UI/UX redesign: Liquid Glass translucent cards, AMOLED black styling, unified 24x24 vector stroke icon system\n- Seamless in-place upgrades: preserve paired devices and settings without uninstalling\n- Borderless WindowChrome custom title bar with multi-monitor snap and maximize bounds\n- Active host process graceful shutdown during upgrade to prevent file locks\n- Single-file setup installer and enterprise WiX MSI package",
     "msi": {
       "name": "Know The Mice Windows Installer (MSI)",
       "filename": "KnowTheMice-Setup-x64.msi",
       "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
       "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
-      "size": "184 KB",
-      "sha256": "DDC587F38AC1BDA0C6124167603B6A5EFB3E0920824AE4BDF90316640516B535"
+      "size": "188 KB",
+      "sha256": "F443665674E1F7B74A83DA102B0FBB7E5F8A6C2AAFCE992F57E4160185CFD024"
     },
     "mandatory": false
   },

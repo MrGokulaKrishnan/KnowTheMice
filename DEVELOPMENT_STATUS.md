@@ -45,11 +45,11 @@ PASS
 ### 5. WINDOWS RELEASE PACKAGES
 PASS
 - **Setup Installer EXE**: `windows/publish_setup/KnowTheMice-Setup-x64.exe`
-  - Size: 1,107,112 bytes (1.06 MB)
-  - SHA-256: `5565A50C5660EF9D728FECEA0DFDDFEBA57E88AC7479DE64DC053B31C2BD79DA`
+  - Size: 1,148,072 bytes (1.10 MB)
+  - SHA-256: `7494AD76CBB2FBE40736762DB235D7182FB275214D7E220E0F99A08AC7E38D65`
 - **WiX MSI Installer**: `windows/publish_setup/KnowTheMice-Setup-x64.msi`
-  - Size: 188,416 bytes (184 KB)
-  - SHA-256: `DDC587F38AC1BDA0C6124167603B6A5EFB3E0920824AE4BDF90316640516B535`
+  - Size: 192,512 bytes (188 KB)
+  - SHA-256: `F443665674E1F7B74A83DA102B0FBB7E5F8A6C2AAFCE992F57E4160185CFD024`
 - **Build Status**: Built cleanly with .NET 8.0 SDK and WiX Toolset, 0 errors.
 
 ### 6. WEB DISTRIBUTION & FIREBASE HOSTING
@@ -74,6 +74,14 @@ PASS
   - Executed silent in-place upgrade (`KnowTheMice-Setup-x64.exe /S`) on active system.
   - Active host PID 12588 was terminated, binaries overwritten with timestamp `02-10-2026 11:54`, new host PID 15168 launched automatically.
   - `trusted_devices.dat` verified intact with zero paired device loss.
+
+### 8. WINDOWS APPLICATION PNG LOGO UPDATE
+PASS
+- **Authoritative Source**: Updated with uploaded media `media_1790921888404.png` (1024x1024 RGBA, transparent background, optical center bbox `[96, 86, 909, 859]`).
+- **Windows Host & Setup**: Replaced `windows/KnowTheMice.Host/logo.png` and `windows/KnowTheMice.Setup/logo.png`.
+- **Windows Icon Suite**: Regenerated `icon.ico` (multi-resolution 256x256 down to 16x16) and `tray.ico` (monogram emblem) in `windows/KnowTheMice.Host`, `windows/KnowTheMice.Setup`, and `branding/windows/`.
+- **Zero Android Modifications**: Verified that zero Android assets or source files in `android/` were touched.
+- **In-Place Upgrade Verified**: Verified running host PID 15168 cleanly upgraded in-place to PID 11292 with new logo assets.
 
 ---
 
