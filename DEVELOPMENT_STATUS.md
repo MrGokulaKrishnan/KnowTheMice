@@ -45,11 +45,11 @@ PASS
 ### 5. WINDOWS RELEASE PACKAGES
 PASS
 - **Setup Installer EXE**: `windows/publish_setup/KnowTheMice-Setup-x64.exe`
-  - Size: 1,148,072 bytes (1.10 MB)
-  - SHA-256: `7494AD76CBB2FBE40736762DB235D7182FB275214D7E220E0F99A08AC7E38D65`
+  - Size: 1,149,608 bytes (1.10 MB)
+  - SHA-256: `55C9020368F775FDD0398DA859F8BC226672117F8541248B9AEF6C13CE8F36A0`
 - **WiX MSI Installer**: `windows/publish_setup/KnowTheMice-Setup-x64.msi`
   - Size: 192,512 bytes (188 KB)
-  - SHA-256: `F443665674E1F7B74A83DA102B0FBB7E5F8A6C2AAFCE992F57E4160185CFD024`
+  - SHA-256: `5C2584E3C451C2832EE0A84F250B155E71BEC2322CF349F026E6F418E1DE6FE7`
 - **Build Status**: Built cleanly with .NET 8.0 SDK and WiX Toolset, 0 errors.
 
 ### 6. WEB DISTRIBUTION & FIREBASE HOSTING
@@ -83,8 +83,18 @@ PASS
 - **Zero Android Modifications**: Verified that zero Android assets or source files in `android/` were touched.
 - **In-Place Upgrade Verified**: Verified running host PID 15168 cleanly upgraded in-place to PID 11292 with new logo assets.
 
+### 9. WINDOWS UPDATE SYSTEM STABILIZATION & "UPDATE FAILED" RESOLUTION
+PASS
+- **Root Cause 1 (Premature Startup Check & Banner Spam)**: Background check on host startup ran immediately before network interfaces stabilized or when offline, entering `UpdateState.Failed` with an intrusive red banner on dashboard. Resolved by introducing a 3-second initialization delay and silent background checks (`isManualCheck: false`), ensuring background network errors cleanly revert to `UpdateState.Idle` without disturbing the user.
+- **Root Cause 2 (Faulty RETRY Loop)**: When state was `UpdateState.Failed` and `AvailableUpdate == null` (such as when already on latest version), clicking `RETRY` invoked `DownloadUpdateAsync()` directly instead of re-checking for updates, triggering "No download URL available." Resolved by redirecting `RETRY` to `CheckForUpdatesAsync(isManual: true)` when no update payload is cached.
+- **Root Cause 3 (Null Guard & Casing Mismatch)**: Handled missing/alternate JSON fields (`url` fallback for `downloadUrl`) and set `PropertyNameCaseInsensitive = true` on `System.Text.Json` deserializer. If `DownloadUpdateAsync()` is called while already up-to-date, it transitions gracefully to `UpdateState.UpToDate` rather than failing.
+- **Dismissible Update Banner**: Added `[ ✕ ]` button (`BtnDismissUpdateBanner`) to `UpdateBanner` in `MainWindow.xaml` allowing users to dismiss any update notification at will.
+- **In-Place Upgrade Verified**: Tested silent in-place upgrade on running host (PID 11292 smoothly terminated and restarted as PID 16088 with new binaries). User settings and paired devices (`%LocalAppData%\KnowTheMice\trusted_devices.dat`) 100% preserved.
+- **Zero Android Modifications**: Verified 0 edits made to `android/` codebase.
+
 ---
 
 ## Overall Status
 ALL REQUIREMENTS IMPLEMENTED, TESTED, VERIFIED, AND READY FOR PRODUCTION DEPLOYMENT.
+
 

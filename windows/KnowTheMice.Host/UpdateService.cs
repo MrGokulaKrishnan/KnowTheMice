@@ -42,6 +42,9 @@ public class PlatformUpdate
     [JsonPropertyName("versionCode")]
     public int VersionCode { get; set; }
 
+    [JsonPropertyName("url")]
+    public string Url { get; set; } = string.Empty;
+
     [JsonPropertyName("downloadUrl")]
     public string DownloadUrl { get; set; } = string.Empty;
 
@@ -84,6 +87,11 @@ public class UpdateService
         string appDir = Path.Combine(localAppData, "KnowTheMice");
         Directory.CreateDirectory(appDir);
         _persistencePath = Path.Combine(appDir, "update_staged.json");
+        try
+        {
+            _http.DefaultRequestHeaders.UserAgent.ParseAdd("KnowTheMice-Host/1.2.0 (Windows NT 10.0; Win64; x64)");
+        }
+        catch { }
     }
 
     public void InitializeState(string currentVersion)
@@ -126,7 +134,7 @@ public class UpdateService
         SetState(UpdateState.Idle, null, null);
     }
 
-    public async Task<PlatformUpdate?> CheckForUpdatesAsync(string currentVersion)
+    public async Task<PlatformUpdate?> CheckForUpdatesAsync(string currentVersion, bool isManualCheck = false)
     {
         // If an update is already staged and ready for restart, retain Ready state
         if (CurrentState == UpdateState.Ready && AvailableUpdate != null)
@@ -134,16 +142,35 @@ public class UpdateService
             return AvailableUpdate;
         }
 
-        SetState(UpdateState.Checking, null, null);
+        if (isManualCheck)
+        {
+            SetState(UpdateState.Checking, null, null);
+        }
 
         try
         {
             string url = $"{UPDATE_METADATA_URL}?t={DateTimeOffset.UtcNow.ToUnixTimeSeconds()}";
             string json = await _http.GetStringAsync(url);
-            var meta = JsonSerializer.Deserialize<UpdateMetadata>(json);
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var meta = JsonSerializer.Deserialize<UpdateMetadata>(json, options);
 
             if (meta?.Windows != null && !string.IsNullOrWhiteSpace(meta.Windows.Version))
             {
+                // Ensure DownloadUrl is populated from url or fallback
+                if (string.IsNullOrWhiteSpace(meta.Windows.DownloadUrl))
+                {
+                    if (!string.IsNullOrWhiteSpace(meta.Windows.Url))
+                    {
+                        meta.Windows.DownloadUrl = meta.Windows.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase)
+                            ? meta.Windows.Url
+                            : "https://knowthemice.web.app" + (meta.Windows.Url.StartsWith("/") ? meta.Windows.Url : "/" + meta.Windows.Url);
+                    }
+                    else
+                    {
+                        meta.Windows.DownloadUrl = "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe";
+                    }
+                }
+
                 if (IsNewerVersion(meta.Windows.Version, currentVersion))
                 {
                     AvailableUpdate = meta.Windows;
@@ -152,13 +179,22 @@ public class UpdateService
                 }
             }
 
+            AvailableUpdate = null;
             SetState(UpdateState.UpToDate, null, null);
             return null;
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"[UpdateService] Check failed: {ex.Message}");
-            SetState(UpdateState.Failed, null, $"Check failed: {ex.Message}");
+            if (isManualCheck)
+            {
+                SetState(UpdateState.Failed, null, $"Check failed: {ex.Message}");
+            }
+            else
+            {
+                // Background check failure: remain silent so we don't display error banner on startup
+                SetState(UpdateState.Idle, null, null);
+            }
             return null;
         }
     }
@@ -167,19 +203,30 @@ public class UpdateService
     {
         if (AvailableUpdate == null || string.IsNullOrWhiteSpace(AvailableUpdate.DownloadUrl))
         {
-            SetState(UpdateState.Failed, null, "No download URL available.");
+            var update = await CheckForUpdatesAsync(MainWindow.APP_VERSION, isManualCheck: false);
+            if (update == null || string.IsNullOrWhiteSpace(update.DownloadUrl))
+            {
+                SetState(UpdateState.UpToDate, null, null);
+                return false;
+            }
+        }
+
+        var targetUpdate = AvailableUpdate;
+        if (targetUpdate == null || string.IsNullOrWhiteSpace(targetUpdate.DownloadUrl))
+        {
+            SetState(UpdateState.UpToDate, null, null);
             return false;
         }
 
-        SetState(UpdateState.Downloading, AvailableUpdate, null);
+        SetState(UpdateState.Downloading, targetUpdate, null);
         DownloadProgress = 0;
 
         try
         {
             string tempDir = Path.GetTempPath();
-            string tempInstaller = Path.Combine(tempDir, $"KnowTheMice-Setup-v{AvailableUpdate.Version}.exe");
+            string tempInstaller = Path.Combine(tempDir, $"KnowTheMice-Setup-v{targetUpdate.Version}.exe");
 
-            using (var response = await _http.GetAsync(AvailableUpdate.DownloadUrl, HttpCompletionOption.ResponseHeadersRead))
+            using (var response = await _http.GetAsync(targetUpdate.DownloadUrl, HttpCompletionOption.ResponseHeadersRead))
             {
                 response.EnsureSuccessStatusCode();
                 long totalBytes = response.Content.Headers.ContentLength ?? -1L;
@@ -297,10 +344,22 @@ public class UpdateService
         catch { }
     }
 
+    public void DismissNotification()
+    {
+        SetState(UpdateState.Idle, null, null);
+    }
+
     private void SetState(UpdateState newState, PlatformUpdate? update, string? error)
     {
         CurrentState = newState;
-        if (update != null) AvailableUpdate = update;
+        if (update != null)
+        {
+            AvailableUpdate = update;
+        }
+        else if (newState == UpdateState.UpToDate || newState == UpdateState.Idle)
+        {
+            AvailableUpdate = null;
+        }
         ErrorMessage = error;
         OnStateChanged?.Invoke(newState, AvailableUpdate, error);
     }

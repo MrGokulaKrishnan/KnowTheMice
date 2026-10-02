@@ -48,7 +48,7 @@ public partial class MainWindow : Window
         // Wire UpdateService state machine
         _updateService.OnStateChanged += HandleUpdateStateChanged;
         _updateService.InitializeState(APP_VERSION);
-        _ = CheckForUpdatesAsync();
+        _ = CheckForUpdatesAsync(isManual: false);
 
         App.Log("MainWindow constructor completed");
     }
@@ -379,9 +379,13 @@ public partial class MainWindow : Window
         });
     }
 
-    private async Task CheckForUpdatesAsync()
+    private async Task CheckForUpdatesAsync(bool isManual = false)
     {
-        await _updateService.CheckForUpdatesAsync(APP_VERSION);
+        if (!isManual)
+        {
+            await Task.Delay(3000);
+        }
+        await _updateService.CheckForUpdatesAsync(APP_VERSION, isManualCheck: isManual);
     }
 
     private async void BtnUpdateAction_Click(object sender, RoutedEventArgs e)
@@ -389,7 +393,6 @@ public partial class MainWindow : Window
         switch (_updateService.CurrentState)
         {
             case UpdateState.UpdateAvailable:
-            case UpdateState.Failed:
                 await _updateService.DownloadUpdateAsync(pct =>
                 {
                     Dispatcher.Invoke(() =>
@@ -400,17 +403,44 @@ public partial class MainWindow : Window
                 });
                 break;
 
+            case UpdateState.Failed:
+                BtnUpdateAction.IsEnabled = false;
+                if (_updateService.AvailableUpdate != null && !string.IsNullOrWhiteSpace(_updateService.AvailableUpdate.DownloadUrl))
+                {
+                    await _updateService.DownloadUpdateAsync(pct =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            PrgUpdate.Value = pct;
+                            TxtUpdateDesc.Text = $"Downloading update... {pct}%";
+                        });
+                    });
+                }
+                else
+                {
+                    // Re-check for updates if we don't have update metadata yet
+                    await CheckForUpdatesAsync(isManual: true);
+                }
+                BtnUpdateAction.IsEnabled = true;
+                break;
+
             case UpdateState.Ready:
                 _updateService.ApplyRestartToUpdate();
                 break;
         }
     }
 
+    private void BtnDismissUpdateBanner_Click(object sender, RoutedEventArgs e)
+    {
+        UpdateBanner.Visibility = Visibility.Collapsed;
+        _updateService.DismissNotification();
+    }
+
     private async void BtnCheckUpdates_Click(object sender, RoutedEventArgs e)
     {
         BtnCheckUpdates.IsEnabled = false;
         TxtStatusLog.Text = "● Checking for updates...";
-        var update = await _updateService.CheckForUpdatesAsync(APP_VERSION);
+        var update = await _updateService.CheckForUpdatesAsync(APP_VERSION, isManualCheck: true);
         BtnCheckUpdates.IsEnabled = true;
 
         if (update != null)

@@ -9,7 +9,7 @@
     "url": "/downloads/windows/KnowTheMice-Setup-x64.exe",
     "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.exe",
     "size": "1.10 MB",
-    "sha256": "7494AD76CBB2FBE40736762DB235D7182FB275214D7E220E0F99A08AC7E38D65",
+    "sha256": "55C9020368F775FDD0398DA859F8BC226672117F8541248B9AEF6C13CE8F36A0",
     "releaseDate": "October 2, 2026",
     "platform": "Windows 10 / 11 (64-bit)",
     "requirements": [
@@ -19,14 +19,14 @@
       "RAM: < 25MB footprint"
     ],
     "description": "Modern Liquid Glass installer with pure black aesthetic, auto-start, system tray host, firewall rules, and desktop shortcuts.",
-    "changelog": "- Updated Windows application PNG logo with optical centering and transparent background\n- Windows UI/UX redesign: Liquid Glass translucent cards, AMOLED black styling, unified 24x24 vector stroke icon system\n- Seamless in-place upgrades: preserve paired devices and settings without uninstalling\n- Borderless WindowChrome custom title bar with multi-monitor snap and maximize bounds\n- Active host process graceful shutdown during upgrade to prevent file locks\n- Single-file setup installer and enterprise WiX MSI package",
+    "changelog": "- Resolved Update Failed banner issue: silent background checks, fallback download URL, and dismissible notification\n- Updated Windows application PNG logo with optical centering and transparent background\n- Windows UI/UX redesign: Liquid Glass translucent cards, AMOLED black styling, unified 24x24 vector stroke icon system\n- Seamless in-place upgrades: preserve paired devices and settings without uninstalling\n- Borderless WindowChrome custom title bar with multi-monitor snap and maximize bounds\n- Active host process graceful shutdown during upgrade to prevent file locks\n- Single-file setup installer and enterprise WiX MSI package",
     "msi": {
       "name": "Know The Mice Windows Installer (MSI)",
       "filename": "KnowTheMice-Setup-x64.msi",
       "url": "/downloads/windows/KnowTheMice-Setup-x64.msi",
       "downloadUrl": "https://knowthemice.web.app/downloads/windows/KnowTheMice-Setup-x64.msi",
       "size": "188 KB",
-      "sha256": "F443665674E1F7B74A83DA102B0FBB7E5F8A6C2AAFCE992F57E4160185CFD024"
+      "sha256": "5C2584E3C451C2832EE0A84F250B155E71BEC2322CF349F026E6F418E1DE6FE7"
     },
     "mandatory": false
   },
