@@ -5,10 +5,21 @@
         Icon="icon.ico"
         Height="700" Width="980"
         MinHeight="620" MinWidth="880"
-        WindowStartupLocation="CenterScreen"
-        Background="{StaticResource AmoledBackground}"
-        Foreground="{StaticResource TextPrimary}"
+        WindowStartupLocation="Manual"
+        WindowStyle="None"
+        ResizeMode="CanResize"
+        Background="#000000"
+        Foreground="#FFFFFF"
+        StateChanged="MainWindow_StateChanged"
         FontFamily="Segoe UI, Inter">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="42"
+                      ResizeBorderThickness="6"
+                      GlassFrameThickness="0"
+                      CornerRadius="0"
+                      UseAeroCaptionButtons="False" />
+    </WindowChrome.WindowChrome>
 
     <Window.Resources>
         <Style x:Key="GlassBorder" TargetType="Border">
@@ -95,7 +106,54 @@
         </Style>
     </Window.Resources>
 
-    <Grid>
+    <Border x:Name="RootBorder" Background="#040404" BorderBrush="#222222" BorderThickness="1" SnapsToDevicePixels="True">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="42" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Row 0: Custom Title Bar -->
+            <Border Grid.Row="0" Background="#070707" BorderBrush="#141414" BorderThickness="0,0,0,1" MouseLeftButtonDown="TitleBar_MouseDown">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Column 0: App Icon, Application Name, Separator, Tagline -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="14,0,0,0"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Border Width="22" Height="22" Background="#000000" CornerRadius="4" Margin="0,0,10,0" ClipToBounds="True">
+                            <Image Source="pack://application:,,,/logo.png" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
+                        </Border>
+                        <TextBlock Text="KNOW THE MICE" FontWeight="Bold" FontSize="12" Foreground="#FFFFFF" VerticalAlignment="Center"/>
+                        <Border Width="1" Height="14" Background="#333333" Margin="10,0" VerticalAlignment="Center"/>
+                        <TextBlock Text="Host Dashboard" FontSize="11" Foreground="{StaticResource TextSecondary}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <!-- Column 1: Transparent Drag Zone (passed through to WindowChrome) -->
+                    <Grid Grid.Column="1" Background="Transparent" />
+
+                    <!-- Column 2: Window Control Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,6,0"
+                                WindowChrome.IsHitTestVisibleInChrome="True">
+                        <Button x:Name="BtnMinimize" Click="BtnMinimize_Click" Style="{StaticResource TitleBarButton}" ToolTip="Minimize">
+                            <Path Data="M0,0 L10,0" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Width="10" Height="2" Stretch="None" />
+                        </Button>
+                        <Button x:Name="BtnMaximize" Click="BtnMaximize_Click" Style="{StaticResource TitleBarButton}" ToolTip="Maximize">
+                            <Path x:Name="MaximizePath" Data="M0,0 H10 V10 H0 Z" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.2" Fill="Transparent" Width="10" Height="10" Stretch="None" />
+                        </Button>
+                        <Button x:Name="BtnClose" Click="BtnClose_Click" Style="{StaticResource TitleBarCloseButton}" ToolTip="Close">
+                            <Path Data="M0,0 L9,9 M9,0 L0,9" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" StrokeThickness="1.3" Width="9" Height="9" Stretch="None" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Row 1: App Main Content -->
+            <Grid Grid.Row="1">
         <Grid.ColumnDefinitions>
             <!-- Sidebar Navigation Column -->
             <ColumnDefinition Width="220" MinWidth="180" MaxWidth="260"/>
@@ -463,4 +521,6 @@
             </Border>
         </Grid>
     </Grid>
+        </Grid>
+    </Border>
 </Window>

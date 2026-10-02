@@ -146,6 +146,12 @@ fun SettingsScreen(
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.SemiBold
                                 )
+                                Text(
+                                    text = "Publisher: KnowTheTech",
+                                    color = TextSecondary,
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Normal
+                                )
                             }
                         }
                         Spacer(modifier = Modifier.height(12.dp))

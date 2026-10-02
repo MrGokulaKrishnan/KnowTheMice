@@ -457,6 +457,54 @@ public partial class MainWindow : Window
         }
     }
 
+    private void MainWindow_StateChanged(object? sender, EventArgs e)
+    {
+        if (this.WindowState == WindowState.Maximized)
+        {
+            RootBorder.Margin = new Thickness(7);
+            BtnMaximize.ToolTip = "Restore Down";
+            MaximizePath.Data = Geometry.Parse("M2,0 H10 V8 H2 Z M0,2 H8 V10 H0 Z");
+        }
+        else
+        {
+            RootBorder.Margin = new Thickness(0);
+            BtnMaximize.ToolTip = "Maximize";
+            MaximizePath.Data = Geometry.Parse("M0,0 H10 V10 H0 Z");
+        }
+    }
+
+    private void TitleBar_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == System.Windows.Input.MouseButton.Left)
+        {
+            if (e.ClickCount == 2)
+            {
+                BtnMaximize_Click(sender, e);
+            }
+            else
+            {
+                this.DragMove();
+            }
+        }
+    }
+
+    private void BtnMinimize_Click(object sender, RoutedEventArgs e)
+    {
+        this.WindowState = WindowState.Minimized;
+    }
+
+    private void BtnMaximize_Click(object sender, RoutedEventArgs e)
+    {
+        this.WindowState = this.WindowState == WindowState.Maximized 
+            ? WindowState.Normal 
+            : WindowState.Maximized;
+    }
+
+    private void BtnClose_Click(object sender, RoutedEventArgs e)
+    {
+        this.Close();
+    }
+
     protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
     {
         if (ChkMinimizeToTray == null || ChkMinimizeToTray.IsChecked != false)

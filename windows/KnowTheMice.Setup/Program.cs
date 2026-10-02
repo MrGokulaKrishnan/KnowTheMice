@@ -11,8 +11,8 @@ namespace KnowTheMice.Setup
     public static class Program
     {
         public const string AppName = "Know The Mice";
-        public const string AppVersion = "1.1.0";
-        public const string AppPublisher = "Know The Mice Team";
+        public const string AppVersion = "1.2.0";
+        public const string AppPublisher = "KnowTheTech";
         public const string ExeName = "KnowTheMice.Host.exe";
 
         [STAThread]

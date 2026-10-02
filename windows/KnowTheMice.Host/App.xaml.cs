@@ -195,7 +195,7 @@ public partial class App : System.Windows.Application
         // About
         contextMenu.Items.Add("About Know The Mice", null, (s, e) => {
             Forms.MessageBox.Show(
-                "Know The Mice — Wireless PC Remote Control Host\nVersion 1.1.0\n\nYour phone. Your PC. Connected.\nhttps://knowthemice.web.app",
+                "Know The Mice — Wireless PC Remote Control Host\nVersion 1.2.0\nPublisher: KnowTheTech\n\nYour phone. Your PC. Connected.\nhttps://knowthemice.web.app",
                 "About Know The Mice",
                 Forms.MessageBoxButtons.OK,
                 Forms.MessageBoxIcon.Information);
@@ -337,70 +337,54 @@ public partial class App : System.Windows.Application
         }
         catch { }
     }
-        /// <summary>
-        /// Ensures the given window is positioned within the current monitor's working area.
-        /// If saved bounds are invalid or off-screen, they are clamped and the window is centered.
-        /// </summary>
-        private void EnsureWindowWithinWorkArea(Window window)
+    /// <summary>
+    /// Ensures the given window is positioned cleanly within the current monitor's working area,
+    /// accounting for taskbars and DPI scaling, preventing top/side clipping.
+    /// </summary>
+    private void EnsureWindowWithinWorkArea(Window window)
+    {
+        try
         {
-            try
+            var primaryScreen = Forms.Screen.PrimaryScreen ?? (Forms.Screen.AllScreens.Length > 0 ? Forms.Screen.AllScreens[0] : null);
+            if (primaryScreen != null)
             {
-                // Retrieve saved geometry; fallback to defaults if not set
-                double left = Properties.Settings.Default["WindowLeft"] as double? ?? window.Left;
-                double top = Properties.Settings.Default["WindowTop"] as double? ?? window.Top;
-                double width = Properties.Settings.Default["WindowWidth"] as double? ?? window.Width;
-                double height = Properties.Settings.Default["WindowHeight"] as double? ?? window.Height;
-
-                // If width/height are unreasonable, use current size
-                if (width <= 0) width = window.Width;
-                if (height <= 0) height = window.Height;
-
-                // Get the screen that currently contains the window (or primary if none)
-                var helper = new System.Windows.Interop.WindowInteropHelper(window);
-                var screen = Forms.Screen.FromHandle(helper.Handle);
-                var workArea = screen.WorkingArea; // device pixels
-
-                // Determine DPI scaling for the target screen
-                var source = PresentationSource.FromVisual(window);
-                double dpiX = 96.0, dpiY = 96.0;
-                if (source != null)
+                var workArea = primaryScreen.WorkingArea;
+                
+                double dpiX = 1.0;
+                double dpiY = 1.0;
+                try
                 {
-                    dpiX = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-                    dpiY = 96.0 * source.CompositionTarget.TransformToDevice.M22;
+                    using var graphics = Drawing.Graphics.FromHwnd(IntPtr.Zero);
+                    dpiX = graphics.DpiX / 96.0;
+                    dpiY = graphics.DpiY / 96.0;
                 }
+                catch { }
 
-                // Convert logical (WPF units) to device pixels
-                int devLeft = (int)Math.Round(left * dpiX / 96.0);
-                int devTop = (int)Math.Round(top * dpiY / 96.0);
-                int devWidth = (int)Math.Round(width * dpiX / 96.0);
-                int devHeight = (int)Math.Round(height * dpiY / 96.0);
+                double workLeft = workArea.Left / dpiX;
+                double workTop = workArea.Top / dpiY;
+                double workWidth = workArea.Width / dpiX;
+                double workHeight = workArea.Height / dpiY;
 
-                // Clamp to work area
-                if (devLeft < workArea.Left) devLeft = workArea.Left;
-                if (devTop < workArea.Top) devTop = workArea.Top;
-                if (devLeft + devWidth > workArea.Right) devLeft = workArea.Right - devWidth;
-                if (devTop + devHeight > workArea.Bottom) devTop = workArea.Bottom - devHeight;
+                double targetWidth = window.Width > 0 ? window.Width : 980;
+                double targetHeight = window.Height > 0 ? window.Height : 700;
 
-                // If still off‑screen after clamping (e.g., window larger than work area), center it
-                if (devLeft < workArea.Left) devLeft = workArea.Left;
-                if (devTop < workArea.Top) devTop = workArea.Top;
+                double finalWidth = Math.Min(targetWidth, workWidth - 20);
+                double finalHeight = Math.Min(targetHeight, workHeight - 20);
 
-                // Convert back to logical units
-                double newLeft = devLeft * 96.0 / dpiX;
-                double newTop = devTop * 96.0 / dpiY;
-                double newWidth = devWidth * 96.0 / dpiX;
-                double newHeight = devHeight * 96.0 / dpiY;
-
-                window.Left = newLeft;
-                window.Top = newTop;
-                window.Width = newWidth;
-                window.Height = newHeight;
+                window.Width = finalWidth;
+                window.Height = finalHeight;
+                window.Left = workLeft + Math.Max(10, (workWidth - finalWidth) / 2.0);
+                window.Top = workTop + Math.Max(10, (workHeight - finalHeight) / 2.0);
             }
-            catch (Exception ex)
+            else
             {
-                // If anything goes wrong, fall back to centering the window on the primary screen
-                App.Log($"EnsureWindowWithinWorkArea failed: {ex.Message}. Centering window.");
                 window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
         }
+        catch (Exception ex)
+        {
+            Log($"EnsureWindowWithinWorkArea fallback: {ex.Message}");
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
+    }
+}

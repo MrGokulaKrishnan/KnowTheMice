@@ -1,6 +1,6 @@
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
   <Package Name="Know The Mice" 
-           Manufacturer="Know The Mice Team" 
+           Manufacturer="KnowTheTech" 
            Version="1.2.0.0" 
            UpgradeCode="A7D4E12C-5F4B-4E7B-9A5A-617F9A0B8A7C"
            Scope="perMachine">
